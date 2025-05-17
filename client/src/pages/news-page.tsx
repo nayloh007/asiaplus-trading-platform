@@ -10,18 +10,21 @@ import { Clock, Share2, ChevronRight, Star, Newspaper, TrendingUp, Info, Lightbu
 import { Button } from "@/components/ui/button";
 
 // รูปภาพที่ใช้ในข่าว
-import passkey from "@assets/321.jpg";
-import bitkubChain from "@assets/445.png";
-import bitkubCEO from "@assets/1656586683_53839_Web_BK_011.png";
-import bitkubCapital from "@assets/bitkub.jpg";
-import bitkubBlockathon from "@assets/BITKUB-BLOCKATHON-2023-03112023.jpg";
-import thbProgrammable from "@assets/Bitkub-Chain-เปิดทดสอบการใช้สื่อกลางการชำระเงิน.png";
-import bitkubHowto from "@assets/hqdefault.jpg";
-import bitkubNext from "@assets/OG_Bitkub_NEXT.png";
-import bitkubKUB from "@assets/PJVlR0ljpN94J9mD9lBL1m6VWO6iyOPHweFucjic1Rv78JsXBJUQDWcx0x2hydrWCx.jpg";
-import bitkubWallet from "@assets/XD_NEXT BA OG Tag 1200x800.png";
-import bitkubCoin from "@assets/21-5-2564-7-53-43.png";
-import bitkubListing from "@assets/u.png";
+import placeholderImage from "@/assets/placeholder.svg";
+
+// ใช้รูปภาพตัวอย่างสำหรับทุกข่าว
+const passkey = placeholderImage;
+const bitkubChain = placeholderImage;
+const bitkubCEO = placeholderImage;
+const bitkubCapital = placeholderImage;
+const bitkubBlockathon = placeholderImage;
+const thbProgrammable = placeholderImage;
+const bitkubHowto = placeholderImage;
+const bitkubNext = placeholderImage;
+const bitkubKUB = placeholderImage;
+const bitkubWallet = placeholderImage;
+const bitkubCoin = placeholderImage;
+const bitkubListing = placeholderImage;
 
 // ข้อมูลข่าวสารแบบ mock ชั่วคราว
 const mockNews = [
