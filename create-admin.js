@@ -35,12 +35,12 @@ async function createAdmin() {
     const adminPassword = hashPassword('admin123');
     
     const query = `
-      INSERT INTO users (username, email, password, full_name, role)
+      INSERT INTO users (username, email, password, role, balance)
       VALUES ($1, $2, $3, $4, $5)
       RETURNING *
     `;
     
-    const values = ['admin', 'admin@bitkub.com', adminPassword, 'Admin Account', 'admin'];
+    const values = ['admin', 'admin@bitkub.com', adminPassword, 'admin', '1000000'];
     const result = await pool.query(query, values);
     
     console.log('Admin user created successfully:', result.rows[0]);
