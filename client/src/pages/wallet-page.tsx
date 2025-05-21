@@ -31,7 +31,7 @@ import { useToast } from "@/hooks/use-toast";
 import { formatCurrency, formatShortDate } from "@/lib/formatters";
 import { Loader2, ArrowUp, ArrowDown, PlusCircle, Trash2, CheckCircle2 } from "lucide-react";
 import { Transaction, BankAccount } from "@shared/schema";
-import walletBgImage from "@assets/XD_NEXT BA OG Tag 1200x800.png";
+import walletBgImage from "@/assets/placeholder.svg";
 
 export default function WalletPage() {
   const { user } = useAuth();
