@@ -70,25 +70,15 @@ export class DatabaseStorage implements IStorage {
         username: users.username,
         password: users.password,
         email: users.email,
-        fullName: users.fullName,
         role: users.role,
         balance: users.balance,
-        createdAt: users.createdAt
+        createdAt: users.createdAt,
+        updatedAt: users.updatedAt
       })
       .from(users)
       .where(eq(users.id, id));
     
-    // เพิ่มคอลัมน์ใหม่โดยกำหนดค่าเริ่มต้นเป็น null
-    if (dbUser) {
-      return {
-        ...dbUser,
-        displayName: null,
-        phoneNumber: null,
-        avatarUrl: null
-      };
-    }
-    
-    return undefined;
+    return dbUser;
   }
   
   async getUserByUsername(username: string): Promise<User | undefined> {
@@ -99,25 +89,15 @@ export class DatabaseStorage implements IStorage {
         username: users.username,
         password: users.password,
         email: users.email,
-        fullName: users.fullName,
         role: users.role,
         balance: users.balance,
-        createdAt: users.createdAt
+        createdAt: users.createdAt,
+        updatedAt: users.updatedAt
       })
       .from(users)
       .where(eq(users.username, username));
     
-    // เพิ่มคอลัมน์ใหม่โดยกำหนดค่าเริ่มต้นเป็น null
-    if (dbUser) {
-      return {
-        ...dbUser,
-        displayName: null,
-        phoneNumber: null,
-        avatarUrl: null
-      };
-    }
-    
-    return undefined;
+    return dbUser;
   }
   
   async getUserByEmail(email: string): Promise<User | undefined> {
@@ -128,25 +108,15 @@ export class DatabaseStorage implements IStorage {
         username: users.username,
         password: users.password,
         email: users.email,
-        fullName: users.fullName,
         role: users.role,
         balance: users.balance,
-        createdAt: users.createdAt
+        createdAt: users.createdAt,
+        updatedAt: users.updatedAt
       })
       .from(users)
       .where(eq(users.email, email));
     
-    // เพิ่มคอลัมน์ใหม่โดยกำหนดค่าเริ่มต้นเป็น null
-    if (dbUser) {
-      return {
-        ...dbUser,
-        displayName: null,
-        phoneNumber: null,
-        avatarUrl: null
-      };
-    }
-    
-    return undefined;
+    return dbUser;
   }
   
   async createUser(insertUser: InsertUser): Promise<User> {
