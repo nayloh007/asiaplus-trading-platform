@@ -56,7 +56,7 @@ export default function AuthPage() {
           <CardHeader className="text-center">
             <div className="flex justify-center mb-2">
               <img 
-                src="/images/asia_plus_logo.png" 
+                src="/images/Asia_Plus_Securities.png" 
                 alt="โลโก้ Asia Plus Securities" 
                 className="h-20"
               />

@@ -49,11 +49,11 @@ export function TopNavigation({ title = "บิทคับ", showBackButton = f
           )}
           <div className="text-xl font-bold flex items-center">
             <img 
-              src="/images/asia_plus_logo.png" 
+              src="/images/Asia_Plus_Securities.png" 
               alt="โลโก้ Asia Plus Securities" 
               className="h-10 mr-2" 
             />
-            <span className={title === "บิทคับ" ? "hidden" : ""}>{title}</span>
+            <span className={title === "เอเซีย พลัส" ? "hidden" : ""}>{title}</span>
           </div>
         </div>
         
