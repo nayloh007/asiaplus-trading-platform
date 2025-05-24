@@ -160,8 +160,8 @@ export function SplashScreen({
               className="h-3 rounded-full transition-all duration-300 ease-out relative overflow-hidden"
               style={{ 
                 width: `${loadingProgress}%`,
-                background: 'linear-gradient(90deg, #08CC5E 0%, #06C755 100%)',
-                boxShadow: '0 0 10px rgba(6,199,85,0.7)'
+                background: 'linear-gradient(90deg, #1E64C8 0%, #0A4B81 100%)',
+                boxShadow: '0 0 10px rgba(30,100,200,0.7)'
               }}
             >
               {/* เอฟเฟกต์เส้นแสงวิ่งผ่าน progress bar */}
@@ -177,11 +177,11 @@ export function SplashScreen({
           {/* ไอคอนโหลดและข้อความ */}
           <div className="flex items-center justify-center w-full">
             <div className="relative mr-3">
-              <Loader2 className="h-6 w-6 text-[#06C755] animate-spin" />
-              <div className="absolute inset-0 rounded-full bg-[#06C755]/10 blur-md"></div>
+              <Loader2 className="h-6 w-6 text-blue-500 animate-spin" />
+              <div className="absolute inset-0 rounded-full bg-blue-500/10 blur-md"></div>
             </div>
             <p className="text-white text-sm font-medium">
-              กำลังโหลด... <span className="text-[#06C755]">{Math.round(loadingProgress)}%</span>
+              กำลังโหลด... <span className="text-blue-500">{Math.round(loadingProgress)}%</span>
             </p>
           </div>
           
@@ -189,7 +189,7 @@ export function SplashScreen({
         </div>
         
         {/* เอฟเฟกต์แสงด้านล่าง */}
-        <div className="absolute bottom-0 w-full h-20 bg-gradient-to-t from-[#06C755]/20 to-transparent"></div>
+        <div className="absolute bottom-0 w-full h-20 bg-gradient-to-t from-blue-500/20 to-transparent"></div>
       </div>
     </div>
   );
