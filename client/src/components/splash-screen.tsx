@@ -49,7 +49,7 @@ export function SplashScreen({
       <div 
         className="w-full h-full flex flex-col items-center justify-center relative"
         style={{
-          background: "linear-gradient(135deg, #004d2e 0%, #00321e 100%)"
+          background: "linear-gradient(135deg, #0a4b81 0%, #063157 100%)"
         }}
       >
         {/* พื้นหลังพิเศษมีลวดลาย */}
@@ -76,7 +76,7 @@ export function SplashScreen({
           {Array.from({ length: 20 }).map((_, index) => (
             <div 
               key={`particle-${index}`} 
-              className="absolute w-1 h-1 rounded-full bg-[#06C755]"
+              className="absolute w-1 h-1 rounded-full bg-blue-500"
               style={{
                 left: `${Math.random() * 100}%`,
                 bottom: `-20px`,
@@ -106,21 +106,21 @@ export function SplashScreen({
         </div>
         
         {/* เอฟเฟกต์วงกลมเรืองแสง */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-[#06C755]/10 blur-3xl animate-pulse"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-blue-500/10 blur-3xl animate-pulse"></div>
         
         {/* โลโก้บิทคับแบบวงกลมที่คุณต้องการ */}
         <div className="relative mb-6">
           <div className="w-32 h-32 relative flex items-center justify-center">
             {/* เอฟเฟกต์เรืองแสงด้านหลัง */}
-            <div className="absolute w-full h-full rounded-full bg-[#06C755]/30 blur-xl animate-pulse"></div>
+            <div className="absolute w-full h-full rounded-full bg-blue-500/30 blur-xl animate-pulse"></div>
             
             {/* โลโก้วงกลม */}
             <img 
-              src="/images/bitkub-circle-logo.png" 
-              alt="Bitkub Logo" 
+              src="/images/asiaplus-circle-logo.png" 
+              alt="Asia Plus Securities Logo" 
               className="w-28 h-28 object-contain relative z-10 animate-pulse"
               style={{
-                filter: 'drop-shadow(0 0 8px rgba(6,199,85,0.5))'
+                filter: 'drop-shadow(0 0 8px rgba(30,100,200,0.5))'
               }}
             />
             
@@ -131,7 +131,7 @@ export function SplashScreen({
             
             {/* วงแหวนเรืองแสงรอบโลโก้ */}
             <div 
-              className="absolute w-full h-full rounded-full border-2 border-[#06C755]/30"
+              className="absolute w-full h-full rounded-full border-2 border-blue-500/30"
               style={{
                 animation: 'pulse 2s infinite'
               }}
@@ -139,7 +139,7 @@ export function SplashScreen({
             
             {/* วงแหวนด้านนอกที่หมุน */}
             <div 
-              className="absolute w-36 h-36 rounded-full border border-[#06C755]/20"
+              className="absolute w-36 h-36 rounded-full border border-blue-500/20"
               style={{
                 animation: 'spin 10s linear infinite'
               }}
@@ -148,8 +148,8 @@ export function SplashScreen({
         </div>
         
         <div className="text-white text-center mb-8">
-          <h1 className="text-4xl font-bold mb-1" style={{ textShadow: '0 0 10px rgba(0,200,83,0.5)' }}>บิทคับ</h1>
-          <p className="text-sm text-gray-300 tracking-widest">EXCHANGE</p>
+          <h1 className="text-4xl font-bold mb-1" style={{ textShadow: '0 0 10px rgba(30,100,200,0.5)' }}>เอเซีย พลัส</h1>
+          <p className="text-sm text-gray-300 tracking-widest">SECURITIES</p>
         </div>
         
         <div className="mt-4 flex flex-col items-center w-80">

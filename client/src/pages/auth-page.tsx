@@ -39,7 +39,7 @@ export default function AuthPage() {
   }
 
   // สร้างคลาสร่วมสำหรับ Input และ FormLabel
-  const inputClasses = "border-[#06C755]/50 focus-visible:ring-[#06C755] bg-white/80 backdrop-blur-sm rounded-md shadow-sm";
+  const inputClasses = "border-blue-400/50 focus-visible:ring-blue-500 bg-white/80 backdrop-blur-sm rounded-md shadow-sm";
   const labelClasses = "text-blue-600 font-medium";
 
   return (
@@ -158,7 +158,7 @@ function LoginForm({
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full bg-[#06C755] hover:bg-[#05A747]" disabled={isLoading}>
+        <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={isLoading}>
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -263,7 +263,7 @@ function RegisterForm({
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full bg-[#06C755] hover:bg-[#05A747]" disabled={isLoading}>
+        <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={isLoading}>
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
