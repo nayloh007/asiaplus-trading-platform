@@ -567,6 +567,24 @@ export default function AdminTransactionsPage() {
                 )}
               </div>
               
+              {/* แสดงรูปภาพหลักฐานการชำระเงิน */}
+              {selectedTransaction.type === 'deposit' && selectedTransaction.paymentProof && (
+                <div className="mt-4">
+                  <div className="text-sm font-medium mb-2">หลักฐานการชำระเงิน:</div>
+                  <div className="border rounded-md overflow-hidden">
+                    <img 
+                      src={selectedTransaction.paymentProof} 
+                      alt="หลักฐานการชำระเงิน" 
+                      className="w-full h-auto object-contain cursor-pointer"
+                      onClick={() => window.open(selectedTransaction.paymentProof, '_blank')}
+                    />
+                  </div>
+                  <div className="text-xs text-muted-foreground text-center mt-1">
+                    คลิกที่รูปภาพเพื่อดูขนาดเต็ม
+                  </div>
+                </div>
+              )}
+              
               {selectedTransaction.status === 'pending' && (
                 <div className="space-y-2 mt-4">
                   <Label htmlFor="admin-note">หมายเหตุของผู้ดูแล</Label>
