@@ -49,7 +49,7 @@ export function TopNavigation({ title = "บิทคับ", showBackButton = f
           )}
           <div className="text-xl font-bold flex items-center">
             <img 
-              src="/images/Asia_Plus_Securities.png" 
+              src="/Asia_Plus_Securities.png" 
               alt="โลโก้ Asia Plus Securities" 
               className="h-10 mr-2" 
             />

@@ -116,7 +116,7 @@ export function SplashScreen({
             
             {/* โลโก้ Asia Plus Securities */}
             <img 
-              src="/images/Asia_Plus_Securities.png" 
+              src="/Asia_Plus_Securities.png" 
               alt="Asia Plus Securities Logo" 
               className="w-48 h-20 object-contain relative z-10"
               style={{

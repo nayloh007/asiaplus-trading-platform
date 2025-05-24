@@ -41,7 +41,7 @@ export function AdminSidebar() {
         <Link href="/admin">
           <a className="flex items-center">
             <img 
-              src="/images/Asia_Plus_Securities.png" 
+              src="/Asia_Plus_Securities.png" 
               alt="โลโก้ Asia Plus Securities" 
               className="h-8 mr-2" 
             />
