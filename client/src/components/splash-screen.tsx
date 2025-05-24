@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import stockChartBg from "../assets/stock_chart_bg.png";
+import aiInteractionBg from "../assets/ai_interaction.jpg";
 
 interface SplashScreenProps {
   onComplete: () => void;
@@ -50,7 +50,7 @@ export function SplashScreen({
       <div 
         className="w-full h-full flex flex-col items-center justify-center relative"
         style={{
-          backgroundImage: `url(${stockChartBg})`,
+          backgroundImage: `url(${aiInteractionBg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat"
