@@ -92,7 +92,7 @@ export function TopNavigation({ title = "บิทคับ", showBackButton = f
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem className="font-medium">{user.fullName}</DropdownMenuItem>
+                <DropdownMenuItem className="font-medium">{user.username}</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 {user.role === "admin" && (
                   <DropdownMenuItem onClick={() => setLocation("/admin")}>
