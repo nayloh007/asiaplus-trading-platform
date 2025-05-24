@@ -7,9 +7,9 @@ import {
 import { db, pool } from "./db";
 import { eq, and, ne, count, sql } from "drizzle-orm";
 import session from "express-session";
-import connectPg from "connect-pg-simple";
+import MemoryStore from "memorystore";
 
-const PostgresSessionStore = connectPg(session);
+const MemoryStoreSession = MemoryStore(session);
 
 export interface IStorage {
   // User operations
@@ -54,11 +54,8 @@ export class DatabaseStorage implements IStorage {
   sessionStore: session.Store;
   
   constructor() {
-    this.sessionStore = new PostgresSessionStore({ 
-      pool, 
-      tableName: 'session',
-      createTableIfMissing: true,
-      pruneSessionInterval: 60
+    this.sessionStore = new MemoryStoreSession({ 
+      checkPeriod: 86400000 // ล้างเซสชันที่หมดอายุทุก 24 ชั่วโมง
     });
   }
   
