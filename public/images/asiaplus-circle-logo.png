@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" fill="none">
+  <!-- วงกลมพื้นหลัง -->
+  <circle cx="100" cy="100" r="95" fill="#0A4B81"/>
+  <circle cx="100" cy="100" r="90" fill="#1E64C8"/>
+  
+  <!-- สัญลักษณ์ A+ เป็นตัวอักษร -->
+  <g fill="white">
+    <!-- ตัว A -->
+    <path d="M60 140L80 60H95L115 140H100L96 125H79L75 140H60ZM82 110H93L88 85H87L82 110Z"/>
+    <!-- เครื่องหมาย + -->
+    <path d="M130 90V110H110V120H130V140H145V120H165V110H145V90H130Z"/>
+  </g>
+  
+  <!-- วงกลมรอบนอก -->
+  <circle cx="100" cy="100" r="95" stroke="white" stroke-width="2" fill="none"/>
+</svg>
