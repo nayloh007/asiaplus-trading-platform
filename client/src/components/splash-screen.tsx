@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
+import stockChartBg from "../assets/stock_chart_bg.png";
 
 interface SplashScreenProps {
   onComplete: () => void;
@@ -49,7 +50,10 @@ export function SplashScreen({
       <div 
         className="w-full h-full flex flex-col items-center justify-center relative"
         style={{
-          background: "linear-gradient(135deg, #0a4b81 0%, #063157 100%)"
+          backgroundImage: `url(${stockChartBg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat"
         }}
       >
         {/* พื้นหลังพิเศษมีลวดลาย */}
