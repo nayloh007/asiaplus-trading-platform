@@ -64,7 +64,7 @@ export function TopNavigation({ title = "บิทคับ", showBackButton = f
             <div>{actionButton}</div>
           ) : !user ? (
             <a 
-              href="https://line.me/ti/p/~oeasy24" 
+              href="https://line.me/ti/p/~@231luwnq" 
               target="_blank" 
               rel="noopener noreferrer"
               className="flex items-center"
