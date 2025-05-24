@@ -114,11 +114,11 @@ export function SplashScreen({
             {/* เอฟเฟกต์เรืองแสงด้านหลัง */}
             <div className="absolute w-full h-full rounded-full bg-blue-500/30 blur-xl animate-pulse"></div>
             
-            {/* โลโก้วงกลม */}
+            {/* โลโก้ Asia Plus Securities */}
             <img 
-              src="/images/asiaplus-circle-logo.png" 
+              src="/images/Asia_Plus_Securities.png" 
               alt="Asia Plus Securities Logo" 
-              className="w-28 h-28 object-contain relative z-10 animate-pulse"
+              className="w-48 h-20 object-contain relative z-10"
               style={{
                 filter: 'drop-shadow(0 0 8px rgba(30,100,200,0.5))'
               }}
