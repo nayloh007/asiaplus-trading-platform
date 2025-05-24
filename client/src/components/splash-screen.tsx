@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import stockMarketGraph from "../assets/stock_market_graph.png";
+import asiaLogo from "../assets/Asia_Plus_Securities.png";
 
 interface SplashScreenProps {
   onComplete: () => void;
@@ -48,7 +49,7 @@ export function SplashScreen({
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center z-50 overflow-hidden">
       <div 
-        className="w-full h-full flex flex-col items-center justify-center relative"
+        className="w-full h-full flex flex-col items-center justify-center relative bg-blend-overlay"
         style={{
           backgroundImage: `url(${stockMarketGraph})`,
           backgroundSize: "cover",
@@ -115,19 +116,21 @@ export function SplashScreen({
         
         {/* โลโก้เอเซีย พลัส แบบวงกลมที่คุณต้องการ */}
         <div className="relative mb-6">
-          <div className="w-32 h-32 relative flex items-center justify-center">
+          <div className="w-64 h-48 relative flex items-center justify-center">
             {/* เอฟเฟกต์เรืองแสงด้านหลัง */}
             <div className="absolute w-full h-full rounded-full bg-blue-500/30 blur-xl animate-pulse"></div>
             
-            {/* โลโก้ Asia Plus Securities */}
-            <img 
-              src="/Asia_Plus_Securities.png" 
-              alt="Asia Plus Securities Logo" 
-              className="w-48 h-20 object-contain relative z-10"
-              style={{
-                filter: 'drop-shadow(0 0 8px rgba(30,100,200,0.5))'
-              }}
-            />
+            {/* โลโก้ Asia Plus Securities - ทำให้ใหญ่ขึ้นและไม่ถูกเบลอ */}
+            <div className="relative z-20 backdrop-filter-none" style={{ filter: 'none' }}>
+              <img 
+                src={asiaLogo} 
+                alt="Asia Plus Securities Logo" 
+                className="w-64 h-32 object-contain"
+                style={{
+                  filter: 'drop-shadow(0 0 10px rgba(30,100,200,0.7))'
+                }}
+              />
+            </div>
             
             {/* เอฟเฟกต์ประกายดาว */}
             <div className="absolute inset-0 flex items-center justify-center z-20">
