@@ -53,7 +53,9 @@ export function SplashScreen({
           backgroundImage: `url(${aiInteractionBg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          backgroundRepeat: "no-repeat"
+          backgroundRepeat: "no-repeat",
+          backdropFilter: "blur(8px)",
+          filter: "blur(1.5px) brightness(0.7)"
         }}
       >
         {/* พื้นหลังพิเศษมีลวดลาย */}
