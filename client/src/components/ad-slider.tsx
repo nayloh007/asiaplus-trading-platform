@@ -92,12 +92,7 @@ export function AdSlider() {
           </div>
         </div>
         
-        <div className="absolute -left-4 top-1/2 -translate-y-1/2">
-          <CarouselPrevious className="bg-white/80 hover:bg-white" />
-        </div>
-        <div className="absolute -right-4 top-1/2 -translate-y-1/2">
-          <CarouselNext className="bg-white/80 hover:bg-white" />
-        </div>
+        {/* ปุ่มนำทางถูกลบออกตามความต้องการของผู้ใช้ */}
       </Carousel>
     </div>
   );
