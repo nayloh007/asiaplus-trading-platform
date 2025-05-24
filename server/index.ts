@@ -15,7 +15,14 @@ app.use((req, res, next) => {
 
   const originalResJson = res.json;
   res.json = function (bodyJson, ...args) {
-    capturedJsonResponse = bodyJson;
+    try {
+      // ตรวจสอบว่าสามารถแปลงเป็น JSON ได้หรือไม่ก่อนที่จะบันทึก
+      const jsonString = JSON.stringify(bodyJson);
+      capturedJsonResponse = JSON.parse(jsonString);
+    } catch (error) {
+      // ถ้าไม่สามารถแปลงเป็น JSON ได้ ให้เก็บเฉพาะข้อความอธิบายความผิดพลาด
+      capturedJsonResponse = { message: 'Response contains circular structure or non-serializable values' };
+    }
     return originalResJson.apply(res, [bodyJson, ...args]);
   };
 
