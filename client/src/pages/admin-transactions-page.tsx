@@ -515,9 +515,9 @@ export default function AdminTransactionsPage() {
                 
                 <div className="text-muted-foreground">ผู้ใช้งาน:</div>
                 <div>
-                  {users?.find(u => u.id === selectedTransaction.userId)?.fullName}
+                  {users?.find(u => u.id === selectedTransaction.userId)?.username}
                   <div className="text-xs text-muted-foreground">
-                    @{users?.find(u => u.id === selectedTransaction.userId)?.username}
+                    ผู้ใช้ #{selectedTransaction.userId}
                   </div>
                 </div>
                 
@@ -552,12 +552,7 @@ export default function AdminTransactionsPage() {
                   </>
                 )}
                 
-                {selectedTransaction.accountName && (
-                  <>
-                    <div className="text-muted-foreground">ชื่อบัญชี:</div>
-                    <div>{selectedTransaction.accountName}</div>
-                  </>
-                )}
+
                 
                 {selectedTransaction.note && (
                   <>
