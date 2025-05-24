@@ -108,7 +108,7 @@ export function SplashScreen({
         {/* เอฟเฟกต์วงกลมเรืองแสง */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-blue-500/10 blur-3xl animate-pulse"></div>
         
-        {/* โลโก้บิทคับแบบวงกลมที่คุณต้องการ */}
+        {/* โลโก้เอเซีย พลัส แบบวงกลมที่คุณต้องการ */}
         <div className="relative mb-6">
           <div className="w-32 h-32 relative flex items-center justify-center">
             {/* เอฟเฟกต์เรืองแสงด้านหลัง */}

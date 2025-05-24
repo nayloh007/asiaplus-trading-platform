@@ -19,7 +19,7 @@ interface TopNavigationProps {
   actionButton?: React.ReactNode;
 }
 
-export function TopNavigation({ title = "บิทคับ", showBackButton = false, onBack, actionButton }: TopNavigationProps) {
+export function TopNavigation({ title = "เอเซีย พลัส", showBackButton = false, onBack, actionButton }: TopNavigationProps) {
   const { user, logoutMutation } = useAuth();
   const [, setLocation] = useLocation();
 

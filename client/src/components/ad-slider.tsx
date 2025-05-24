@@ -15,8 +15,8 @@ export function AdSlider() {
   
   const imageArray = [
     { src: "/d.jpg", alt: "Fibonacci คืออะไร" },
-    { src: "/e.png", alt: "ระวังแอพปลอม Bitkub Desktop" },
-    { src: "/f.jpg", alt: "วิธีโอนเหรียญมาไว้ที่ Bitkub Exchange" },
+    { src: "/e.png", alt: "ระวังแอพปลอม เอเซีย พลัส Desktop" },
+    { src: "/f.jpg", alt: "วิธีโอนเหรียญมาไว้ที่ เอเซีย พลัส Securities" },
     { src: "/g.jpg", alt: "Bitcoin Halving คืออะไร?" },
     { src: "/h.png", alt: "แหล่งความรู้มือใหม่หัดลงทุน" },
     { src: "/i.png", alt: "New Listing Plume (PLUME)" },
@@ -25,7 +25,7 @@ export function AdSlider() {
     { src: "/q.png", alt: "Bitkub x XDC: Vision Day" },
     { src: "/r.png", alt: "Proof of Reserve" },
     { src: "/s.jpg", alt: "ภัยคุกคามประเภทฟิชชิ่ง" },
-    { src: "/t.jpg", alt: "บิทคับ เอ็กซ์เชนจ์ Call Center 1518" }
+    { src: "/t.jpg", alt: "เอเซีย พลัส ซีเคียวริตี้ส์ Call Center 1518" }
   ];
 
   useEffect(() => {

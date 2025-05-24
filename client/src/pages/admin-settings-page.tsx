@@ -536,7 +536,7 @@ export default function AdminSettingsPage() {
                                 <Label htmlFor="site-name" className="font-medium">ชื่อเว็บไซต์</Label>
                                 <p className="text-sm text-muted-foreground">ชื่อที่แสดงในเบราว์เซอร์และระบบ</p>
                               </div>
-                              <Input id="site-name" defaultValue="บิทคับ" className="w-60" />
+                              <Input id="site-name" defaultValue="เอเซีย พลัส" className="w-60" />
                             </div>
                             
                             <div className="flex items-center justify-between space-x-2">
