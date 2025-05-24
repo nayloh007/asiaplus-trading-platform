@@ -65,11 +65,15 @@ async function comparePasswords(supplied: string, stored: string) {
 }
 
 export function setupAuth(app: Express) {
+  const MemoryStoreSession = MemoryStore(session);
+  
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET || "crypto-trade-secret",
     resave: false,
     saveUninitialized: false,
-    store: storage.sessionStore,
+    store: new MemoryStoreSession({
+      checkPeriod: 86400000 // ล้างเซสชันที่หมดอายุทุก 24 ชั่วโมง
+    }),
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
       secure: process.env.NODE_ENV === "production",
