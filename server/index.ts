@@ -1,6 +1,8 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { storage } from "./storage";
+import bcrypt from "bcryptjs";
 
 const app = express();
 app.use(express.json({ limit: '10mb' })); // เพิ่มขนาด limit เป็น 10mb
@@ -36,7 +38,41 @@ app.use((req, res, next) => {
   next();
 });
 
+// ฟังก์ชันสำหรับสร้างผู้ใช้แอดมิน
+async function createAdminUser() {
+  try {
+    // ตรวจสอบว่ามีผู้ใช้แอดมินอยู่แล้วหรือไม่
+    const existingAdmin = await storage.getUserByUsername('admin');
+    if (existingAdmin) {
+      console.log('Admin user already exists');
+      return;
+    }
+
+    // เข้ารหัสรหัสผ่าน
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash('admin123', salt);
+    
+    // สร้างข้อมูลผู้ใช้แอดมิน
+    const adminUser = {
+      username: 'admin',
+      password: hashedPassword,
+      email: 'admin@example.com',
+      role: 'admin',
+      balance: '1000000',
+    };
+    
+    // บันทึกผู้ใช้แอดมิน
+    const newUser = await storage.createUser(adminUser);
+    console.log('Admin user created successfully:', newUser.username);
+  } catch (error) {
+    console.error('Error creating admin user:', error);
+  }
+}
+
 (async () => {
+  // สร้างผู้ใช้แอดมินเมื่อเริ่มแอปพลิเคชัน
+  await createAdminUser();
+  
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
