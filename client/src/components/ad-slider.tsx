@@ -22,7 +22,7 @@ export function AdSlider() {
     { src: "/i.png", alt: "New Listing Plume (PLUME)" },
     { src: "/o.png", alt: "New Listing XDC Network (XDC)" },
     { src: "/p.png", alt: "รวมข่าวเด่นประจำสัปดาห์" },
-    { src: "/q.png", alt: "Bitkub x XDC: Vision Day" },
+    { src: "/q.png", alt: "เอเซีย พลัส x XDC: Vision Day" },
     { src: "/r.png", alt: "Proof of Reserve" },
     { src: "/s.jpg", alt: "ภัยคุกคามประเภทฟิชชิ่ง" },
     { src: "/t.jpg", alt: "เอเซีย พลัส ซีเคียวริตี้ส์ Call Center 1518" }

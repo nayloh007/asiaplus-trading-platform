@@ -176,7 +176,7 @@ export default function AdminDashboardPage() {
           <main className="flex-1 overflow-y-auto p-6 bg-background">
             <div className="mb-6">
               <h2 className="text-xl font-bold">ภาพรวมระบบ</h2>
-              <p className="text-muted-foreground">ยินดีต้อนรับเข้าสู่แดชบอร์ดผู้ดูแลระบบ Bitkub</p>
+              <p className="text-muted-foreground">ยินดีต้อนรับเข้าสู่แดชบอร์ดผู้ดูแลระบบ เอเซีย พลัส</p>
             </div>
             
             {/* Stats Cards */}

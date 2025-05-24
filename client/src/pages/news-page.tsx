@@ -14,17 +14,6 @@ import placeholderImage from "@/assets/placeholder.svg";
 
 // ใช้รูปภาพตัวอย่างสำหรับทุกข่าว
 const passkey = placeholderImage;
-const bitkubChain = placeholderImage;
-const bitkubCEO = placeholderImage;
-const bitkubCapital = placeholderImage;
-const bitkubBlockathon = placeholderImage;
-const thbProgrammable = placeholderImage;
-const bitkubHowto = placeholderImage;
-const bitkubNext = placeholderImage;
-const bitkubKUB = placeholderImage;
-const bitkubWallet = placeholderImage;
-const bitkubCoin = placeholderImage;
-const bitkubListing = placeholderImage;
 
 // ข้อมูลข่าวสารแบบ mock ชั่วคราว
 const mockNews = [
@@ -32,7 +21,7 @@ const mockNews = [
     id: 1,
     title: "Bitcoin (BTC) ทะลุ 80,000 ดอลลาร์แล้ว นักวิเคราะห์คาดอาจแตะ 100,000 ดอลลาร์ในปีนี้",
     summary: "Bitcoin ทำราคาสูงสุดใหม่ที่ 80,000 ดอลลาร์ หลังจากมีการปรับตัวในเชิงบวกอย่างต่อเนื่อง นักวิเคราะห์ชั้นนำคาดการณ์ว่าอาจจะแตะ 100,000 ดอลลาร์ภายในสิ้นปีนี้",
-    imageUrl: bitkubCoin,
+    imageUrl: placeholderImage,
     date: "15 พ.ค. 2025",
     category: "market",
     isFeatured: true,
@@ -42,7 +31,7 @@ const mockNews = [
     id: 2,
     title: "Ethereum (ETH) เตรียมปรับปรุงโปรโตคอลใหญ่ คาดว่าลดค่าธรรมเนียมได้ถึง 90%",
     summary: "Ethereum เตรียมอัปเดตโปรโตคอลครั้งใหญ่ซึ่งจะช่วยลดค่าธรรมเนียมการทำธุรกรรมลงได้ถึง 90% ผู้ใช้สามารถประหยัดเงินได้มากขึ้นในการใช้งานบนเครือข่าย",
-    imageUrl: bitkubNext,
+    imageUrl: placeholderImage,
     date: "14 พ.ค. 2025",
     category: "tech",
     isFeatured: false,
@@ -50,11 +39,11 @@ const mockNews = [
   },
   {
     id: 3,
-    title: "Bitkub เปิดตัวฟีเจอร์ Passkey ใหม่ เพิ่มความปลอดภัยในการเข้าถึงบัญชี",
-    summary: "Bitkub เตรียมเปิดตัวฟีเจอร์ Passkey ใหม่ที่รองรับการยืนยันตัวตนด้วยเทคโนโลยีสมัยใหม่ ช่วยให้ผู้ใช้สามารถเข้าถึงบัญชีได้อย่างปลอดภัยมากขึ้น",
+    title: "เอเซีย พลัส เปิดตัวฟีเจอร์ Passkey ใหม่ เพิ่มความปลอดภัยในการเข้าถึงบัญชี",
+    summary: "เอเซีย พลัส เตรียมเปิดตัวฟีเจอร์ Passkey ใหม่ที่รองรับการยืนยันตัวตนด้วยเทคโนโลยีสมัยใหม่ ช่วยให้ผู้ใช้สามารถเข้าถึงบัญชีได้อย่างปลอดภัยมากขึ้น",
     imageUrl: passkey,
     date: "12 พ.ค. 2025",
-    category: "bitkub",
+    category: "asiap",
     isFeatured: true,
     isHot: false
   },
@@ -62,7 +51,7 @@ const mockNews = [
     id: 4,
     title: "กระทรวงการคลังไทยเตรียมออกกฎหมายภาษี NFT และสินทรัพย์ดิจิทัล",
     summary: "กระทรวงการคลังไทยเตรียมออกกฎหมายภาษีสำหรับ NFT และสินทรัพย์ดิจิทัล คาดว่าจะมีผลบังคับใช้ในช่วงไตรมาสที่ 4 ของปีนี้ นักลงทุนควรเตรียมตัวรับมือ",
-    imageUrl: bitkubCEO,
+    imageUrl: placeholderImage,
     date: "10 พ.ค. 2025",
     category: "regulation",
     isFeatured: false,
@@ -70,9 +59,9 @@ const mockNews = [
   },
   {
     id: 5,
-    title: "Bitkub Chain เปิดทดสอบการใช้ THB Programmable Payment บนบล็อกเชน",
-    summary: "Bitkub Chain เปิดทดสอบการใช้ THB Programmable Payment ซึ่งเป็นสื่อกลางการชำระเงินด้วยเงินบาทบนระบบบล็อกเชน พร้อมให้ทดสอบการใช้งานภายในปี 2025",
-    imageUrl: thbProgrammable,
+    title: "เอเซีย พลัส Chain เปิดทดสอบการใช้ THB Programmable Payment บนบล็อกเชน",
+    summary: "เอเซีย พลัส Chain เปิดทดสอบการใช้ THB Programmable Payment ซึ่งเป็นสื่อกลางการชำระเงินด้วยเงินบาทบนระบบบล็อกเชน พร้อมให้ทดสอบการใช้งานภายในปี 2025",
+    imageUrl: placeholderImage,
     date: "8 พ.ค. 2025",
     category: "regulation",
     isFeatured: false,
@@ -80,9 +69,9 @@ const mockNews = [
   },
   {
     id: 6,
-    title: "Bitkub Exchange ประกาศเปิดเทรด Grass (GRASS) คริปโตน้องใหม่ล่าสุด",
-    summary: "Bitkub Exchange ประกาศเปิดให้ฝาก-ถอน และเทรด Grass (GRASS) คริปโตเคอร์เรนซี่น้องใหม่ล่าสุด เริ่มฝาก-ถอนวันที่ 9 เมษายน และเปิดเทรด 10 เมษายน 2025",
-    imageUrl: bitkubListing,
+    title: "เอเซีย พลัส Exchange ประกาศเปิดเทรด Grass (GRASS) คริปโตน้องใหม่ล่าสุด",
+    summary: "เอเซีย พลัส Exchange ประกาศเปิดให้ฝาก-ถอน และเทรด Grass (GRASS) คริปโตเคอร์เรนซี่น้องใหม่ล่าสุด เริ่มฝาก-ถอนวันที่ 9 เมษายน และเปิดเทรด 10 เมษายน 2025",
+    imageUrl: placeholderImage,
     date: "5 พ.ค. 2025",
     category: "market",
     isFeatured: false,
@@ -90,19 +79,19 @@ const mockNews = [
   },
   {
     id: 7,
-    title: "Bitkub จัดงาน BLOCKATHON 2023 ชวนนักพัฒนามาร่วมสร้างนวัตกรรมบล็อกเชน",
-    summary: "Bitkub จัดงาน BLOCKATHON 2023 เชิญชวนนักพัฒนาและผู้สนใจเทคโนโลยีบล็อกเชนมาร่วมสร้างสรรค์นวัตกรรมและแอปพลิเคชันบนเครือข่าย Bitkub Chain",
-    imageUrl: bitkubBlockathon,
+    title: "เอเซีย พลัส จัดงาน BLOCKATHON 2023 ชวนนักพัฒนามาร่วมสร้างนวัตกรรมบล็อกเชน",
+    summary: "เอเซีย พลัส จัดงาน BLOCKATHON 2023 เชิญชวนนักพัฒนาและผู้สนใจเทคโนโลยีบล็อกเชนมาร่วมสร้างสรรค์นวัตกรรมและแอปพลิเคชันบนเครือข่าย เอเซีย พลัส Chain",
+    imageUrl: placeholderImage,
     date: "3 พ.ค. 2025",
-    category: "bitkub",
+    category: "asiap",
     isFeatured: true,
     isHot: false
   },
   {
     id: 8,
-    title: "วิธีสมัคร Bitkub และยืนยันตัวตนล่าสุด 2024 แบบละเอียดทุกขั้นตอน",
-    summary: "แนะนำวิธีการสมัครและยืนยันตัวตนบนแพลตฟอร์ม Bitkub แบบละเอียดทุกขั้นตอน อัปเดตล่าสุดปี 2024 สำหรับผู้ที่สนใจเริ่มต้นลงทุนในคริปโตเคอร์เรนซี่",
-    imageUrl: bitkubHowto,
+    title: "วิธีสมัคร เอเซีย พลัส และยืนยันตัวตนล่าสุด 2024 แบบละเอียดทุกขั้นตอน",
+    summary: "แนะนำวิธีการสมัครและยืนยันตัวตนบนแพลตฟอร์ม เอเซีย พลัส แบบละเอียดทุกขั้นตอน อัปเดตล่าสุดปี 2024 สำหรับผู้ที่สนใจเริ่มต้นลงทุนในคริปโตเคอร์เรนซี่",
+    imageUrl: placeholderImage,
     date: "1 พ.ค. 2025",
     category: "market",
     isFeatured: false,
@@ -110,21 +99,21 @@ const mockNews = [
   },
   {
     id: 9,
-    title: "Bitkub เปลี่ยนชื่อ Bitkub Chain เป็น KUB พร้อมแผนพัฒนาเครือข่ายในอนาคต",
-    summary: "Bitkub ประกาศเปลี่ยนชื่อ Bitkub Chain เป็น KUB อย่างเป็นทางการ พร้อมเผยแผนการพัฒนาเครือข่ายบล็อกเชนในอนาคตเพื่อรองรับการเติบโตของอุตสาหกรรมคริปโต",
-    imageUrl: bitkubKUB,
+    title: "เอเซีย พลัส เปลี่ยนชื่อ เอเซีย พลัส Chain เป็น KUB พร้อมแผนพัฒนาเครือข่ายในอนาคต",
+    summary: "เอเซีย พลัส ประกาศเปลี่ยนชื่อ เอเซีย พลัส Chain เป็น KUB อย่างเป็นทางการ พร้อมเผยแผนการพัฒนาเครือข่ายบล็อกเชนในอนาคตเพื่อรองรับการเติบโตของอุตสาหกรรมคริปโต",
+    imageUrl: placeholderImage,
     date: "30 เม.ย. 2025",
-    category: "bitkub",
+    category: "asiap",
     isFeatured: false,
     isHot: true
   },
   {
     id: 10,
-    title: "Bitkub NEXT เปิดตัว Digital Hub ศูนย์รวมบริการดิจิทัลครบวงจร",
-    summary: "Bitkub NEXT เปิดตัวบริการ Digital Hub ศูนย์รวมบริการดิจิทัลครบวงจร ทั้งการลงทุน การเงิน และไลฟ์สไตล์ รองรับการใช้งานทั้งคริปโตและสินทรัพย์ดิจิทัลรูปแบบอื่น",
-    imageUrl: bitkubWallet,
+    title: "เอเซีย พลัส NEXT เปิดตัว Digital Hub ศูนย์รวมบริการดิจิทัลครบวงจร",
+    summary: "เอเซีย พลัส NEXT เปิดตัวบริการ Digital Hub ศูนย์รวมบริการดิจิทัลครบวงจร ทั้งการลงทุน การเงิน และไลฟ์สไตล์ รองรับการใช้งานทั้งคริปโตและสินทรัพย์ดิจิทัลรูปแบบอื่น",
+    imageUrl: placeholderImage,
     date: "28 เม.ย. 2025",
-    category: "bitkub",
+    category: "asiap",
     isFeatured: true,
     isHot: false
   }
