@@ -40,10 +40,12 @@ export function AdminSidebar() {
       <div className="p-6 border-b border-border">
         <Link href="/admin">
           <a className="flex items-center">
-            <div className="h-8 w-8 rounded-md bg-primary flex items-center justify-center text-primary-foreground font-bold">
-              B
-            </div>
-            <h1 className="text-xl font-bold ml-2">Bitkub Admin</h1>
+            <img 
+              src="/images/asia_plus_logo.png" 
+              alt="โลโก้ Asia Plus Securities" 
+              className="h-8 mr-2" 
+            />
+            <h1 className="text-xl font-bold ml-2">Asia Plus Admin</h1>
           </a>
         </Link>
       </div>
@@ -74,7 +76,7 @@ export function AdminSidebar() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <p className="text-sm font-medium">แอดมิน</p>
-            <p className="text-xs text-muted-foreground">admin@bitkub.com</p>
+            <p className="text-xs text-muted-foreground">admin@asiaplus.co.th</p>
           </div>
         </div>
         <Button 

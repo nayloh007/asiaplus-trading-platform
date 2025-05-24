@@ -40,28 +40,28 @@ export default function AuthPage() {
 
   // สร้างคลาสร่วมสำหรับ Input และ FormLabel
   const inputClasses = "border-[#06C755]/50 focus-visible:ring-[#06C755] bg-white/80 backdrop-blur-sm rounded-md shadow-sm";
-  const labelClasses = "text-[#06C755] font-medium";
+  const labelClasses = "text-blue-600 font-medium";
 
   return (
     <MobileContainer>
       <TopNavigation />
       <div className="p-4 flex flex-col items-center justify-center min-h-[calc(100vh-64px)]" 
             style={{
-              backgroundImage: "url('/images/bitkub-pattern-bg.jpg')",
+              backgroundColor: "#f5f7fa",
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat"
             }}>
-        <Card className="w-full max-w-md mx-auto border border-[#06C755]/40 bg-white/70 backdrop-blur-lg shadow-xl rounded-xl">
+        <Card className="w-full max-w-md mx-auto border border-blue-400/40 bg-white/90 backdrop-blur-lg shadow-xl rounded-xl">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-2">
               <img 
-                src="/images/bitkub-logo.png" 
-                alt="โลโก้บิทคับ" 
-                className="h-16"
+                src="/images/asia_plus_logo.png" 
+                alt="โลโก้ Asia Plus Securities" 
+                className="h-20"
               />
             </div>
-            <CardTitle className="text-2xl text-[#06C755]">
+            <CardTitle className="text-2xl text-blue-600">
               {activeTab === "login" ? "ยินดีต้อนรับกลับ" : "สร้างบัญชีใหม่"}
             </CardTitle>
             <CardDescription>
@@ -76,9 +76,9 @@ export default function AuthPage() {
               value={activeTab}
               onValueChange={(value) => setActiveTab(value as "login" | "register")}
             >
-              <TabsList className="grid grid-cols-2 mb-4 bg-white/60 p-1 rounded-lg border border-[#06C755]/30">
-                <TabsTrigger value="login" className="data-[state=active]:bg-[#06C755] data-[state=active]:text-white data-[state=inactive]:text-[#06C755]">เข้าสู่ระบบ</TabsTrigger>
-                <TabsTrigger value="register" className="data-[state=active]:bg-[#06C755] data-[state=active]:text-white data-[state=inactive]:text-[#06C755]">สมัครสมาชิก</TabsTrigger>
+              <TabsList className="grid grid-cols-2 mb-4 bg-white/60 p-1 rounded-lg border border-blue-400/30">
+                <TabsTrigger value="login" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=inactive]:text-blue-600">เข้าสู่ระบบ</TabsTrigger>
+                <TabsTrigger value="register" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=inactive]:text-blue-600">สมัครสมาชิก</TabsTrigger>
               </TabsList>
 
               <TabsContent value="login">
