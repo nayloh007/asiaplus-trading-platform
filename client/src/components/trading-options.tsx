@@ -362,16 +362,16 @@ export function TradingOptions({ crypto }: TradingOptionsProps) {
               className="space-y-4"
             >
               {tradeOptions.map((option) => (
-                <div key={option.duration} className="flex items-center justify-between p-4 border rounded-lg bg-neutral-50">
+                <div key={option.duration} className="flex items-center justify-between p-4 border rounded-lg bg-background">
                   <div className="flex items-center space-x-3">
                     <RadioGroupItem value={option.duration} id={`option-${option.duration}`} />
                     <div>
-                      <div className="text-sm text-neutral-600">เวลาชำระราคา</div>
+                      <div className="text-sm text-muted-foreground">เวลาชำระราคา</div>
                       <div className="text-xl font-bold">{option.duration}</div>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-md font-medium text-green-600">กำไร {option.profit}%</div>
+                    <div className="text-md font-medium text-primary">กำไร {option.profit}%</div>
                   </div>
                 </div>
               ))}
