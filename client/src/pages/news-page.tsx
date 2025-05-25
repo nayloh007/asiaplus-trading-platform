@@ -9,11 +9,22 @@ import { Separator } from "@/components/ui/separator";
 import { Clock, Share2, ChevronRight, Star, Newspaper, TrendingUp, Info, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-// รูปภาพที่ใช้ในข่าว
+// รูปภาพที่ใช้ในข่าว - placeholder
 import placeholderImage from "@/assets/placeholder.svg";
 
-// ใช้รูปภาพตัวอย่างสำหรับทุกข่าว
-const passkey = placeholderImage;
+// รูปภาพจาก Asia Plus Securities
+import asiaPlus1 from "@assets/462601494_2872254826265363_8039408733850352485_n.png";
+import asiaPlus2 from "@assets/462884981_2876000042557508_8492050558665398215_n.jpg";
+import asiaPlus3 from "@assets/463194602_2877123072445205_400290765798955497_n.png";
+import asiaPlus4 from "@assets/463199942_2878974105593435_496135016965127313_n.png";
+import asiaPlus5 from "@assets/463883305_2883588198465359_7359262269516360381_n.png";
+import asiaPlus6 from "@assets/469260309_2928765837280928_8586244591954648374_n.png";
+import asiaPlus7 from "@assets/475770537_2978550502302461_2285734999134478019_n.png";
+import asiaPlus8 from "@assets/481193256_3003680446456133_1544279445465180161_n.jpg";
+import asiaPlus9 from "@assets/481247539_3003680433122801_4202088951531435287_n.jpg";
+import asiaPlus10 from "@assets/481265377_3001713059986205_2798521872516734220_n.jpg";
+import asiaPlus11 from "@assets/485370924_3024524554371722_736050699631465514_n.jpg";
+import asiaPlus12 from "@assets/35301242_1006247372866127_4893868337596989440_n.png";
 
 // ข้อมูลข่าวสารแบบ mock ชั่วคราว
 const mockNews = [
@@ -21,7 +32,7 @@ const mockNews = [
     id: 1,
     title: "Bitcoin (BTC) ทะลุ 80,000 ดอลลาร์แล้ว นักวิเคราะห์คาดอาจแตะ 100,000 ดอลลาร์ในปีนี้",
     summary: "Bitcoin ทำราคาสูงสุดใหม่ที่ 80,000 ดอลลาร์ หลังจากมีการปรับตัวในเชิงบวกอย่างต่อเนื่อง นักวิเคราะห์ชั้นนำคาดการณ์ว่าอาจจะแตะ 100,000 ดอลลาร์ภายในสิ้นปีนี้",
-    imageUrl: placeholderImage,
+    imageUrl: asiaPlus8,
     date: "15 พ.ค. 2025",
     category: "market",
     isFeatured: true,
@@ -31,7 +42,7 @@ const mockNews = [
     id: 2,
     title: "Ethereum (ETH) เตรียมปรับปรุงโปรโตคอลใหญ่ คาดว่าลดค่าธรรมเนียมได้ถึง 90%",
     summary: "Ethereum เตรียมอัปเดตโปรโตคอลครั้งใหญ่ซึ่งจะช่วยลดค่าธรรมเนียมการทำธุรกรรมลงได้ถึง 90% ผู้ใช้สามารถประหยัดเงินได้มากขึ้นในการใช้งานบนเครือข่าย",
-    imageUrl: placeholderImage,
+    imageUrl: asiaPlus9,
     date: "14 พ.ค. 2025",
     category: "tech",
     isFeatured: false,
@@ -39,9 +50,9 @@ const mockNews = [
   },
   {
     id: 3,
-    title: "เอเซีย พลัส เปิดตัวฟีเจอร์ Passkey ใหม่ เพิ่มความปลอดภัยในการเข้าถึงบัญชี",
-    summary: "เอเซีย พลัส เตรียมเปิดตัวฟีเจอร์ Passkey ใหม่ที่รองรับการยืนยันตัวตนด้วยเทคโนโลยีสมัยใหม่ ช่วยให้ผู้ใช้สามารถเข้าถึงบัญชีได้อย่างปลอดภัยมากขึ้น",
-    imageUrl: passkey,
+    title: "เอเซีย พลัส เปิดตัวฟีเจอร์ใหม่ เพิ่มความปลอดภัยในการเข้าถึงบัญชี",
+    summary: "เอเซีย พลัส เตรียมเปิดตัวฟีเจอร์ใหม่ที่รองรับการยืนยันตัวตนด้วยเทคโนโลยีสมัยใหม่ ช่วยให้ผู้ใช้สามารถเข้าถึงบัญชีได้อย่างปลอดภัยมากขึ้น",
+    imageUrl: asiaPlus11,
     date: "12 พ.ค. 2025",
     category: "asiap",
     isFeatured: true,
@@ -51,7 +62,7 @@ const mockNews = [
     id: 4,
     title: "กระทรวงการคลังไทยเตรียมออกกฎหมายภาษี NFT และสินทรัพย์ดิจิทัล",
     summary: "กระทรวงการคลังไทยเตรียมออกกฎหมายภาษีสำหรับ NFT และสินทรัพย์ดิจิทัล คาดว่าจะมีผลบังคับใช้ในช่วงไตรมาสที่ 4 ของปีนี้ นักลงทุนควรเตรียมตัวรับมือ",
-    imageUrl: placeholderImage,
+    imageUrl: asiaPlus5,
     date: "10 พ.ค. 2025",
     category: "regulation",
     isFeatured: false,

@@ -91,5 +91,21 @@
     "predeterminedResult": "win",
     "endTime": "2025-05-25T05:21:39.637Z",
     "updatedAt": "2025-05-25T05:21:39.637Z"
+  },
+  {
+    "id": 7,
+    "userId": 2,
+    "cryptoId": "bitcoin",
+    "entryPrice": "108179",
+    "amount": "100",
+    "direction": "up",
+    "duration": 60,
+    "profitPercentage": "30",
+    "createdAt": "2025-05-25T05:24:39.334Z",
+    "status": "completed",
+    "result": "win",
+    "predeterminedResult": "win",
+    "endTime": "2025-05-25T05:25:39.294Z",
+    "updatedAt": "2025-05-25T05:25:39.294Z"
   }
 ]

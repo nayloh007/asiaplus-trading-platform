@@ -20,5 +20,37 @@
     "status": "approved",
     "createdAt": "2025-05-25T05:02:40.209Z",
     "updatedAt": "2025-05-25T05:02:51.712Z"
+  },
+  {
+    "id": 3,
+    "userId": 2,
+    "type": "withdraw",
+    "amount": "100",
+    "fee": "3.00",
+    "method": "bank",
+    "bankName": "ไทยพาณิชย์",
+    "bankAccount": "3216548971",
+    "accountName": "หำกดหกด หกดหกด",
+    "bankAccountId": 1,
+    "status": "approved",
+    "note": "เงินถูกตัดจากบัญชีแล้ว รอการอนุมัติ | ค่าธรรมเนียม 3%: 3.00 บาท ยอดสุทธิ: 97.00 บาท",
+    "createdAt": "2025-05-25T05:32:35.813Z",
+    "updatedAt": "2025-05-25T05:33:26.825Z"
+  },
+  {
+    "id": 4,
+    "userId": 2,
+    "type": "withdraw",
+    "amount": "100",
+    "fee": "3.00",
+    "method": "bank",
+    "bankName": "ไทยพาณิชย์",
+    "bankAccount": "3216548973",
+    "accountName": "หำกดหกด หกดหกด",
+    "bankAccountId": 1,
+    "status": "frozen",
+    "note": "123",
+    "createdAt": "2025-05-25T05:33:42.688Z",
+    "updatedAt": "2025-05-25T05:33:50.867Z"
   }
 ]
