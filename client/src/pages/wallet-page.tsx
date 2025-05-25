@@ -32,6 +32,7 @@ import { formatCurrency, formatShortDate } from "@/lib/formatters";
 import { Loader2, ArrowUp, ArrowDown, PlusCircle, Trash2, CheckCircle2 } from "lucide-react";
 import { Transaction, BankAccount } from "@shared/schema";
 import asiaLogo from "@assets/Asia_Plus_Securities.png";
+import cryptoBgImage from "@assets/image_1748118681634.png";
 
 export default function WalletPage() {
   const { user } = useAuth();
@@ -411,9 +412,13 @@ export default function WalletPage() {
         <Card className="mb-4 text-white overflow-hidden rounded-none border-x-0 shadow-none">
           <div className="relative">
             <div className="absolute inset-0 z-0">
-              {/* พื้นหลังสีน้ำเงินเข้มที่เข้ากับสีของ Asia Plus Securities */}
-              <div className="w-full h-full bg-blue-900 bg-gradient-to-br from-blue-800 to-blue-950"></div>
-              <div className="absolute inset-0 bg-black/10"></div>
+              {/* พื้นหลังใช้รูปภาพตามที่ผู้ใช้ต้องการ */}
+              <img 
+                src={cryptoBgImage} 
+                alt="Crypto Background" 
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-black/20"></div>
             </div>
             <CardContent className="p-6 relative z-10">
               <div className="flex justify-between items-start mb-4">
