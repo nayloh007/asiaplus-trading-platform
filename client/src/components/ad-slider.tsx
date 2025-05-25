@@ -15,10 +15,11 @@ export function AdSlider() {
   
   // ใช้รูปภาพจาก Asia Plus Securities
   const imageArray = [
-    { src: "/images/Asia_Plus_Securities.png", alt: "Asia Plus Securities - การลงทุนที่ให้ผลตอบแทนดี" },
-    { src: "/images/asia_plus_logo.png", alt: "Asia Plus Securities - บริการซื้อขายหลักทรัพย์" },
-    { src: "/images/asiaplus-circle-logo.png", alt: "Asia Plus Securities - ที่ปรึกษาการลงทุนมืออาชีพ" },
-    { src: "/images/asiaplus-circle-logo.svg", alt: "Asia Plus Securities - เทคโนโลยีการลงทุนสมัยใหม่" }
+    { src: "https://img.freepik.com/premium-photo/bitcoin-blockchain-crypto-currency-digital-encryption-digital-money-exchange-technology-network-connections_24070-1004.jpg", alt: "Asia Plus Securities - การลงทุนคริปโตเคอเรนซี" },
+    { src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5pJ2InnYs9MRNVVj5aFqmVK-0S4wm0jLQ4Q&usqp=CAU", alt: "Asia Plus Securities - บริการซื้อขายหลักทรัพย์" },
+    { src: "https://media.istockphoto.com/id/1332501286/photo/cryptocurrency-coin-bitcoin-with-blockchain-technology-and-network-connection-on-motherboard.jpg?s=612x612&w=0&k=20&c=q9y_HqHY3gJR7YfSxHAkLcPnWVt5t4nydBSEafqZFcE=", alt: "Asia Plus Securities - ที่ปรึกษาการลงทุนมืออาชีพ" },
+    { src: "https://t3.ftcdn.net/jpg/02/89/27/76/360_F_289277646_usBCutfWDVlUvI5vJfZ5QTVGD5qdhO8N.jpg", alt: "Asia Plus Securities - เทคโนโลยีการลงทุนสมัยใหม่" },
+    { src: "https://www.shutterstock.com/image-photo/double-exposure-businessman-stock-market-600nw-1908262593.jpg", alt: "Asia Plus Securities - วิเคราะห์การลงทุนอย่างแม่นยำ" }
   ];
 
   useEffect(() => {
@@ -66,7 +67,7 @@ export function AdSlider() {
                   onError={(e) => {
                     console.error(`Failed to load image: ${image.src}`);
                     e.currentTarget.onerror = null;
-                    e.currentTarget.src = "/images/asiaplus-circle-logo.png"; 
+                    e.currentTarget.src = "https://www.asiaplus.co.th/images/logo/symbol/original/1587976780795.png"; 
                   }}
                 />
               </div>
