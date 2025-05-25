@@ -209,7 +209,7 @@ export default function ProfilePage() {
         {/* ภาพพื้นหลัง */}
         <div className="absolute inset-0 w-full h-full">
           <img 
-            src="https://www.brandbuffet.in.th/wp-content/uploads/2021/12/shutterstock_crypto.jpg" 
+            src="https://img.freepik.com/premium-photo/bitcoin-blockchain-crypto-currency-digital-encryption-digital-money-exchange-technology-network-connections_24070-1004.jpg" 
             alt="Crypto Background" 
             className="w-full h-full object-cover"
           />
