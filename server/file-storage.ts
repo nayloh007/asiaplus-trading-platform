@@ -81,7 +81,7 @@ export class FileStorage implements IStorage {
       checkPeriod: 86400000 // 24 ชั่วโมง
     });
 
-    console.log('Using file-based storage for persistence...');
+    console.log('✅ Using file-based JSON storage for persistence - Data will be stored in ./data/ directory');
   }
 
   // บันทึกข้อมูลทั้งหมดลงไฟล์
