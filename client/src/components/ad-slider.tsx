@@ -13,19 +13,15 @@ export function AdSlider() {
   const [api, setApi] = useState<any>();
   const [activeIndex, setActiveIndex] = useState(0);
   
+  // ใช้รูปภาพจาก Asia Plus Securities
   const imageArray = [
-    { src: "/d.jpg", alt: "Fibonacci คืออะไร" },
-    { src: "/e.png", alt: "ระวังแอพปลอม เอเซีย พลัส Desktop" },
-    { src: "/f.jpg", alt: "วิธีโอนเหรียญมาไว้ที่ เอเซีย พลัส Securities" },
-    { src: "/g.jpg", alt: "Bitcoin Halving คืออะไร?" },
-    { src: "/h.png", alt: "แหล่งความรู้มือใหม่หัดลงทุน" },
-    { src: "/i.png", alt: "New Listing Plume (PLUME)" },
-    { src: "/o.png", alt: "New Listing XDC Network (XDC)" },
-    { src: "/p.png", alt: "รวมข่าวเด่นประจำสัปดาห์" },
-    { src: "/q.png", alt: "เอเซีย พลัส x XDC: Vision Day" },
-    { src: "/r.png", alt: "Proof of Reserve" },
-    { src: "/s.jpg", alt: "ภัยคุกคามประเภทฟิชชิ่ง" },
-    { src: "/t.jpg", alt: "เอเซีย พลัส ซีเคียวริตี้ส์ Call Center 1518" }
+    { src: "assets/20220817-a-cover.jpg", alt: "Asia Plus Securities - การลงทุนที่ให้ผลตอบแทนดี" },
+    { src: "assets/a3723684-c60a-409c-bb99-408c85902672.webp", alt: "Asia Plus Securities - บริการซื้อขายหลักทรัพย์" },
+    { src: "assets/ASP.jpg", alt: "Asia Plus Securities - ที่ปรึกษาการลงทุนมืออาชีพ" },
+    { src: "assets/gR8QI0ZY9LXIUopdOXvc.jpg", alt: "Asia Plus Securities - ติดตามการลงทุนอย่างใกล้ชิด" },
+    { src: "assets/gVPK6VaFv8EDKlvFu0Ae.webp", alt: "Asia Plus Securities - เทคโนโลยีการลงทุนสมัยใหม่" },
+    { src: "assets/w644 (2).jpg", alt: "Asia Plus Securities - วิเคราะห์การลงทุนอย่างแม่นยำ" },
+    { src: "assets/พบสื่อ-Q1-65-ช่วงที่1-e1641968185261.jpg", alt: "Asia Plus Securities - ปีเสือ SET ขึ้นเหนือ 1800 จุด" }
   ];
 
   useEffect(() => {
