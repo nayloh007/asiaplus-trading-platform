@@ -873,7 +873,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // อัพเดทรหัสผ่าน (ถ้ามี)
       if (req.body.password) {
+        console.log("กำลังแฮชรหัสผ่านใหม่สำหรับผู้ใช้ ID:", userId);
         const hashedPassword = await hashPassword(req.body.password);
+        console.log("รหัสผ่านที่แฮชแล้ว:", hashedPassword.substring(0, 20) + "...");
         updateData.password = hashedPassword;
       }
       
