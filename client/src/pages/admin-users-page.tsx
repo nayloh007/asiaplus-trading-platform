@@ -78,16 +78,16 @@ export default function AdminUsersPage() {
       cell: (user: User) => <span>{user.id}</span>,
     },
     {
-      key: 'fullName',
+      key: 'username',
       header: 'ชื่อผู้ใช้',
       cell: (user: User) => (
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-medium">
-            {user.fullName.charAt(0)}
+            {user.username.charAt(0).toUpperCase()}
           </div>
           <div>
-            <div className="font-medium">{user.fullName}</div>
-            <div className="text-xs text-muted-foreground">@{user.username}</div>
+            <div className="font-medium">{user.username}</div>
+            <div className="text-xs text-muted-foreground">@{user.email}</div>
           </div>
         </div>
       ),
