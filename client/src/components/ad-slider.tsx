@@ -15,13 +15,10 @@ export function AdSlider() {
   
   // ใช้รูปภาพจาก Asia Plus Securities
   const imageArray = [
-    { src: "assets/20220817-a-cover.jpg", alt: "Asia Plus Securities - การลงทุนที่ให้ผลตอบแทนดี" },
-    { src: "assets/a3723684-c60a-409c-bb99-408c85902672.webp", alt: "Asia Plus Securities - บริการซื้อขายหลักทรัพย์" },
-    { src: "assets/ASP.jpg", alt: "Asia Plus Securities - ที่ปรึกษาการลงทุนมืออาชีพ" },
-    { src: "assets/gR8QI0ZY9LXIUopdOXvc.jpg", alt: "Asia Plus Securities - ติดตามการลงทุนอย่างใกล้ชิด" },
-    { src: "assets/gVPK6VaFv8EDKlvFu0Ae.webp", alt: "Asia Plus Securities - เทคโนโลยีการลงทุนสมัยใหม่" },
-    { src: "assets/w644 (2).jpg", alt: "Asia Plus Securities - วิเคราะห์การลงทุนอย่างแม่นยำ" },
-    { src: "assets/พบสื่อ-Q1-65-ช่วงที่1-e1641968185261.jpg", alt: "Asia Plus Securities - ปีเสือ SET ขึ้นเหนือ 1800 จุด" }
+    { src: "/images/Asia_Plus_Securities.png", alt: "Asia Plus Securities - การลงทุนที่ให้ผลตอบแทนดี" },
+    { src: "/images/asia_plus_logo.png", alt: "Asia Plus Securities - บริการซื้อขายหลักทรัพย์" },
+    { src: "/images/asiaplus-circle-logo.png", alt: "Asia Plus Securities - ที่ปรึกษาการลงทุนมืออาชีพ" },
+    { src: "/images/asiaplus-circle-logo.svg", alt: "Asia Plus Securities - เทคโนโลยีการลงทุนสมัยใหม่" }
   ];
 
   useEffect(() => {
@@ -65,7 +62,12 @@ export function AdSlider() {
                 <img 
                   src={image.src} 
                   alt={image.alt}
-                  className="w-full h-auto object-cover"
+                  className="w-full h-48 object-cover"
+                  onError={(e) => {
+                    console.error(`Failed to load image: ${image.src}`);
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = "/images/asiaplus-circle-logo.png"; 
+                  }}
                 />
               </div>
             </CarouselItem>
