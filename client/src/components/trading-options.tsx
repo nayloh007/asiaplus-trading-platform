@@ -222,13 +222,28 @@ export function TradingOptions({ crypto }: TradingOptionsProps) {
   
   // ทำการสั่งซื้อจริงๆ เมื่อยืนยันใน Dialog แล้ว
   const handleConfirmTrade = () => {
+    // หา option ที่เลือกเพื่อดึงข้อมูล seconds และ profit
+    const selectedOption = tradeOptions.find(option => option.duration === selectedDuration);
+    const durationInSeconds = selectedOption ? selectedOption.seconds : 60;
+    const profitPercentage = selectedOption ? selectedOption.profit.toString() : "30";
+    
+    console.log("ส่งข้อมูลการเทรด:", {
+      cryptoId: crypto.id,
+      amount,
+      direction: tradeDirection,
+      entryPrice: crypto.current_price.toString(),
+      duration: durationInSeconds,
+      profitPercentage
+    });
+    
     // ส่งข้อมูลไปยัง API
     tradeMutation.mutate({
       cryptoId: crypto.id,
       amount,
       direction: tradeDirection,
       entryPrice: crypto.current_price.toString(),
-      duration: selectedDuration
+      duration: durationInSeconds,
+      profitPercentage
     });
     
     // ปิด Dialog
