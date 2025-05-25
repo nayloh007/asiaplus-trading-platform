@@ -209,8 +209,8 @@ export default function ProfilePage() {
         {/* ภาพพื้นหลัง */}
         <div className="absolute inset-0 w-full h-full">
           <img 
-            src="https://static.thairath.co.th/media/dFQROr7oWzulq5Fa5KwDYYXV1sTshzdFCROlWQMPUVODVUxSFH1wE3kZAlWkwOAo7OY.webp" 
-            alt="Background" 
+            src="https://www.brandbuffet.in.th/wp-content/uploads/2021/12/shutterstock_crypto.jpg" 
+            alt="Crypto Background" 
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/60"></div>
