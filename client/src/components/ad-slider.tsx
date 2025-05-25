@@ -69,7 +69,7 @@ export function AdSlider() {
                 <img 
                   src={image.src} 
                   alt={image.alt}
-                  className="w-full h-48 object-cover"
+                  className="w-full h-64 object-cover"
                   onError={(e) => {
                     console.error(`Failed to load image: ${image.src}`);
                     e.currentTarget.onerror = null;
