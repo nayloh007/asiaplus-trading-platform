@@ -103,31 +103,46 @@ export function TradingOptions({ crypto }: TradingOptionsProps) {
     },
     onSuccess: (data) => {
       toast({
-        title: "Trade executed",
-        description: `Your ${crypto.symbol.toUpperCase()} trade has been placed successfully.`,
+        title: "การเทรดสำเร็จ",
+        description: `เทรด ${crypto.symbol.toUpperCase()} ของคุณได้ถูกบันทึกเรียบร้อยแล้ว`,
       });
       queryClient.invalidateQueries({ queryKey: ["/api/trades"] });
       
-      // หา option ที่เลือก
-      const selectedOption = tradeOptions.find(option => option.duration === data.duration);
-      if (selectedOption) {
-        // สร้างข้อมูลการเทรดที่กำลังดำเนินการอยู่
-        const now = new Date();
-        const endTime = new Date(now.getTime() + selectedOption.seconds * 1000);
-        
-        // เพิ่มข้อมูลการเทรดเข้าไปใน global state
-        addActiveTrade({
-          id: data.id,
-          duration: selectedOption.seconds,
-          entryPrice: parseFloat(data.entryPrice),
-          direction: data.direction as "up" | "down",
-          amount: data.amount,
-          profitPercentage: selectedOption.profit,
-          endTime,
-          cryptoId: data.cryptoId,
-          cryptoSymbol: crypto.symbol.toUpperCase()
-        });
-      }
+      console.log("ข้อมูลการเทรดที่ได้รับ:", data);
+      
+      // ดึงค่า seconds จาก tradeOptions โดยเปรียบเทียบกับ duration ที่ส่งไป
+      const durationInSeconds = parseInt(data.duration);
+      const selectedOption = tradeOptions.find(option => option.seconds === durationInSeconds);
+      const profitPercent = selectedOption ? selectedOption.profit : parseInt(data.profitPercentage);
+      
+      // สร้างข้อมูลการเทรดที่กำลังดำเนินการอยู่
+      const now = new Date();
+      const endTime = new Date(now.getTime() + durationInSeconds * 1000);
+      
+      console.log("กำลังเพิ่มข้อมูลการเทรด:", {
+        id: data.id,
+        duration: durationInSeconds,
+        entryPrice: parseFloat(data.entryPrice),
+        direction: data.direction,
+        amount: data.amount,
+        profitPercentage: profitPercent,
+        endTime,
+        cryptoId: data.cryptoId,
+        cryptoSymbol: crypto.symbol.toUpperCase()
+      });
+      
+      // เพิ่มข้อมูลการเทรดเข้าไปใน global state
+      addActiveTrade({
+        id: data.id,
+        duration: durationInSeconds,
+        entryPrice: parseFloat(data.entryPrice),
+        direction: data.direction as "up" | "down",
+        amount: data.amount,
+        profitPercentage: profitPercent,
+        endTime,
+        cryptoId: data.cryptoId,
+        cryptoSymbol: crypto.symbol.toUpperCase()
+      });
     },
     onError: (error: Error) => {
       toast({
