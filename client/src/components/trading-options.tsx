@@ -106,7 +106,9 @@ export function TradingOptions({ crypto }: TradingOptionsProps) {
         title: "การเทรดสำเร็จ",
         description: `เทรด ${crypto.symbol.toUpperCase()} ของคุณได้ถูกบันทึกเรียบร้อยแล้ว`,
       });
+      // อัพเดทข้อมูลการเทรดและข้อมูลผู้ใช้ (เพื่ออัพเดทยอดเงินคงเหลือ)
       queryClient.invalidateQueries({ queryKey: ["/api/trades"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
       
       console.log("ข้อมูลการเทรดที่ได้รับ:", data);
       
