@@ -294,26 +294,24 @@ export function registerSettingsRoutes(app: Express) {
       
       // รายการตั้งค่าที่จะบันทึก
       const settings = [
-        { key: 'bank_name', value: JSON.stringify(data.bank.name) },
-        { key: 'bank_account_number', value: JSON.stringify(data.bank.accountNumber) },
-        { key: 'bank_account_name', value: JSON.stringify(data.bank.accountName) },
-        { key: 'promptpay_number', value: JSON.stringify(data.promptpay.number) },
-        { key: 'promptpay_tax_id', value: JSON.stringify(data.promptpay.taxId) },
-        { key: 'promptpay_name', value: JSON.stringify(data.promptpay.name) },
+        { key: 'bank_name', value: data.bank.name },
+        { key: 'bank_account_number', value: data.bank.accountNumber },
+        { key: 'bank_account_name', value: data.bank.accountName },
+        { key: 'promptpay_number', value: data.promptpay.number },
+        { key: 'promptpay_tax_id', value: data.promptpay.taxId },
+        { key: 'promptpay_name', value: data.promptpay.name },
       ];
       
       // อัปเดตทีละรายการ
       for (const setting of settings) {
-        if (setting.value) {
-          // UPSERT - อัปเดตถ้ามีอยู่แล้ว หรือเพิ่มใหม่ถ้ายังไม่มี
-          await pool.query(
-            `INSERT INTO settings (key, value, updated_at) 
-             VALUES ($1, $2::jsonb, NOW()) 
-             ON CONFLICT (key) 
-             DO UPDATE SET value = $2::jsonb, updated_at = NOW()`,
-            [setting.key, setting.value]
-          );
-        }
+        // UPSERT - อัปเดตถ้ามีอยู่แล้ว หรือเพิ่มใหม่ถ้ายังไม่มี
+        await pool.query(
+          `INSERT INTO settings (key, value, updated_at) 
+           VALUES ($1, $2::text, NOW()) 
+           ON CONFLICT (key) 
+           DO UPDATE SET value = $2::text, updated_at = NOW()`,
+          [setting.key, setting.value]
+        );
       }
       
       res.json({
@@ -404,6 +402,8 @@ export function registerSettingsRoutes(app: Express) {
           name: dbSettings.promptpay_name || "",
         }
       };
+      
+      console.log("Retrieved deposit accounts:", depositAccounts);
       
       // ไม่ต้อง end pool เพราะเป็น shared pool
       res.json(depositAccounts);
