@@ -31,7 +31,7 @@ import { useToast } from "@/hooks/use-toast";
 import { formatCurrency, formatShortDate } from "@/lib/formatters";
 import { Loader2, ArrowUp, ArrowDown, PlusCircle, Trash2, CheckCircle2 } from "lucide-react";
 import { Transaction, BankAccount } from "@shared/schema";
-import walletBgImage from "@/assets/wallet-bg.png";
+import asiaLogo from "@assets/Asia_Plus_Securities.png";
 
 export default function WalletPage() {
   const { user } = useAuth();
@@ -411,30 +411,38 @@ export default function WalletPage() {
         <Card className="mb-4 text-white overflow-hidden rounded-none border-x-0 shadow-none">
           <div className="relative">
             <div className="absolute inset-0 z-0">
-              <img 
-                src={walletBgImage} 
-                alt="Bitkub Wallet" 
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-black/40"></div>
+              {/* พื้นหลังสีน้ำเงินเข้มที่เข้ากับสีของ Asia Plus Securities */}
+              <div className="w-full h-full bg-blue-900 bg-gradient-to-br from-blue-800 to-blue-950"></div>
+              <div className="absolute inset-0 bg-black/10"></div>
             </div>
             <CardContent className="p-6 relative z-10">
-              <div className="text-sm mb-1">ยอดเงินคงเหลือ</div>
-              <div className="text-3xl font-bold mb-4">
-                {formatCurrency(Number(user?.balance || 0))}
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <div className="text-sm mb-1 text-blue-100">ยอดเงินคงเหลือ</div>
+                  <div className="text-3xl font-bold mb-4">
+                    {formatCurrency(Number(user?.balance || 0))}
+                  </div>
+                </div>
+                <div className="relative">
+                  <img 
+                    src={asiaLogo} 
+                    alt="Asia Plus Securities" 
+                    className="h-8 object-contain"
+                  />
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <Button
                   onClick={() => setShowDepositDialog(true)}
                   variant="outline"
-                  className="bg-white/20 border-white text-white hover:bg-white/30"
+                  className="bg-blue-800/40 border-blue-300 text-white hover:bg-blue-700/50"
                 >
                   ฝากเงิน
                 </Button>
                 <Button
                   onClick={() => setShowWithdrawDialog(true)}
                   variant="outline"
-                  className="bg-white/20 border-white text-white hover:bg-white/30"
+                  className="bg-blue-800/40 border-blue-300 text-white hover:bg-blue-700/50"
                 >
                   ถอนเงิน
                 </Button>
