@@ -15,11 +15,17 @@ export function AdSlider() {
   
   // ใช้รูปภาพจาก Asia Plus Securities
   const imageArray = [
-    { src: "https://img.freepik.com/premium-photo/bitcoin-blockchain-crypto-currency-digital-encryption-digital-money-exchange-technology-network-connections_24070-1004.jpg", alt: "Asia Plus Securities - การลงทุนคริปโตเคอเรนซี" },
-    { src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5pJ2InnYs9MRNVVj5aFqmVK-0S4wm0jLQ4Q&usqp=CAU", alt: "Asia Plus Securities - บริการซื้อขายหลักทรัพย์" },
-    { src: "https://media.istockphoto.com/id/1332501286/photo/cryptocurrency-coin-bitcoin-with-blockchain-technology-and-network-connection-on-motherboard.jpg?s=612x612&w=0&k=20&c=q9y_HqHY3gJR7YfSxHAkLcPnWVt5t4nydBSEafqZFcE=", alt: "Asia Plus Securities - ที่ปรึกษาการลงทุนมืออาชีพ" },
-    { src: "https://t3.ftcdn.net/jpg/02/89/27/76/360_F_289277646_usBCutfWDVlUvI5vJfZ5QTVGD5qdhO8N.jpg", alt: "Asia Plus Securities - เทคโนโลยีการลงทุนสมัยใหม่" },
-    { src: "https://www.shutterstock.com/image-photo/double-exposure-businessman-stock-market-600nw-1908262593.jpg", alt: "Asia Plus Securities - วิเคราะห์การลงทุนอย่างแม่นยำ" }
+    { src: "https://static.thairath.co.th/media/dFQROr7oWzulq5Fa5LFdxcIa26hqueL6RwsHNPI4t2aRVd94wvZ5IS9p2D9KZtf8Vsg.jpg", alt: "Asia Plus Securities - การลงทุนที่ให้ผลตอบแทนดี" },
+    { src: "https://www.thunkhaotoday.com/storage/news/investing/2022/08/20220817-a-cover.jpg", alt: "Asia Plus Securities - บริการซื้อขายหลักทรัพย์" },
+    { src: "https://www.thaipr.net/wp-content/uploads/2022/01/%E0%B8%9E%E0%B8%9A%E0%B8%AA%E0%B8%B7%E0%B9%88%E0%B8%AD-Q1-65-%E0%B8%8A%E0%B9%88%E0%B8%A7%E0%B8%87%E0%B8%97%E0%B8%B5%E0%B9%881-e1641968185261.jpg", alt: "Asia Plus Securities - ปีเสือ SET ขึ้นเหนือ 1800 จุด" },
+    { src: "https://image.bangkokbiznews.com/image/kt/media/image/news/2021/07/01/946462/750x422_946462_1625117217.jpeg", alt: "Asia Plus Securities - วิเคราะห์ตลาดหุ้น" },
+    { src: "https://thunhoon.com/cache/image/article/286253/5dcbcebb-08cf-4271-b8dc-c6f73ad3d544.jpeg", alt: "Asia Plus Securities - แนวโน้มตลาดหุ้น" },
+    { src: "https://www.kaohoon.com/wp-content/uploads/2020/07/ASP.jpg", alt: "Asia Plus Securities - ที่ปรึกษาการลงทุนมืออาชีพ" },
+    { src: "https://www.tnnthailand.com/static/2025/a3723684-c60a-409c-bb99-408c85902672.webp", alt: "Asia Plus Securities - โลโก้บริษัท" },
+    { src: "https://image.bangkokbiznews.com/uploads/images/md/2024/04/gR8QI0ZY9LXIUopdOXvc.webp?x-image-process=style/LG", alt: "Asia Plus Securities - วิเคราะห์ตลาด" },
+    { src: "https://today-obs.line-scdn.net/0hF_f8PVppGXBbQQm8TQpmJ2MXFQFoJwN5eSRWH34RT0FybQslYi9KE3ZHR1x_d1wmeyBVECxDRhd1eVpxMw/w644", alt: "Asia Plus Securities - ข้อมูลการลงทุน" },
+    { src: "https://www.kaohoon.com/wp-content/uploads/2022/07/%E0%B8%AD%E0%B9%80%E0%B8%8B%E0%B8%B5%E0%B8%A2%E0%B8%9E%E0%B8%A5%E0%B8%B1%E0%B8%AA-%E0%B9%81%E0%B8%99%E0%B8%B0%E0%B8%AA%E0%B8%AD%E0%B8%A2-7-%E0%B8%AB%E0%B8%B8%E0%B9%89%E0%B8%99%E0%B9%80%E0%B8%94%E0%B9%88%E0%B8%99-Q3-%E0%B8%A3%E0%B8%B1%E0%B8%9A%E0%B8%94%E0%B8%AD%E0%B8%81%E0%B9%80%E0%B8%9A%E0%B8%B5%E0%B9%89%E0%B8%A2%E0%B8%82%E0%B8%B2.jpeg", alt: "Asia Plus Securities - แนะนำ 7 หุ้นเด่น Q3" },
+    { src: "https://www.prachachat.net/wp-content/uploads/2025/03/cover-2025-03-12T160142.887-728x485.jpg", alt: "Asia Plus Securities - วิเคราะห์การลงทุน" }
   ];
 
   useEffect(() => {
