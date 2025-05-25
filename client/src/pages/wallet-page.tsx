@@ -421,19 +421,10 @@ export default function WalletPage() {
               <div className="absolute inset-0 bg-black/20"></div>
             </div>
             <CardContent className="p-6 relative z-10">
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <div className="text-sm mb-1 text-blue-100">ยอดเงินคงเหลือ</div>
-                  <div className="text-3xl font-bold mb-4">
-                    {formatCurrency(Number(user?.balance || 0))}
-                  </div>
-                </div>
-                <div className="relative">
-                  <img 
-                    src={asiaLogo} 
-                    alt="Asia Plus Securities" 
-                    className="h-8 object-contain"
-                  />
+              <div className="flex flex-col mb-4">
+                <div className="text-sm mb-1 text-blue-100">ยอดเงินคงเหลือ</div>
+                <div className="text-3xl font-bold mb-4">
+                  {formatCurrency(Number(user?.balance || 0))}
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
