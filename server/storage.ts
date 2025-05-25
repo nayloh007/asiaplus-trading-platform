@@ -339,28 +339,57 @@ export class DatabaseStorage implements IStorage {
       .where(eq(trades.id, id))
       .returning();
     
-    // ถ้าเป็นการปิดการเทรดและชนะ ให้เพิ่มเงินเข้าบัญชี
+    // ถ้าเป็นการปิดการเทรดและชนะ ให้เพิ่มเงินกำไรและเงินลงทุนเข้าบัญชี
     if (status === "completed" && result === "win") {
       // ดึงยอดเงินปัจจุบันของผู้ใช้
       const currentBalance = await this.getUserBalance(originalTrade.userId);
       
-      // ใช้จำนวนเงินที่ลงทุนโดยตรง ไม่ต้องคูณกับราคา BTC
+      // ใช้จำนวนเงินที่ลงทุนโดยตรง
       const investmentValue = parseFloat(originalTrade.amount);
       
-      // หาเปอร์เซ็นต์กำไรตามระยะเวลา (60S = 30%, 120S = 40%, 300S = 50%)
+      // หาเปอร์เซ็นต์กำไรตามระยะเวลา
       let profitPercentage = 0;
-      switch (originalTrade.duration) {
-        case "60S": profitPercentage = 30; break;
-        case "120S": profitPercentage = 40; break;
-        case "300S": profitPercentage = 50; break;
-        default: profitPercentage = 30;
+      
+      // ดึงเปอร์เซ็นต์กำไรจากค่า duration ที่อาจเป็นตัวเลขหรือสตริง
+      const durationValue = originalTrade.duration;
+      
+      if (typeof durationValue === 'number') {
+        // กรณีที่ duration เป็นตัวเลขวินาที
+        if (durationValue === 60) profitPercentage = 30;
+        else if (durationValue === 120) profitPercentage = 40;
+        else if (durationValue === 300) profitPercentage = 50;
+        else profitPercentage = 30; // กรณีอื่นๆ
+      } else {
+        // กรณีที่ duration เป็นสตริง
+        switch (durationValue) {
+          case "60S": profitPercentage = 30; break;
+          case "120S": profitPercentage = 40; break;
+          case "300S": profitPercentage = 50; break;
+          case "1 นาที": profitPercentage = 30; break;
+          case "2 นาที": profitPercentage = 40; break;
+          case "5 นาที": profitPercentage = 50; break;
+          default: 
+            // พยายามแปลงเป็นตัวเลขและเช็คค่า
+            const seconds = parseInt(durationValue);
+            if (!isNaN(seconds)) {
+              if (seconds === 60) profitPercentage = 30;
+              else if (seconds === 120) profitPercentage = 40;
+              else if (seconds === 300) profitPercentage = 50;
+              else profitPercentage = 30;
+            } else {
+              profitPercentage = 30; // ค่าเริ่มต้น
+            }
+        }
       }
       
       // คำนวณกำไร
       const profit = investmentValue * (profitPercentage / 100);
       
       // คำนวณยอดเงินใหม่ = เงินปัจจุบัน + เงินลงทุน + กำไร
+      // เมื่อเทรดชนะ จะได้รับทั้งเงินลงทุนคืนและกำไร
       const newBalance = (parseFloat(currentBalance) + investmentValue + profit).toString();
+      
+      console.log(`การเทรดที่ชนะ: เงินลงทุน ${investmentValue}, กำไร ${profit}, ยอดเงินใหม่ ${newBalance}`);
       
       // อัพเดทยอดเงิน
       await this.updateUserBalance(originalTrade.userId, newBalance);
