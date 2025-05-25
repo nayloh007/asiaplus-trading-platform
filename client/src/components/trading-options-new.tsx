@@ -105,12 +105,20 @@ export function TradingOptions({ crypto }: TradingOptionsProps) {
   
   // ทำการสั่งซื้อจริงๆ เมื่อยืนยันใน Dialog แล้ว
   const handleConfirmTrade = () => {
+    // หา profit percentage จาก selectedDuration
+    const selectedOption = tradeOptions.find(option => option.duration === selectedDuration);
+    const profitPercentage = selectedOption ? selectedOption.profit.toString() : "0";
+    
+    // แปลง duration string เป็น number ใช้ seconds จาก tradeOptions
+    const durationInSeconds = selectedOption ? selectedOption.seconds : 60;
+    
     tradeMutation.mutate({
       cryptoId: crypto.id,
       amount,
       direction: tradeDirection,
       entryPrice: crypto.current_price.toString(),
-      duration: selectedDuration
+      duration: durationInSeconds,
+      profitPercentage: profitPercentage
     });
     
     // ปิด Dialog
