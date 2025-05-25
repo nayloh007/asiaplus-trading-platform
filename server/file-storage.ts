@@ -257,6 +257,9 @@ export class FileStorage implements IStorage {
       id: this.nextTradeId++,
       ...trade,
       createdAt: new Date(),
+      status: "active",
+      result: null,
+      predeterminedResult: null,
       endTime: null
     };
     this.trades.push(newTrade);

@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "id": 1,
+    "userId": 2,
+    "cryptoId": "bitcoin",
+    "entryPrice": "108228",
+    "amount": "0.01",
+    "direction": "up",
+    "duration": 60,
+    "profitPercentage": "30",
+    "createdAt": "2025-05-25T05:04:40.214Z",
+    "endTime": null
+  },
+  {
+    "id": 2,
+    "userId": 2,
+    "cryptoId": "bitcoin",
+    "entryPrice": "108228",
+    "amount": "0.01",
+    "direction": "up",
+    "duration": 60,
+    "profitPercentage": "30",
+    "createdAt": "2025-05-25T05:06:16.854Z",
+    "endTime": null
+  }
+]
