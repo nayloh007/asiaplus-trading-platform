@@ -7,27 +7,25 @@ import { insertTradeSchema, insertBankAccountSchema, trades, bankAccounts, type 
 import { ZodError } from "zod";
 import { z } from "zod";
 import { fromZodError } from "zod-validation-error";
-import { scrypt, randomBytes } from "crypto";
-import { promisify } from "util";
+import bcrypt from "bcryptjs";
 import { registerSettingsRoutes } from "./settings";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
-const scryptAsync = promisify(scrypt);
-
-// Helper function for hashing passwords
+// Helper function for hashing passwords - ใช้ bcrypt เหมือนใน auth.ts
 async function hashPassword(password: string) {
-  const salt = randomBytes(16).toString("hex");
-  const buf = (await scryptAsync(password, salt, 64)) as Buffer;
-  return `${buf.toString("hex")}.${salt}`;
+  const salt = await bcrypt.genSalt(10);
+  return bcrypt.hash(password, salt);
 }
 
-// Helper function for comparing passwords
+// Helper function for comparing passwords - ใช้ bcrypt เหมือนใน auth.ts
 async function comparePasswords(supplied: string, stored: string) {
-  const [hashed, salt] = stored.split(".");
-  const hashedBuf = Buffer.from(hashed, "hex");
-  const suppliedBuf = (await scryptAsync(supplied, salt, 64)) as Buffer;
-  return Buffer.compare(hashedBuf, suppliedBuf) === 0;
+  try {
+    return await bcrypt.compare(supplied, stored);
+  } catch (error) {
+    console.error('Error comparing passwords:', error);
+    return false;
+  }
 }
 
 // Middleware to check if user is authenticated
