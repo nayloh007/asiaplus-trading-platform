@@ -28,9 +28,9 @@ export default function TradeHistoryPage() {
   const getResultText = (result: string | null | undefined) => {
     if (!result) return "";
     switch (result) {
-      case "win": return "ชนะ";
-      case "lose": return "แพ้";
-      case "draw": return "เสมอ";
+      case "win": return "✅ ชนะ";
+      case "lose": return "❌ แพ้";
+      case "draw": return "🔄 เสมอ";
       default: return result;
     }
   };
