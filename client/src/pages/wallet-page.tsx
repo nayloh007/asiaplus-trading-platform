@@ -414,7 +414,7 @@ export default function WalletPage() {
             <div className="absolute inset-0 z-0">
               {/* พื้นหลังใช้รูปภาพตามที่ผู้ใช้ต้องการ */}
               <img 
-                src={cryptoBgImage} 
+                src="https://www.brandbuffet.in.th/wp-content/uploads/2021/12/shutterstock_crypto.jpg" 
                 alt="Crypto Background" 
                 className="w-full h-full object-cover"
               />
