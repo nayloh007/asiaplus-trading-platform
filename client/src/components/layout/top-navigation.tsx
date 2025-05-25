@@ -49,7 +49,7 @@ export function TopNavigation({ title = "ASIA PLUS", showBackButton = false, onB
           )}
           <div className="text-xl font-bold flex items-center">
             <img 
-              src="/favicon.jpg" 
+              src="https://cdn2.downdetector.com/static/uploads/c/300/e49bc/Asia_Plus_Securities.png" 
               alt="โลโก้ ASIA PLUS" 
               className="h-10 mr-2" 
             />
