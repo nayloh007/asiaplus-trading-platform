@@ -325,14 +325,46 @@ export class FileStorage implements IStorage {
     const transactionIndex = this.transactions.findIndex(transaction => transaction.id === id);
     if (transactionIndex === -1) return undefined;
 
+    const originalTransaction = this.transactions[transactionIndex];
+    
     const updatedTransaction: Transaction = {
-      ...this.transactions[transactionIndex],
+      ...originalTransaction,
       status,
       updatedAt: new Date()
     };
 
     if (note) {
       updatedTransaction.note = note;
+    }
+
+    // ถ้าเป็นการอนุมัติการฝากเงิน ให้เพิ่มเงินเข้าบัญชี
+    if (status === "approved" && originalTransaction.type === "deposit") {
+      // ดึงข้อมูลผู้ใช้
+      const user = this.users.find(user => user.id === originalTransaction.userId);
+      if (user) {
+        // คำนวณยอดเงินใหม่
+        const currentBalance = user.balance || "0";
+        const newBalance = (parseFloat(currentBalance) + parseFloat(originalTransaction.amount)).toString();
+        
+        // อัพเดทยอดเงิน
+        user.balance = newBalance;
+        console.log(`[DEPOSIT APPROVED] เพิ่มเงินในบัญชีผู้ใช้ ${user.username} จำนวน ${originalTransaction.amount} บาท ยอดคงเหลือ ${newBalance} บาท`);
+      }
+    }
+    
+    // ถ้าเป็นการปฏิเสธการถอนเงิน ให้คืนเงินกลับเข้าบัญชี
+    if (status === "rejected" && originalTransaction.type === "withdraw") {
+      // ดึงข้อมูลผู้ใช้
+      const user = this.users.find(user => user.id === originalTransaction.userId);
+      if (user) {
+        // คำนวณยอดเงินเมื่อคืนเงินกลับเข้าบัญชี
+        const currentBalance = user.balance || "0";
+        const newBalance = (parseFloat(currentBalance) + parseFloat(originalTransaction.amount)).toString();
+        
+        // อัพเดทยอดเงิน
+        user.balance = newBalance;
+        console.log(`[WITHDRAW REJECTED] คืนเงินกลับเข้าบัญชีผู้ใช้ ${user.username} จำนวน ${originalTransaction.amount} บาท ยอดคงเหลือ ${newBalance} บาท`);
+      }
     }
 
     this.transactions[transactionIndex] = updatedTransaction;
