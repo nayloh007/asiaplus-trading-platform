@@ -15,6 +15,15 @@ export class MemoryStorage {
   private trades: Trade[] = [];
   private transactions: Transaction[] = [];
   private bankAccounts: BankAccount[] = [];
+  private settings: { [key: string]: string } = {
+    // ข้อมูลตั้งต้นสำหรับบัญชีธนาคารและพร้อมเพย์
+    bank_name: "ธนาคารกสิกรไทย",
+    bank_account_number: "123-456-7890",
+    bank_account_name: "บริษัท เอเซีย พลัส จำกัด",
+    promptpay_number: "012-345-6789",
+    promptpay_tax_id: "0123456789012",
+    promptpay_name: "บริษัท เอเซีย พลัส จำกัด"
+  };
   private nextUserId = 1;
   private nextTradeId = 1;
   private nextTransactionId = 1;
@@ -265,7 +274,55 @@ export class MemoryStorage {
     
     return this.transactions[txIndex];
   }
+
+  // เพิ่มเมธอดสำหรับจัดการการตั้งค่า
+  async getSetting(key: string): Promise<string | null> {
+    return this.settings[key] || null;
+  }
+
+  async getAllSettings(): Promise<{[key: string]: string}> {
+    return { ...this.settings };
+  }
+
+  async saveSetting(key: string, value: string): Promise<void> {
+    this.settings[key] = value;
+  }
+
+  async saveMultipleSettings(settings: {key: string, value: string}[]): Promise<void> {
+    for (const setting of settings) {
+      this.settings[setting.key] = setting.value;
+    }
+  }
+
+  async getDepositAccounts(): Promise<{
+    bank: { name: string; accountNumber: string; accountName: string; };
+    promptpay: { number: string; taxId: string; name: string; };
+  }> {
+    return {
+      bank: {
+        name: this.settings.bank_name || "",
+        accountNumber: this.settings.bank_account_number || "",
+        accountName: this.settings.bank_account_name || "",
+      },
+      promptpay: {
+        number: this.settings.promptpay_number || "",
+        taxId: this.settings.promptpay_tax_id || "",
+        name: this.settings.promptpay_name || "",
+      }
+    };
+  }
+
+  async saveDepositAccounts(data: {
+    bank: { name: string; accountNumber: string; accountName: string; };
+    promptpay: { number: string; taxId: string; name: string; };
+  }): Promise<void> {
+    this.settings.bank_name = data.bank.name;
+    this.settings.bank_account_number = data.bank.accountNumber;
+    this.settings.bank_account_name = data.bank.accountName;
+    this.settings.promptpay_number = data.promptpay.number;
+    this.settings.promptpay_tax_id = data.promptpay.taxId;
+    this.settings.promptpay_name = data.promptpay.name;
+  }
 }
 
-// สร้าง instance ของ MemoryStorage
 export const memoryStorage = new MemoryStorage();
