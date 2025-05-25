@@ -122,11 +122,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // ตรวจสอบว่าสถานะที่ส่งมาถูกต้อง
       let { status, result } = req.body;
       
-      // ดึงข้อมูลการเทรดเพื่อตรวจสอบ predetermined result
-      const [originalTrade] = await db.select().from(trades).where(eq(trades.id, tradeId));
+      // ดึงข้อมูลการเทรดจาก storage
+      const userTrades = await storage.getTradesByUser(req.user.id);
+      const originalTrade = userTrades.find(trade => trade.id === tradeId);
+      
       if (!originalTrade) {
+        console.error(`ไม่พบข้อมูลการเทรด ID: ${tradeId} ของผู้ใช้ ID: ${req.user.id}`);
         return res.status(404).json({ message: "Trade not found" });
       }
+      
+      console.log(`กำลังอัพเดทสถานะการเทรด ID: ${tradeId} เป็น ${status} ผลลัพธ์: ${result}`);
       
       // ถ้ามีการกำหนดผลลัพธ์ล่วงหน้า ให้ใช้ผลลัพธ์นั้นแทนผลลัพธ์ที่ส่งมา
       if (originalTrade.predeterminedResult && status === "completed") {

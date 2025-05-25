@@ -9,7 +9,10 @@
     "duration": 60,
     "profitPercentage": "30",
     "createdAt": "2025-05-25T05:04:40.214Z",
-    "endTime": null
+    "endTime": null,
+    "status": "active",
+    "result": null,
+    "predeterminedResult": null
   },
   {
     "id": 2,
@@ -21,6 +24,24 @@
     "duration": 60,
     "profitPercentage": "30",
     "createdAt": "2025-05-25T05:06:16.854Z",
+    "endTime": null,
+    "status": "active",
+    "result": null,
+    "predeterminedResult": null
+  },
+  {
+    "id": 3,
+    "userId": 2,
+    "cryptoId": "bitcoin",
+    "entryPrice": "108250",
+    "amount": "0.01",
+    "direction": "up",
+    "duration": 60,
+    "profitPercentage": "30",
+    "createdAt": "2025-05-25T05:09:42.598Z",
+    "status": "active",
+    "result": null,
+    "predeterminedResult": null,
     "endTime": null
   }
 ]
