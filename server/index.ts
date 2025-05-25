@@ -1,7 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import { memoryStorage } from "./memory-storage";
+import { storage } from "./storage";
 import bcrypt from "bcryptjs";
 
 const app = express();
@@ -49,7 +49,7 @@ app.use((req, res, next) => {
 async function createAdminUser() {
   try {
     // ตรวจสอบว่ามีผู้ใช้แอดมินอยู่แล้วหรือไม่
-    const existingAdmin = await memoryStorage.getUserByUsername('admin');
+    const existingAdmin = await storage.getUserByUsername('admin');
     if (existingAdmin) {
       console.log('Admin user already exists');
       return;
@@ -69,7 +69,7 @@ async function createAdminUser() {
     };
     
     // บันทึกผู้ใช้แอดมิน
-    const newUser = await memoryStorage.createUser(adminUser);
+    const newUser = await storage.createUser(adminUser);
     console.log('Admin user created successfully:', newUser.username);
   } catch (error) {
     console.error('Error creating admin user:', error);
