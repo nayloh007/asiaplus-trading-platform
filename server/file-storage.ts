@@ -301,14 +301,18 @@ export class FileStorage implements IStorage {
     const tradeIndex = this.trades.findIndex(trade => trade.id === id);
     if (tradeIndex === -1) return undefined;
 
+    const originalTrade = this.trades[tradeIndex];
+    const finalResult = (status === 'completed' && originalTrade.predeterminedResult) ? 
+      originalTrade.predeterminedResult : result;
+
     const updatedTrade: Trade = {
-      ...this.trades[tradeIndex],
+      ...originalTrade,
       status,
       updatedAt: new Date(),
     };
 
     if (result) {
-      updatedTrade.result = result;
+      updatedTrade.result = finalResult;
     }
 
     if (predeterminedResult) {
@@ -317,6 +321,33 @@ export class FileStorage implements IStorage {
 
     if (status === 'completed') {
       updatedTrade.endTime = new Date();
+      
+      // ถ้าการเทรดสิ้นสุดและผลลัพธ์เป็นชนะ ให้เพิ่มเงินเข้าบัญชี
+      if (finalResult === 'win') {
+        // ค้นหาผู้ใช้
+        const user = this.users.find(u => u.id === originalTrade.userId);
+        if (user) {
+          // คำนวณจำนวนเงินที่ลงทุน
+          const investmentAmount = parseFloat(originalTrade.amount);
+          
+          // คำนวณผลกำไรตามเปอร์เซ็นต์
+          const profitPercentage = parseFloat(originalTrade.profitPercentage) / 100;
+          const profit = investmentAmount * profitPercentage;
+          
+          // คำนวณยอดเงินรวมที่จะได้คืน (เงินลงทุน + กำไร)
+          const totalReturn = investmentAmount + profit;
+          
+          // เพิ่มเงินเข้าบัญชี
+          const currentBalance = parseFloat(user.balance || "0");
+          const newBalance = (currentBalance + totalReturn).toString();
+          user.balance = newBalance;
+          
+          console.log(`[TRADE WIN] เพิ่มเงินในบัญชีผู้ใช้ ${user.username} เงินลงทุน ${investmentAmount} บาท + กำไร ${profit.toFixed(2)} บาท = ${totalReturn.toFixed(2)} บาท ยอดคงเหลือใหม่ ${newBalance} บาท`);
+        }
+      } else if (finalResult === 'lose') {
+        // กรณีแพ้ไม่ต้องทำอะไร เพราะหักเงินไปแล้วตอนเริ่มเทรด
+        console.log(`[TRADE LOSE] ผู้ใช้ ID ${originalTrade.userId} แพ้การเทรด จำนวนเงิน ${originalTrade.amount} บาท ไม่ได้รับเงินคืน`);
+      }
     }
 
     this.trades[tradeIndex] = updatedTrade;

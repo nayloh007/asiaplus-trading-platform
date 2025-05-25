@@ -59,5 +59,37 @@
     "predeterminedResult": null,
     "endTime": "2025-05-25T05:15:17.951Z",
     "updatedAt": "2025-05-25T05:15:17.951Z"
+  },
+  {
+    "id": 5,
+    "userId": 2,
+    "cryptoId": "bitcoin",
+    "entryPrice": "108215",
+    "amount": "100",
+    "direction": "up",
+    "duration": 60,
+    "profitPercentage": "30",
+    "createdAt": "2025-05-25T05:17:57.457Z",
+    "status": "completed",
+    "result": "lose",
+    "predeterminedResult": null,
+    "endTime": "2025-05-25T05:18:57.489Z",
+    "updatedAt": "2025-05-25T05:18:57.489Z"
+  },
+  {
+    "id": 6,
+    "userId": 2,
+    "cryptoId": "bitcoin",
+    "entryPrice": "108209",
+    "amount": "100",
+    "direction": "up",
+    "duration": 60,
+    "profitPercentage": "30",
+    "createdAt": "2025-05-25T05:20:39.382Z",
+    "status": "completed",
+    "result": "win",
+    "predeterminedResult": "win",
+    "endTime": "2025-05-25T05:21:39.637Z",
+    "updatedAt": "2025-05-25T05:21:39.637Z"
   }
 ]
