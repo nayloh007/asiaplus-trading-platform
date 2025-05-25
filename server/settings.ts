@@ -289,29 +289,40 @@ export function registerSettingsRoutes(app: Express) {
       
       const data = result.data;
       
-      // บันทึกการตั้งค่าลงในฐานข้อมูล
-      const { pool } = await import('./db');
-      
-      // รายการตั้งค่าที่จะบันทึก
-      const settings = [
-        { key: 'bank_name', value: data.bank.name },
-        { key: 'bank_account_number', value: data.bank.accountNumber },
-        { key: 'bank_account_name', value: data.bank.accountName },
-        { key: 'promptpay_number', value: data.promptpay.number },
-        { key: 'promptpay_tax_id', value: data.promptpay.taxId },
-        { key: 'promptpay_name', value: data.promptpay.name },
-      ];
-      
-      // อัปเดตทีละรายการ
-      for (const setting of settings) {
-        // UPSERT - อัปเดตถ้ามีอยู่แล้ว หรือเพิ่มใหม่ถ้ายังไม่มี
-        await pool.query(
-          `INSERT INTO settings (key, value, updated_at) 
-           VALUES ($1, $2::text, NOW()) 
-           ON CONFLICT (key) 
-           DO UPDATE SET value = $2::text, updated_at = NOW()`,
-          [setting.key, setting.value]
-        );
+      // ตรวจสอบโหมดการทำงาน: in-memory หรือ database
+      if (process.env.NODE_ENV === 'development') {
+        // ใช้งานใน Memory Storage
+        const { memoryStorage } = await import('./memory-storage');
+        
+        // บันทึกข้อมูลในโหมด in-memory
+        await memoryStorage.saveDepositAccounts(data);
+        
+        console.log("บันทึกข้อมูลบัญชีธนาคารในโหมด in-memory:", data);
+      } else {
+        // บันทึกการตั้งค่าลงในฐานข้อมูล
+        const { pool } = await import('./db');
+        
+        // รายการตั้งค่าที่จะบันทึก
+        const settings = [
+          { key: 'bank_name', value: data.bank.name },
+          { key: 'bank_account_number', value: data.bank.accountNumber },
+          { key: 'bank_account_name', value: data.bank.accountName },
+          { key: 'promptpay_number', value: data.promptpay.number },
+          { key: 'promptpay_tax_id', value: data.promptpay.taxId },
+          { key: 'promptpay_name', value: data.promptpay.name },
+        ];
+        
+        // อัปเดตทีละรายการ
+        for (const setting of settings) {
+          // UPSERT - อัปเดตถ้ามีอยู่แล้ว หรือเพิ่มใหม่ถ้ายังไม่มี
+          await pool.query(
+            `INSERT INTO settings (key, value, updated_at) 
+             VALUES ($1, $2::text, NOW()) 
+             ON CONFLICT (key) 
+             DO UPDATE SET value = $2::text, updated_at = NOW()`,
+            [setting.key, setting.value]
+          );
+        }
       }
       
       res.json({
@@ -379,33 +390,46 @@ export function registerSettingsRoutes(app: Express) {
   // ดึงข้อมูลบัญชีธนาคารและพร้อมเพย์สำหรับการฝากเงิน (สำหรับผู้ใช้ทั่วไป)
   app.get("/api/deposit-accounts", async (req: Request, res: Response) => {
     try {
-      // ใช้ pool ที่มีอยู่แล้วจาก server/db.ts
-      const { pool } = await import('./db');
+      let depositAccounts;
       
-      const result = await pool.query('SELECT key, value FROM settings WHERE key IN (\'bank_name\', \'bank_account_number\', \'bank_account_name\', \'promptpay_number\', \'promptpay_tax_id\', \'promptpay_name\')');
+      // ตรวจสอบโหมดการทำงาน: in-memory หรือ database
+      if (process.env.NODE_ENV === 'development') {
+        // ใช้งานใน Memory Storage
+        const { memoryStorage } = await import('./memory-storage');
+        
+        // ดึงข้อมูลจาก in-memory storage
+        depositAccounts = await memoryStorage.getDepositAccounts();
+        
+        console.log("ดึงข้อมูลบัญชีธนาคารจากโหมด in-memory:", depositAccounts);
+      } else {
+        // ใช้ pool ที่มีอยู่แล้วจาก server/db.ts
+        const { pool } = await import('./db');
+        
+        const result = await pool.query('SELECT key, value FROM settings WHERE key IN (\'bank_name\', \'bank_account_number\', \'bank_account_name\', \'promptpay_number\', \'promptpay_tax_id\', \'promptpay_name\')');
+        
+        // แปลงข้อมูลจาก DB เป็น object
+        const dbSettings = result.rows.reduce((acc, row) => {
+          acc[row.key] = row.value;
+          return acc;
+        }, {} as Record<string, string>);
+        
+        depositAccounts = {
+          bank: {
+            name: dbSettings.bank_name || "",
+            accountNumber: dbSettings.bank_account_number || "",
+            accountName: dbSettings.bank_account_name || "",
+          },
+          promptpay: {
+            number: dbSettings.promptpay_number || "",
+            taxId: dbSettings.promptpay_tax_id || "",
+            name: dbSettings.promptpay_name || "",
+          }
+        };
+        
+        console.log("ดึงข้อมูลบัญชีธนาคารจากฐานข้อมูล:", depositAccounts);
+      }
       
-      // แปลงข้อมูลจาก DB เป็น object
-      const dbSettings = result.rows.reduce((acc, row) => {
-        acc[row.key] = row.value;
-        return acc;
-      }, {} as Record<string, string>);
-      
-      const depositAccounts = {
-        bank: {
-          name: dbSettings.bank_name || "",
-          accountNumber: dbSettings.bank_account_number || "",
-          accountName: dbSettings.bank_account_name || "",
-        },
-        promptpay: {
-          number: dbSettings.promptpay_number || "",
-          taxId: dbSettings.promptpay_tax_id || "",
-          name: dbSettings.promptpay_name || "",
-        }
-      };
-      
-      console.log("Retrieved deposit accounts:", depositAccounts);
-      
-      // ไม่ต้อง end pool เพราะเป็น shared pool
+      // ส่งข้อมูลไปยังผู้ใช้
       res.json(depositAccounts);
     } catch (error) {
       console.error("Error fetching deposit accounts:", error);
