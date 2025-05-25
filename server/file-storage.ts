@@ -253,6 +253,27 @@ export class FileStorage implements IStorage {
 
   // Trade operations
   async createTrade(trade: InsertTrade): Promise<Trade> {
+    // ดึงยอดเงินของผู้ใช้
+    const user = this.users.find(u => u.id === trade.userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+    
+    // ใช้จำนวนเงินที่ใส่โดยตรง ไม่ต้องคูณกับราคา BTC
+    const tradeValue = parseFloat(trade.amount);
+    const currentBalance = parseFloat(user.balance || "0");
+    
+    // ตรวจสอบว่ามีเงินเพียงพอหรือไม่
+    if (currentBalance < tradeValue) {
+      throw new Error("Insufficient balance");
+    }
+    
+    // หักเงินออกจากบัญชีทันที
+    const newBalance = (currentBalance - tradeValue).toString();
+    user.balance = newBalance;
+    
+    console.log(`[TRADE] หักเงินในบัญชีผู้ใช้ ${user.username} จำนวน ${tradeValue} บาท ยอดคงเหลือ ${newBalance} บาท`);
+    
     const newTrade: Trade = {
       id: this.nextTradeId++,
       ...trade,
@@ -262,6 +283,7 @@ export class FileStorage implements IStorage {
       predeterminedResult: null,
       endTime: null
     };
+    
     this.trades.push(newTrade);
     this.saveData();
     return newTrade;

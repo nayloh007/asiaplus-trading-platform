@@ -43,5 +43,21 @@
     "result": null,
     "predeterminedResult": null,
     "endTime": null
+  },
+  {
+    "id": 4,
+    "userId": 2,
+    "cryptoId": "bitcoin",
+    "entryPrice": "108233",
+    "amount": "100",
+    "direction": "up",
+    "duration": 60,
+    "profitPercentage": "30",
+    "createdAt": "2025-05-25T05:14:11.290Z",
+    "status": "completed",
+    "result": "lose",
+    "predeterminedResult": null,
+    "endTime": "2025-05-25T05:15:17.951Z",
+    "updatedAt": "2025-05-25T05:15:17.951Z"
   }
 ]
