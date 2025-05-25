@@ -1,0 +1,387 @@
+import fs from 'fs';
+import path from 'path';
+import session from 'express-session';
+import MemoryStore from 'memorystore';
+import { User, BankAccount, Trade, Transaction, InsertUser, InsertBankAccount, InsertTrade, InsertTransaction } from '@shared/schema';
+import { IStorage } from './storage';
+
+// กำหนดโฟลเดอร์สำหรับเก็บข้อมูล
+const DATA_DIR = './data';
+const USER_FILE = path.join(DATA_DIR, 'users.json');
+const BANK_ACCOUNT_FILE = path.join(DATA_DIR, 'bank_accounts.json');
+const TRADE_FILE = path.join(DATA_DIR, 'trades.json');
+const TRANSACTION_FILE = path.join(DATA_DIR, 'transactions.json');
+const SETTINGS_FILE = path.join(DATA_DIR, 'settings.json');
+
+// ตรวจสอบว่ามีโฟลเดอร์ data หรือไม่ ถ้าไม่มีให้สร้าง
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+}
+
+// ฟังก์ชันสำหรับอ่านข้อมูลจากไฟล์
+function readJsonFile<T>(filePath: string, defaultValue: T): T {
+  try {
+    if (fs.existsSync(filePath)) {
+      const data = fs.readFileSync(filePath, 'utf8');
+      return JSON.parse(data) as T;
+    }
+  } catch (error) {
+    console.error(`Error reading file ${filePath}:`, error);
+  }
+  return defaultValue;
+}
+
+// ฟังก์ชันสำหรับเขียนข้อมูลลงไฟล์
+function writeJsonFile<T>(filePath: string, data: T): void {
+  try {
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+  } catch (error) {
+    console.error(`Error writing file ${filePath}:`, error);
+  }
+}
+
+export class FileStorage implements IStorage {
+  private users: User[] = [];
+  private trades: Trade[] = [];
+  private transactions: Transaction[] = [];
+  private bankAccounts: BankAccount[] = [];
+  private settings: { [key: string]: string } = {};
+  
+  private nextUserId = 1;
+  private nextTradeId = 1;
+  private nextTransactionId = 1;
+  private nextBankAccountId = 1;
+  sessionStore: session.Store;
+
+  constructor() {
+    // อ่านข้อมูลจากไฟล์
+    this.users = readJsonFile<User[]>(USER_FILE, []);
+    this.trades = readJsonFile<Trade[]>(TRADE_FILE, []);
+    this.transactions = readJsonFile<Transaction[]>(TRANSACTION_FILE, []);
+    this.bankAccounts = readJsonFile<BankAccount[]>(BANK_ACCOUNT_FILE, []);
+    this.settings = readJsonFile<{ [key: string]: string }>(SETTINGS_FILE, {});
+
+    // กำหนดค่า ID ถัดไปสำหรับแต่ละประเภทข้อมูล
+    if (this.users.length > 0) {
+      this.nextUserId = Math.max(...this.users.map(u => u.id)) + 1;
+    }
+    if (this.trades.length > 0) {
+      this.nextTradeId = Math.max(...this.trades.map(t => t.id)) + 1;
+    }
+    if (this.transactions.length > 0) {
+      this.nextTransactionId = Math.max(...this.transactions.map(t => t.id)) + 1;
+    }
+    if (this.bankAccounts.length > 0) {
+      this.nextBankAccountId = Math.max(...this.bankAccounts.map(b => b.id)) + 1;
+    }
+
+    // สร้าง session store
+    const MemoryStoreClass = MemoryStore(session);
+    this.sessionStore = new MemoryStoreClass({
+      checkPeriod: 86400000 // 24 ชั่วโมง
+    });
+
+    console.log('Using file-based storage for persistence...');
+  }
+
+  // บันทึกข้อมูลทั้งหมดลงไฟล์
+  private saveData() {
+    writeJsonFile(USER_FILE, this.users);
+    writeJsonFile(TRADE_FILE, this.trades);
+    writeJsonFile(TRANSACTION_FILE, this.transactions);
+    writeJsonFile(BANK_ACCOUNT_FILE, this.bankAccounts);
+    writeJsonFile(SETTINGS_FILE, this.settings);
+  }
+
+  // User operations
+  async getUser(id: number): Promise<User | undefined> {
+    return this.users.find(user => user.id === id);
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    return this.users.find(user => user.username === username);
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    return this.users.find(user => user.email === email);
+  }
+
+  async createUser(user: InsertUser): Promise<User> {
+    const newUser: User = {
+      id: this.nextUserId++,
+      ...user,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    this.users.push(newUser);
+    this.saveData();
+    return newUser;
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    return [...this.users];
+  }
+
+  async updateUserProfile(userId: number, profileData: Partial<User>): Promise<User | undefined> {
+    const userIndex = this.users.findIndex(user => user.id === userId);
+    if (userIndex === -1) return undefined;
+
+    const updatedUser = {
+      ...this.users[userIndex],
+      ...profileData,
+      updatedAt: new Date()
+    };
+    this.users[userIndex] = updatedUser;
+    this.saveData();
+    return updatedUser;
+  }
+
+  async updateUserPassword(userId: number, newPassword: string): Promise<User | undefined> {
+    const userIndex = this.users.findIndex(user => user.id === userId);
+    if (userIndex === -1) return undefined;
+
+    const updatedUser = {
+      ...this.users[userIndex],
+      password: newPassword,
+      updatedAt: new Date()
+    };
+    this.users[userIndex] = updatedUser;
+    this.saveData();
+    return updatedUser;
+  }
+
+  async updateUser(userId: number, userData: Partial<User>): Promise<User | undefined> {
+    const userIndex = this.users.findIndex(user => user.id === userId);
+    if (userIndex === -1) return undefined;
+
+    const updatedUser = {
+      ...this.users[userIndex],
+      ...userData,
+      updatedAt: new Date()
+    };
+    this.users[userIndex] = updatedUser;
+    this.saveData();
+    return updatedUser;
+  }
+
+  // Balance operations
+  async getUserBalance(userId: number): Promise<string> {
+    const user = await this.getUser(userId);
+    return user ? user.balance : "0";
+  }
+
+  async updateUserBalance(userId: number, newBalance: string): Promise<User | undefined> {
+    const userIndex = this.users.findIndex(user => user.id === userId);
+    if (userIndex === -1) return undefined;
+
+    const updatedUser = {
+      ...this.users[userIndex],
+      balance: newBalance,
+      updatedAt: new Date()
+    };
+    this.users[userIndex] = updatedUser;
+    this.saveData();
+    return updatedUser;
+  }
+
+  // Bank account operations
+  async createBankAccount(bankAccount: InsertBankAccount): Promise<BankAccount> {
+    const newBankAccount: BankAccount = {
+      id: this.nextBankAccountId++,
+      ...bankAccount,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    this.bankAccounts.push(newBankAccount);
+    this.saveData();
+    return newBankAccount;
+  }
+
+  async getBankAccountsByUser(userId: number): Promise<BankAccount[]> {
+    return this.bankAccounts.filter(account => account.userId === userId);
+  }
+
+  async updateBankAccountDefault(id: number, isDefault: boolean): Promise<BankAccount | undefined> {
+    const accountIndex = this.bankAccounts.findIndex(account => account.id === id);
+    if (accountIndex === -1) return undefined;
+
+    // หากตั้งค่าเป็น default ให้ยกเลิก default ของบัญชีอื่นของผู้ใช้คนเดียวกัน
+    if (isDefault) {
+      const userId = this.bankAccounts[accountIndex].userId;
+      this.bankAccounts.forEach((account, index) => {
+        if (account.userId === userId && account.id !== id) {
+          this.bankAccounts[index] = { ...account, isDefault: false };
+        }
+      });
+    }
+
+    const updatedAccount = {
+      ...this.bankAccounts[accountIndex],
+      isDefault,
+      updatedAt: new Date()
+    };
+    this.bankAccounts[accountIndex] = updatedAccount;
+    this.saveData();
+    return updatedAccount;
+  }
+
+  async updateBankAccount(id: number, bankAccountData: Partial<BankAccount>): Promise<BankAccount | undefined> {
+    const accountIndex = this.bankAccounts.findIndex(account => account.id === id);
+    if (accountIndex === -1) return undefined;
+
+    const updatedAccount = {
+      ...this.bankAccounts[accountIndex],
+      ...bankAccountData,
+      updatedAt: new Date()
+    };
+    this.bankAccounts[accountIndex] = updatedAccount;
+    this.saveData();
+    return updatedAccount;
+  }
+
+  async deleteBankAccount(id: number): Promise<void> {
+    const accountIndex = this.bankAccounts.findIndex(account => account.id === id);
+    if (accountIndex !== -1) {
+      this.bankAccounts.splice(accountIndex, 1);
+      this.saveData();
+    }
+  }
+
+  async getBankAccountById(id: number): Promise<BankAccount | undefined> {
+    return this.bankAccounts.find(account => account.id === id);
+  }
+
+  // Trade operations
+  async createTrade(trade: InsertTrade): Promise<Trade> {
+    const newTrade: Trade = {
+      id: this.nextTradeId++,
+      ...trade,
+      createdAt: new Date(),
+      endTime: null
+    };
+    this.trades.push(newTrade);
+    this.saveData();
+    return newTrade;
+  }
+
+  async getTradesByUser(userId: number): Promise<Trade[]> {
+    return this.trades.filter(trade => trade.userId === userId);
+  }
+
+  async getAllTrades(): Promise<Trade[]> {
+    return [...this.trades];
+  }
+
+  async updateTradeStatus(id: number, status: string, result?: string, predeterminedResult?: string): Promise<Trade | undefined> {
+    const tradeIndex = this.trades.findIndex(trade => trade.id === id);
+    if (tradeIndex === -1) return undefined;
+
+    const updatedTrade: Trade = {
+      ...this.trades[tradeIndex],
+      status,
+      updatedAt: new Date(),
+    };
+
+    if (result) {
+      updatedTrade.result = result;
+    }
+
+    if (predeterminedResult) {
+      updatedTrade.predeterminedResult = predeterminedResult;
+    }
+
+    if (status === 'completed') {
+      updatedTrade.endTime = new Date();
+    }
+
+    this.trades[tradeIndex] = updatedTrade;
+    this.saveData();
+    return updatedTrade;
+  }
+
+  // Transaction operations
+  async createTransaction(transaction: InsertTransaction): Promise<Transaction> {
+    const newTransaction: Transaction = {
+      id: this.nextTransactionId++,
+      ...transaction,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      status: transaction.status || 'pending',
+    };
+    this.transactions.push(newTransaction);
+    this.saveData();
+    return newTransaction;
+  }
+
+  async getTransactionsByUser(userId: number): Promise<Transaction[]> {
+    return this.transactions.filter(transaction => transaction.userId === userId);
+  }
+
+  async getAllTransactions(): Promise<Transaction[]> {
+    return [...this.transactions];
+  }
+
+  async updateTransactionStatus(id: number, status: string, note?: string): Promise<Transaction | undefined> {
+    const transactionIndex = this.transactions.findIndex(transaction => transaction.id === id);
+    if (transactionIndex === -1) return undefined;
+
+    const updatedTransaction: Transaction = {
+      ...this.transactions[transactionIndex],
+      status,
+      updatedAt: new Date()
+    };
+
+    if (note) {
+      updatedTransaction.note = note;
+    }
+
+    this.transactions[transactionIndex] = updatedTransaction;
+    this.saveData();
+    return updatedTransaction;
+  }
+
+  // Settings operations
+  async getSetting(key: string): Promise<string | null> {
+    return this.settings[key] || null;
+  }
+
+  async getAllSettings(): Promise<{[key: string]: string}> {
+    return { ...this.settings };
+  }
+
+  async saveSetting(key: string, value: string): Promise<void> {
+    this.settings[key] = value;
+    this.saveData();
+  }
+
+  async saveMultipleSettings(settings: {key: string, value: string}[]): Promise<void> {
+    settings.forEach(({ key, value }) => {
+      this.settings[key] = value;
+    });
+    this.saveData();
+  }
+
+  async getDepositAccounts(): Promise<{
+    bankAccounts: { bank: string, account: string, name: string }[];
+    promptpay: string | null;
+  }> {
+    const bankAccounts = this.settings.bankAccounts ? 
+      JSON.parse(this.settings.bankAccounts) : [];
+    const promptpay = this.settings.promptpay || null;
+    
+    return { bankAccounts, promptpay };
+  }
+
+  async saveDepositAccounts(data: {
+    bankAccounts: { bank: string, account: string, name: string }[];
+    promptpay: string | null;
+  }): Promise<void> {
+    this.settings.bankAccounts = JSON.stringify(data.bankAccounts);
+    if (data.promptpay) {
+      this.settings.promptpay = data.promptpay;
+    }
+    this.saveData();
+  }
+}
+
+export const fileStorage = new FileStorage();
