@@ -51,20 +51,40 @@ export default function TradeHistoryPage() {
   };
   
   // ฟังก์ชันแปลงระยะเวลาเป็นรูปแบบที่อ่านง่าย
-  const formatDuration = (duration: string) => {
-    if (duration.endsWith('S')) {
-      const seconds = parseInt(duration.replace('S', ''));
-      if (seconds < 60) {
-        return `${seconds} วินาที`;
+  const formatDuration = (duration: string | number) => {
+    let seconds: number;
+    
+    // ตรวจสอบประเภทของข้อมูลที่ได้รับ
+    if (typeof duration === 'number') {
+      // กรณีที่เป็นตัวเลขวินาที
+      seconds = duration;
+    } else if (typeof duration === 'string') {
+      // กรณีที่เป็นสตริง ตรวจสอบว่าลงท้ายด้วย 'S' หรือไม่
+      if (duration.endsWith('S')) {
+        seconds = parseInt(duration.replace('S', ''));
       } else {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
-        return remainingSeconds > 0 
-          ? `${minutes} นาที ${remainingSeconds} วินาที` 
-          : `${minutes} นาที`;
+        // พยายามแปลงเป็นตัวเลข
+        seconds = parseInt(duration);
       }
+    } else {
+      return 'ไม่ระบุ';
     }
-    return duration;
+    
+    // ตรวจสอบว่าการแปลงเป็นตัวเลขสำเร็จหรือไม่
+    if (isNaN(seconds)) {
+      return 'ไม่ระบุ';
+    }
+    
+    // แปลงเป็นรูปแบบนาที:วินาที
+    if (seconds < 60) {
+      return `${seconds} วินาที`;
+    } else {
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = seconds % 60;
+      return remainingSeconds > 0 
+        ? `${minutes} นาที ${remainingSeconds} วินาที` 
+        : `${minutes} นาที`;
+    }
   };
 
   return (
