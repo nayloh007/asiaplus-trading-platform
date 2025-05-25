@@ -137,11 +137,20 @@ export function TradeCountdown({
             </div>
           </div>
           
-          <div className="flex items-center justify-center mt-4">
-            <div className={`px-4 py-2 rounded-full text-white text-sm font-medium ${
-              isWinning ? "bg-green-500" : "bg-red-500"
+          <div className="flex flex-col items-center justify-center mt-4 space-y-2">
+            <div className="text-center">
+              <span className="text-sm text-muted-foreground">สถานะปัจจุบัน:</span>
+            </div>
+            <div className={`px-5 py-3 rounded-full text-white text-md font-bold shadow-lg ${
+              isWinning ? "bg-green-600" : "bg-red-600"
             }`}>
-              {isWinning ? "กำลังทำกำไร" : "กำลังขาดทุน"}
+              {isWinning 
+                ? `กำลังทำกำไร ${currentPrice ? `+${formatCurrency(Math.abs(priceChange))}` : ""}` 
+                : `กำลังขาดทุน ${currentPrice ? `-${formatCurrency(Math.abs(priceChange))}` : ""}`
+              }
+            </div>
+            <div className="text-xs text-muted-foreground mt-1">
+              ราคาจะต้อง{direction === "up" ? "สูงกว่า" : "ต่ำกว่า"}ราคาเข้าเมื่อหมดเวลาจึงจะได้กำไร
             </div>
           </div>
         </div>
