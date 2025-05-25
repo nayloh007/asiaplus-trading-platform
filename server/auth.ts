@@ -2,8 +2,7 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Express } from "express";
 import session from "express-session";
-import crypto, { scrypt, randomBytes, timingSafeEqual } from "crypto";
-import { promisify } from "util";
+import bcrypt from "bcryptjs";
 import { memoryStorage as storage } from "./memory-storage";
 import MemoryStore from "memorystore";
 import { User as SelectUser } from "@shared/schema";
@@ -14,54 +13,20 @@ declare global {
   }
 }
 
-const scryptAsync = promisify(scrypt);
-
+// ฟังก์ชันเข้ารหัสรหัสผ่านใช้ bcrypt เหมือนกับในไฟล์ server/index.ts
 async function hashPassword(password: string) {
-  const salt = randomBytes(16).toString("hex");
-  const buf = (await scryptAsync(password, salt, 64)) as Buffer;
-  return `${buf.toString("hex")}.${salt}`;
+  const salt = await bcrypt.genSalt(10);
+  return bcrypt.hash(password, salt);
 }
 
-// This implementation matches the one in create-admin.js
+// ฟังก์ชันเปรียบเทียบรหัสผ่านด้วย bcrypt
 async function comparePasswords(supplied: string, stored: string) {
-  return new Promise<boolean>((resolve) => {
-    try {
-      // Check if stored password has the expected format
-      if (!stored || !stored.includes('.')) {
-        console.error('Stored password format is invalid:', stored);
-        resolve(false);
-        return;
-      }
-      
-      const [hash, salt] = stored.split(".");
-      if (!hash || !salt) {
-        console.error('Invalid password parts:', { hash, salt });
-        resolve(false);
-        return;
-      }
-      
-      // Use the callback version to safely handle the comparison
-      scrypt(supplied, salt, 64, (err, derivedKey) => {
-        if (err) {
-          console.error('Error in scrypt:', err);
-          resolve(false);
-          return;
-        }
-        
-        try {
-          const storedBuf = Buffer.from(hash, 'hex');
-          const result = timingSafeEqual(storedBuf, derivedKey);
-          resolve(result);
-        } catch (error) {
-          console.error('Error comparing buffers:', error);
-          resolve(false);
-        }
-      });
-    } catch (error) {
-      console.error('Error comparing passwords:', error);
-      resolve(false);
-    }
-  });
+  try {
+    return await bcrypt.compare(supplied, stored);
+  } catch (error) {
+    console.error('Error comparing passwords:', error);
+    return false;
+  }
 }
 
 export function setupAuth(app: Express) {
