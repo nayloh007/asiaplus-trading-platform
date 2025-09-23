@@ -38,6 +38,7 @@ export interface IStorage {
   createTrade(trade: InsertTrade): Promise<Trade>;
   getTradesByUser(userId: number): Promise<Trade[]>;
   getAllTrades(): Promise<Trade[]>;
+  getActiveTrades(): Promise<Trade[]>;
   updateTradeStatus(id: number, status: string, result?: string): Promise<Trade | undefined>;
   
   // Transaction operations
@@ -316,6 +317,11 @@ export class DatabaseStorage implements IStorage {
   
   async getAllTrades(): Promise<Trade[]> {
     return db.select().from(trades);
+  }
+
+  // ฟังก์ชันสำหรับดึงการเทรดที่ยังคง active
+  async getActiveTrades(): Promise<Trade[]> {
+    return await db.select().from(trades).where(eq(trades.status, 'active'));
   }
   
   async updateTradeStatus(id: number, status: string, result?: string, predeterminedResult?: string): Promise<Trade | undefined> {
