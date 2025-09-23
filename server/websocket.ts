@@ -76,15 +76,24 @@ async function processActiveTrades() {
     // ดึงการเทรดที่ยังคง active
     const activeTrades = await storage.getActiveTrades();
     
+    if (activeTrades.length > 0) {
+      console.log(`Processing ${activeTrades.length} active trades...`);
+    }
+    
     for (const trade of activeTrades) {
       const now = new Date();
       const tradeCreatedAt = new Date(trade.createdAt);
       const tradeEndTime = new Date(tradeCreatedAt.getTime() + (trade.duration * 1000));
       
+      console.log(`Trade ${trade.id}: Created at ${tradeCreatedAt.toISOString()}, Ends at ${tradeEndTime.toISOString()}, Now: ${now.toISOString()}`);
+      
       // ตรวจสอบว่าการเทรดหมดเวลาแล้วหรือยัง
       if (now >= tradeEndTime) {
         console.log(`Trade ${trade.id} has expired, processing...`);
         await completeTrade(trade);
+      } else {
+        const timeLeft = tradeEndTime.getTime() - now.getTime();
+        console.log(`Trade ${trade.id} has ${Math.floor(timeLeft / 1000)} seconds left`);
       }
     }
   } catch (error) {
