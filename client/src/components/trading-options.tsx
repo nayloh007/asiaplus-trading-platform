@@ -31,7 +31,8 @@ interface TradeFormData {
   amount: string;
   direction: "up" | "down";
   entryPrice: string;
-  duration: string; // เพิ่มเวลาชำระราคา 
+  duration: number; // เพิ่มเวลาชำระราคา 
+  profitPercentage: string;
 }
 
 type TradeOption = {
@@ -260,7 +261,8 @@ export function TradingOptions({ crypto }: TradingOptionsProps) {
       amount,
       direction: tradeDirection,
       entryPrice: crypto.current_price.toString(),
-      duration: durationInSeconds.toString(),
+      duration: durationInSeconds,
+      profitPercentage,
     });
     
     // ปิด Dialog
