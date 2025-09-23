@@ -90,6 +90,19 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
       refetchTrades();
     });
 
+    // รับการอัปเดตการเทรดที่เสร็จสิ้น
+    newSocket.on('trade-completed', (completedTradeInfo) => {
+      console.log('Trade completed:', completedTradeInfo);
+      
+      // รีเฟรชข้อมูลการเทรดทันที
+      refetchTrades();
+      
+      // อัปเดต local state โดยการลบการเทรดที่เสร็จแล้วออกจาก active trades
+      setTrades(prevTrades => 
+        prevTrades.filter(trade => trade.id !== completedTradeInfo.tradeId)
+      );
+    });
+
     return () => {
       newSocket.close();
     };

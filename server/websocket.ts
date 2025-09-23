@@ -142,6 +142,16 @@ async function completeTrade(trade: any) {
 
       // ส่งการอัพเดทการเทรดผ่าน WebSocket
       notifyTradeUpdate(trade.userId, updatedTrade);
+      
+      // ส่งการอัปเดตไปยังทุกผู้ใช้ที่เชื่อมต่ออยู่ (สำหรับ global trade status)
+      if (io) {
+        io.emit('trade-completed', {
+          tradeId: trade.id,
+          userId: trade.userId,
+          result: result,
+          status: 'completed'
+        });
+      }
     }
   } catch (error) {
     console.error(`Error completing trade ${trade.id}:`, error);

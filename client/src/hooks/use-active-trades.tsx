@@ -1,5 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "./use-auth";
+import { useEffect } from "react";
+import { useWebSocket } from "@/contexts/websocket-context";
 
 export type ActiveTradeData = {
   id: number;
@@ -19,6 +21,7 @@ const ACTIVE_TRADES_KEY = "active-trades";
 export function useActiveTrades() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const { socket, isConnected } = useWebSocket();
 
   // ดึงข้อมูลการเทรดที่กำลังทำอยู่จาก cache
   const { data: activeTrades = [] } = useQuery<ActiveTradeData[]>({
@@ -54,6 +57,23 @@ export function useActiveTrades() {
       return (old || []).filter(trade => trade.id !== tradeId);
     });
   };
+
+  // Listen สำหรับการเทรดที่เสร็จสิ้นจาก WebSocket
+  useEffect(() => {
+    if (socket && isConnected) {
+      const handleTradeCompleted = (completedTradeInfo: { tradeId: number; userId: number; result: string; status: string }) => {
+        console.log('Active trades hook received trade completion:', completedTradeInfo);
+        // ลบการเทรดที่เสร็จสิ้นออกจาก active trades
+        removeActiveTrade(completedTradeInfo.tradeId);
+      };
+
+      socket.on('trade-completed', handleTradeCompleted);
+
+      return () => {
+        socket.off('trade-completed', handleTradeCompleted);
+      };
+    }
+  }, [socket, isConnected]);
 
   // ค้นหาการเทรดที่กำลังทำอยู่ตาม cryptoId
   const getActiveTradeForCrypto = (cryptoId: string) => {
