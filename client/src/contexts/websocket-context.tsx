@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useQuery } from '@tanstack/react-query';
 import type { Trade } from '@shared/schema';
+import { useAuth } from '@/hooks/use-auth';
 
 interface WebSocketContextType {
   socket: Socket | null;
@@ -23,10 +24,11 @@ export function useWebSocket() {
 
 interface WebSocketProviderProps {
   children: React.ReactNode;
-  userId?: number;
 }
 
-export function WebSocketProvider({ children, userId }: WebSocketProviderProps) {
+export function WebSocketProvider({ children }: WebSocketProviderProps) {
+  const { user } = useAuth();
+  const userId = user?.id;
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [trades, setTrades] = useState<Trade[]>([]);

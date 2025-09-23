@@ -21,6 +21,7 @@ import { Separator } from "@/components/ui/separator";
 import { useActiveTrades } from "@/hooks/use-active-trades";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { TradeCountdown } from "@/components/trade-countdown";
+import { useWebSocket } from "@/contexts/websocket-context";
 
 interface TradingOptionsProps {
   crypto: CryptoCurrency;
@@ -56,6 +57,7 @@ export function TradingOptions({ crypto }: TradingOptionsProps) {
   const { user } = useAuth();
   const { toast } = useToast();
   const { getActiveTradeForCrypto, addActiveTrade, removeActiveTrade } = useActiveTrades();
+  const { isConnected, trades: realTimeTrades, refreshTrades } = useWebSocket();
   
   // ดึงข้อมูลการเทรดที่กำลังดำเนินการอยู่จาก global state
   const activeTradeData = getActiveTradeForCrypto(crypto.id);
@@ -111,6 +113,9 @@ export function TradingOptions({ crypto }: TradingOptionsProps) {
       // อัพเดทข้อมูลการเทรดและข้อมูลผู้ใช้ (เพื่ออัพเดทยอดเงินคงเหลือ)
       queryClient.invalidateQueries({ queryKey: ["/api/trades"] });
       queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      
+      // รีเฟรช real-time trades จาก WebSocket
+      refreshTrades();
       
       console.log("ข้อมูลการเทรดที่ได้รับ:", data);
       
