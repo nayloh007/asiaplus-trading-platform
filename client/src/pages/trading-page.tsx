@@ -50,7 +50,6 @@ export default function TradingPage() {
     <MobileContainer>
       <div className="pb-20"> {/* Add padding for bottom navigation */}
         <TopNavigation 
-          title="Trade" 
           actionButton={
             <Button 
               variant="ghost" 

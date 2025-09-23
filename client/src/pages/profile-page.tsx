@@ -202,7 +202,7 @@ export default function ProfilePage() {
 
   return (
     <MobileContainer>
-      <TopNavigation title="โปรไฟล์" />
+      <TopNavigation />
       
       {/* ส่วนแสดงข้อมูลโปรไฟล์พร้อมพื้นหลัง */}
       <div className="relative overflow-hidden">

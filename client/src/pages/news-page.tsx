@@ -143,7 +143,7 @@ export default function NewsPage() {
   
   return (
     <MobileContainer>
-      <TopNavigation title="ข่าวสารคริปโต" />
+      <TopNavigation />
       
       <div className="pb-20 w-full">
         {/* แบนเนอร์ข่าวเด่น */}
