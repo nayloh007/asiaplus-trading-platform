@@ -893,6 +893,68 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin Settings API
+  app.get("/api/admin/settings", isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      // ดึงการตั้งค่าทั้งหมดจากฐานข้อมูล
+      const allSettings = await db.select().from(settings);
+      
+      // แปลงเป็น object
+      const settingsObj = allSettings.reduce((acc: any, setting) => {
+        acc[setting.key] = setting.value;
+        return acc;
+      }, {});
+      
+      res.json(settingsObj);
+    } catch (error) {
+      console.error("Error fetching settings:", error);
+      res.status(500).json({ message: "Failed to fetch settings" });
+    }
+  });
+  
+  app.put("/api/admin/settings", isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const {
+        trade_fee_percentage,
+        withdrawal_fee_percentage,
+        min_deposit_amount,
+        min_withdrawal_amount,
+        allow_trading,
+        allow_registrations,
+        maintenance_mode
+      } = req.body;
+      
+      // รายการการตั้งค่าที่อนุญาตให้อัปเดต
+      const allowedSettings = {
+        trade_fee_percentage,
+        withdrawal_fee_percentage,
+        min_deposit_amount,
+        min_withdrawal_amount,
+        allow_trading,
+        allow_registrations,
+        maintenance_mode
+      };
+      
+      // อัปเดตแต่ละการตั้งค่า
+      for (const [key, value] of Object.entries(allowedSettings)) {
+        if (value !== undefined) {
+          await db
+            .insert(settings)
+            .values({ key, value: String(value) })
+            .onConflictDoUpdate({
+              target: settings.key,
+              set: { value: String(value), updatedAt: new Date() }
+            });
+        }
+      }
+      
+      res.json({ message: "Settings updated successfully" });
+    } catch (error) {
+      console.error("Error updating settings:", error);
+      res.status(500).json({ message: "Failed to update settings" });
+    }
+  });
+
   // Register settings routes
   registerSettingsRoutes(app);
 
