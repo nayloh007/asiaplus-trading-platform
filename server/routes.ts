@@ -1,6 +1,6 @@
 import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
-import { fileStorage as storage } from "./file-storage";
+import { storage } from "./storage";
 import { setupAuth } from "./auth";
 import { getMarketData, getCryptoById } from "./crypto-api";
 import { insertTradeSchema, insertBankAccountSchema, trades, bankAccounts, type User } from "@shared/schema";

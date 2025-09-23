@@ -2,7 +2,7 @@ import { spawn } from "child_process";
 import fs from "fs";
 import path from "path";
 import { Express, Request, Response, NextFunction } from "express";
-import { fileStorage as storage } from "./file-storage";
+import { storage } from "./storage";
 import multer from "multer";
 import { z } from "zod";
 

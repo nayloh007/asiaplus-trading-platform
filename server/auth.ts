@@ -3,7 +3,7 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { Express } from "express";
 import session from "express-session";
 import bcrypt from "bcryptjs";
-import { fileStorage as storage } from "./file-storage";
+import { storage } from "./storage";
 import MemoryStore from "memorystore";
 import { User as SelectUser } from "@shared/schema";
 

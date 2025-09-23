@@ -57,6 +57,7 @@ export class DatabaseStorage implements IStorage {
     this.sessionStore = new MemoryStoreSession({ 
       checkPeriod: 86400000 // ล้างเซสชันที่หมดอายุทุก 24 ชั่วโมง
     });
+    console.log('✅ Using PostgreSQL database storage for persistence');
   }
   
   async getUser(id: number): Promise<User | undefined> {
@@ -586,4 +587,5 @@ export class DatabaseStorage implements IStorage {
   }
 }
 
+// Export shared storage instance
 export const storage = new DatabaseStorage();
