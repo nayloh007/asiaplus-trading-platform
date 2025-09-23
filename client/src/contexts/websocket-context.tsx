@@ -87,7 +87,9 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
       });
       
       // Refresh trades query เพื่อให้แน่ใจว่าข้อมูลถูกต้อง
-      refetchTrades();
+      setTimeout(() => {
+        refetchTrades();
+      }, 100);
     });
 
     // รับการอัปเดตการเทรดที่เสร็จสิ้น
@@ -95,7 +97,9 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
       console.log('Trade completed:', completedTradeInfo);
       
       // รีเฟรชข้อมูลการเทรดทันที
-      refetchTrades();
+      setTimeout(() => {
+        refetchTrades();
+      }, 100);
       
       // อัปเดต local state โดยการลบการเทรดที่เสร็จแล้วออกจาก active trades
       setTrades(prevTrades => 
@@ -106,7 +110,7 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     return () => {
       newSocket.close();
     };
-  }, [userId, refetchTrades]);
+  }, [userId]);
 
   const refreshTrades = () => {
     refetchTrades();

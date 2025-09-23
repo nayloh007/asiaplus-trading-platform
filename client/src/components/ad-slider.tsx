@@ -9,23 +9,36 @@ import {
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
+// Import รูปภาพจาก assets
+import asiaPlus1 from "@assets/462601494_2872254826265363_8039408733850352485_n.png";
+import asiaPlus2 from "@assets/462884981_2876000042557508_8492050558665398215_n.jpg";
+import asiaPlus3 from "@assets/463194602_2877123072445205_400290765798955497_n.png";
+import asiaPlus4 from "@assets/463199942_2878974105593435_496135016965127313_n.png";
+import asiaPlus5 from "@assets/463883305_2883588198465359_7359262269516360381_n.png";
+import asiaPlus6 from "@assets/469260309_2928765837280928_8586244591954648374_n.png";
+import asiaPlus7 from "@assets/475770537_2978550502302461_2285734999134478019_n.png";
+import asiaPlus8 from "@assets/481193256_3003680446456133_1544279445465180161_n.jpg";
+import asiaPlus9 from "@assets/481247539_3003680433122801_4202088951531435287_n.jpg";
+import asiaPlus10 from "@assets/481265377_3001713059986205_2798521872516734220_n.jpg";
+import asiaPlus11 from "@assets/485370924_3024524554371722_736050699631465514_n.jpg";
+
 export function AdSlider() {
   const [api, setApi] = useState<any>();
   const [activeIndex, setActiveIndex] = useState(0);
   
   // ใช้รูปภาพจาก Asia Plus Securities
   const imageArray = [
-    { src: "https://static.thairath.co.th/media/dFQROr7oWzulq5Fa5LFdxcIa26hqueL6RwsHNPI4t2aRVd94wvZ5IS9p2D9KZtf8Vsg.jpg", alt: "Asia Plus Securities - การลงทุนที่ให้ผลตอบแทนดี" },
-    { src: "https://www.thunkhaotoday.com/storage/news/investing/2022/08/20220817-a-cover.jpg", alt: "Asia Plus Securities - บริการซื้อขายหลักทรัพย์" },
-    { src: "https://www.thaipr.net/wp-content/uploads/2022/01/%E0%B8%9E%E0%B8%9A%E0%B8%AA%E0%B8%B7%E0%B9%88%E0%B8%AD-Q1-65-%E0%B8%8A%E0%B9%88%E0%B8%A7%E0%B8%87%E0%B8%97%E0%B8%B5%E0%B9%881-e1641968185261.jpg", alt: "Asia Plus Securities - ปีเสือ SET ขึ้นเหนือ 1800 จุด" },
-    { src: "https://image.bangkokbiznews.com/image/kt/media/image/news/2021/07/01/946462/750x422_946462_1625117217.jpeg", alt: "Asia Plus Securities - วิเคราะห์ตลาดหุ้น" },
-    { src: "https://thunhoon.com/cache/image/article/286253/5dcbcebb-08cf-4271-b8dc-c6f73ad3d544.jpeg", alt: "Asia Plus Securities - แนวโน้มตลาดหุ้น" },
-    { src: "https://www.kaohoon.com/wp-content/uploads/2020/07/ASP.jpg", alt: "Asia Plus Securities - ที่ปรึกษาการลงทุนมืออาชีพ" },
-    { src: "https://www.tnnthailand.com/static/2025/a3723684-c60a-409c-bb99-408c85902672.webp", alt: "Asia Plus Securities - โลโก้บริษัท" },
-    { src: "https://image.bangkokbiznews.com/uploads/images/md/2024/04/gR8QI0ZY9LXIUopdOXvc.webp?x-image-process=style/LG", alt: "Asia Plus Securities - วิเคราะห์ตลาด" },
-    { src: "https://today-obs.line-scdn.net/0hF_f8PVppGXBbQQm8TQpmJ2MXFQFoJwN5eSRWH34RT0FybQslYi9KE3ZHR1x_d1wmeyBVECxDRhd1eVpxMw/w644", alt: "Asia Plus Securities - ข้อมูลการลงทุน" },
-    { src: "https://www.kaohoon.com/wp-content/uploads/2022/07/%E0%B8%AD%E0%B9%80%E0%B8%8B%E0%B8%B5%E0%B8%A2%E0%B8%9E%E0%B8%A5%E0%B8%B1%E0%B8%AA-%E0%B9%81%E0%B8%99%E0%B8%B0%E0%B8%AA%E0%B8%AD%E0%B8%A2-7-%E0%B8%AB%E0%B8%B8%E0%B9%89%E0%B8%99%E0%B9%80%E0%B8%94%E0%B9%88%E0%B8%99-Q3-%E0%B8%A3%E0%B8%B1%E0%B8%9A%E0%B8%94%E0%B8%AD%E0%B8%81%E0%B9%80%E0%B8%9A%E0%B8%B5%E0%B9%89%E0%B8%A2%E0%B8%82%E0%B8%B2.jpeg", alt: "Asia Plus Securities - แนะนำ 7 หุ้นเด่น Q3" },
-    { src: "https://www.prachachat.net/wp-content/uploads/2025/03/cover-2025-03-12T160142.887-728x485.jpg", alt: "Asia Plus Securities - วิเคราะห์การลงทุน" }
+    { src: asiaPlus1, alt: "Asia Plus Securities - การลงทุนที่ให้ผลตอบแทนดี" },
+    { src: asiaPlus2, alt: "Asia Plus Securities - บริการซื้อขายหลักทรัพย์" },
+    { src: asiaPlus3, alt: "Asia Plus Securities - ปีเสือ SET ขึ้นเหนือ 1800 จุด" },
+    { src: asiaPlus4, alt: "Asia Plus Securities - วิเคราะห์ตลาดหุ้น" },
+    { src: asiaPlus5, alt: "Asia Plus Securities - แนวโน้มตลาดหุ้น" },
+    { src: asiaPlus6, alt: "Asia Plus Securities - ที่ปรึกษาการลงทุนมืออาชีพ" },
+    { src: asiaPlus7, alt: "Asia Plus Securities - โลโก้บริษัท" },
+    { src: asiaPlus8, alt: "Asia Plus Securities - วิเคราะห์ตลาด" },
+    { src: asiaPlus9, alt: "Asia Plus Securities - ข้อมูลการลงทุน" },
+    { src: asiaPlus10, alt: "Asia Plus Securities - แนะนำ 7 หุ้นเด่น Q3" },
+    { src: asiaPlus11, alt: "Asia Plus Securities - วิเคราะห์การลงทุน" }
   ];
 
   useEffect(() => {
@@ -71,9 +84,9 @@ export function AdSlider() {
                   alt={image.alt}
                   className="w-full h-64 object-cover"
                   onError={(e) => {
-                    console.error(`Failed to load image: ${image.src}`);
+                    console.error(`Failed to load image: ${image.alt}`);
                     e.currentTarget.onerror = null;
-                    e.currentTarget.src = "https://www.asiaplus.co.th/images/logo/symbol/original/1587976780795.png"; 
+                    e.currentTarget.src = asiaPlus1; 
                   }}
                 />
               </div>
