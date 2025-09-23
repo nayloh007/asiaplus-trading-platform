@@ -71,7 +71,7 @@ export function TradingOptions({ crypto }: TradingOptionsProps) {
     refetchInterval: 5000, // รีเฟรชทุก 5 วินาที
   });
   
-  // จำกัดจำนวนที่ป้อนได้ไม่เกิน 1,000
+  // จำกัดจำนวนที่ป้อนได้ไม่เกินยอดเงินในบัญชี
   const validateAndSetAmount = (value: string) => {
     const numValue = parseFloat(value);
     
@@ -81,9 +81,10 @@ export function TradingOptions({ crypto }: TradingOptionsProps) {
       return;
     }
     
-    // จำกัดค่าไม่เกิน 1,000
-    if (numValue > 1000) {
-      setAmount("1000");
+    // จำกัดค่าไม่เกินยอดเงินในบัญชี (ดึง userBalance จาก user object)
+    const currentBalance = user ? parseFloat(user.balance) : 0;
+    if (numValue > currentBalance) {
+      setAmount(currentBalance.toString());
     } else {
       setAmount(value);
     }
@@ -259,8 +260,7 @@ export function TradingOptions({ crypto }: TradingOptionsProps) {
       amount,
       direction: tradeDirection,
       entryPrice: crypto.current_price.toString(),
-      duration: durationInSeconds,
-      profitPercentage
+      duration: durationInSeconds.toString(),
     });
     
     // ปิด Dialog
