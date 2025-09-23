@@ -296,11 +296,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // สร้างรายการธุรกรรมใหม่ (สถานะ pending ต้องรอแอดมินอนุมัติ)
       const transactionData = {
         userId: req.user.id,
-        type: "deposit",
+        type: "deposit" as const,
         amount: data.amount,
         method: data.method,
         paymentProof: data.paymentProofBase64,
-        status: "pending", // default status
       };
       
       const transaction = await storage.createTransaction(transactionData);
@@ -355,12 +354,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // สร้างรายการธุรกรรมใหม่ (สถานะ pending ต้องรอแอดมินอนุมัติ)
       const transactionData = {
         userId: req.user.id,
-        type: "withdraw",
+        type: "withdraw" as const,
         amount: data.amount,
         method: data.method,
         bankName: data.bankName,
         bankAccount: data.bankAccount,
-        status: "pending", // default status
         note: "เงินถูกตัดจากบัญชีแล้ว รอการอนุมัติ"
       };
       
@@ -629,15 +627,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // สร้างรายการธุรกรรมใหม่ (สถานะ pending ต้องรอแอดมินอนุมัติ)
       const transactionData = {
         userId: req.user.id,
-        type: "withdraw",
+        type: "withdraw" as const,
         amount: data.amount,  // จำนวนเงินที่ขอถอนก่อนหักค่าธรรมเนียม
-        fee: fee.toFixed(2),  // ค่าธรรมเนียม 3%
         method: "bank",
         bankName: bankAccount.bankName,
         bankAccount: bankAccount.accountNumber,
-        accountName: bankAccount.accountName,
-        bankAccountId: bankAccount.id,
-        status: "pending", // default status
         note: `เงินถูกตัดจากบัญชีแล้ว รอการอนุมัติ | ค่าธรรมเนียม 3%: ${fee.toFixed(2)} บาท ยอดสุทธิ: ${finalAmount.toFixed(2)} บาท`,
       };
       
