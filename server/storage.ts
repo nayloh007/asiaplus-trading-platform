@@ -569,19 +569,17 @@ export class DatabaseStorage implements IStorage {
         password: users.password,
         email: users.email,
         fullName: users.fullName,
+        displayName: users.displayName,
+        phoneNumber: users.phoneNumber,
+        avatarUrl: users.avatarUrl,
         role: users.role,
         balance: users.balance,
-        createdAt: users.createdAt
+        createdAt: users.createdAt,
+        updatedAt: users.updatedAt
       });
     
     if (dbUser) {
-      // สร้าง User object ที่มีคอลัมน์ใหม่ด้วย
-      return {
-        ...dbUser,
-        displayName: null,
-        phoneNumber: null,
-        avatarUrl: null
-      };
+      return dbUser;
     }
     
     return undefined;
