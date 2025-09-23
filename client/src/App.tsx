@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute, AdminRoute } from "@/lib/protected-route";
+import { WebSocketProvider } from "@/contexts/websocket-context";
 import { SplashScreen } from "@/components/splash-screen";
 import { useState, useEffect } from "react";
 import { ThemeProvider } from "next-themes";
@@ -62,14 +63,16 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
         <AuthProvider>
-          <TooltipProvider>
-            <Toaster />
-            {showSplash ? (
-              <SplashScreen onComplete={handleSplashComplete} />
-            ) : (
-              <Router />
-            )}
-          </TooltipProvider>
+          <WebSocketProvider>
+            <TooltipProvider>
+              <Toaster />
+              {showSplash ? (
+                <SplashScreen onComplete={handleSplashComplete} />
+              ) : (
+                <Router />
+              )}
+            </TooltipProvider>
+          </WebSocketProvider>
         </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
