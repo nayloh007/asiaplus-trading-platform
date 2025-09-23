@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth } from "./auth";
 import { getMarketData, getCryptoById } from "./crypto-api";
-import { insertTradeSchema, insertBankAccountSchema, trades, bankAccounts, type User } from "@shared/schema";
+import { insertTradeSchema, insertBankAccountSchema, trades, bankAccounts, settings, type User } from "@shared/schema";
 import { ZodError } from "zod";
 import { z } from "zod";
 import { fromZodError } from "zod-validation-error";
