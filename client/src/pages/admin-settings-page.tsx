@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { DesktopContainer } from "@/components/layout/desktop-container";
 import { AdminSidebar } from "@/components/layout/admin-sidebar";
@@ -113,8 +113,21 @@ export default function AdminSettingsPage() {
     isLoading: isLoadingSettings
   } = useQuery({
     queryKey: ['/api/admin/settings'],
-    enabled: activeTab === "general", // ดึงข้อมูลเมื่ออยู่ที่แท็บ general เท่านั้น
+    enabled: activeTab === "general" || activeTab === "trading", // ดึงข้อมูลเมื่ออยู่ที่แท็บ general หรือ trading
   });
+
+  // ตั้งค่า state variables เมื่อได้ข้อมูลมาแล้ว
+  useEffect(() => {
+    if (settings) {
+      setAllowTrading(settings.allow_trading === 'true');
+      setAllowRegistrations(settings.allow_registrations === 'true');
+      setMaintenanceMode(settings.maintenance_mode === 'true');
+      setTradeFeePercentage(parseFloat(settings.trade_fee_percentage) || 1.5);
+      setWithdrawalFeePercentage(parseFloat(settings.withdrawal_fee_percentage) || 0.1);
+      setMinDepositAmount(parseInt(settings.min_deposit_amount) || 100);
+      setMinWithdrawalAmount(parseInt(settings.min_withdrawal_amount) || 100);
+    }
+  }, [settings]);
   
   // Mutation สำหรับแก้ไขบัญชีธนาคารและพร้อมเพย์สำหรับการฝากเงิน
   const updateDepositAccountsMutation = useMutation({
@@ -260,11 +273,45 @@ export default function AdminSettingsPage() {
     });
   };
   
+  // Mutation สำหรับบันทึกการตั้งค่า
+  const saveSettingsMutation = useMutation({
+    mutationFn: async (settingsData: {
+      trade_fee_percentage: number;
+      withdrawal_fee_percentage: number;
+      min_deposit_amount: number;
+      min_withdrawal_amount: number;
+      allow_trading: boolean;
+      allow_registrations: boolean;
+      maintenance_mode: boolean;
+    }) => {
+      const res = await apiRequest("PUT", "/api/admin/settings", settingsData);
+      return await res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/settings'] });
+      toast({
+        title: "การตั้งค่าถูกบันทึกแล้ว",
+        description: "การเปลี่ยนแปลงการตั้งค่าได้รับการบันทึกเรียบร้อยแล้ว",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "เกิดข้อผิดพลาด",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleSaveSettings = () => {
-    // Implement API call to save settings
-    toast({
-      title: "การตั้งค่าถูกบันทึกแล้ว",
-      description: "การเปลี่ยนแปลงการตั้งค่าได้รับการบันทึกเรียบร้อยแล้ว",
+    saveSettingsMutation.mutate({
+      trade_fee_percentage: tradeFeePercentage,
+      withdrawal_fee_percentage: withdrawalFeePercentage,
+      min_deposit_amount: minDepositAmount,
+      min_withdrawal_amount: minWithdrawalAmount,
+      allow_trading: allowTrading,
+      allow_registrations: allowRegistrations,
+      maintenance_mode: maintenanceMode,
     });
   };
   
