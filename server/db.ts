@@ -1,14 +1,16 @@
-import { Pool } from 'pg';
-import { drizzle } from 'drizzle-orm/node-postgres';
+import { Pool, neonConfig } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-serverless';
+import ws from "ws";
 import * as schema from "@shared/schema";
 
-// ใช้ mock pool แทนการเชื่อมต่อกับ PostgreSQL เนื่องจากมีปัญหาในการเชื่อมต่อ
-// ระบบจะใช้ file-storage.ts แทนเพื่อเก็บข้อมูลถาวร
-export const pool = {
-  query: async () => ({ rows: [] }),
-  connect: async () => ({}),
-  end: async () => {},
-} as unknown as Pool;
+// Integration: javascript_database
+neonConfig.webSocketConstructor = ws;
 
-// สร้าง drizzle instance กับ schema
-export const db = drizzle(pool, { schema });
+if (!process.env.DATABASE_URL) {
+  throw new Error(
+    "DATABASE_URL must be set. Did you forget to provision a database?",
+  );
+}
+
+export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+export const db = drizzle({ client: pool, schema });

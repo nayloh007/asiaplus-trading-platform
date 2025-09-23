@@ -110,6 +110,10 @@ export class FileStorage implements IStorage {
     const newUser: User = {
       id: this.nextUserId++,
       ...user,
+      fullName: null,
+      displayName: null,
+      phoneNumber: null,
+      avatarUrl: null,
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -281,7 +285,8 @@ export class FileStorage implements IStorage {
       status: "active",
       result: null,
       predeterminedResult: null,
-      endTime: null
+      endTime: null,
+      closedAt: null
     };
     
     this.trades.push(newTrade);
@@ -308,14 +313,14 @@ export class FileStorage implements IStorage {
     const updatedTrade: Trade = {
       ...originalTrade,
       status,
-      updatedAt: new Date(),
+      closedAt: status === 'completed' ? new Date() : originalTrade.closedAt,
     };
 
-    if (result) {
-      updatedTrade.result = finalResult;
+    if (result !== undefined) {
+      updatedTrade.result = finalResult || null;
     }
 
-    if (predeterminedResult) {
+    if (predeterminedResult !== undefined) {
       updatedTrade.predeterminedResult = predeterminedResult;
     }
 
@@ -360,9 +365,14 @@ export class FileStorage implements IStorage {
     const newTransaction: Transaction = {
       id: this.nextTransactionId++,
       ...transaction,
+      status: 'pending',
+      bankName: transaction.bankName || null,
+      method: transaction.method || null,
+      bankAccount: transaction.bankAccount || null,
+      paymentProof: transaction.paymentProof || null,
+      note: transaction.note || null,
       createdAt: new Date(),
-      updatedAt: new Date(),
-      status: transaction.status || 'pending',
+      updatedAt: new Date()
     };
     this.transactions.push(newTransaction);
     this.saveData();

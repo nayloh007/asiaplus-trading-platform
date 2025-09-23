@@ -7,6 +7,10 @@ export const users = pgTable('users', {
   username: text('username').notNull().unique(),
   email: text('email').notNull().unique(),
   password: text('password').notNull(),
+  fullName: text('full_name'),
+  displayName: text('display_name'),
+  phoneNumber: text('phone_number'),
+  avatarUrl: text('avatar_url'),
   role: text('role').default('user').notNull(),
   balance: text('balance').default('0').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -39,6 +43,7 @@ export const trades = pgTable('trades', {
   predeterminedResult: text('predetermined_result'), // 'win' or 'lose'
   profitPercentage: text('profit_percentage').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
+  closedAt: timestamp('closed_at'),
   endTime: timestamp('end_time'),
 });
 

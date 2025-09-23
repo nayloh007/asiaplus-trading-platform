@@ -60,13 +60,16 @@ export class DatabaseStorage implements IStorage {
   }
   
   async getUser(id: number): Promise<User | undefined> {
-    // เลือกเฉพาะคอลัมน์ที่มีอยู่แล้วในฐานข้อมูล
     const [dbUser] = await db
       .select({
         id: users.id,
         username: users.username,
         password: users.password,
         email: users.email,
+        fullName: users.fullName,
+        displayName: users.displayName,
+        phoneNumber: users.phoneNumber,
+        avatarUrl: users.avatarUrl,
         role: users.role,
         balance: users.balance,
         createdAt: users.createdAt,
@@ -79,13 +82,16 @@ export class DatabaseStorage implements IStorage {
   }
   
   async getUserByUsername(username: string): Promise<User | undefined> {
-    // เลือกเฉพาะคอลัมน์ที่มีอยู่แล้วในฐานข้อมูล
     const [dbUser] = await db
       .select({
         id: users.id,
         username: users.username,
         password: users.password,
         email: users.email,
+        fullName: users.fullName,
+        displayName: users.displayName,
+        phoneNumber: users.phoneNumber,
+        avatarUrl: users.avatarUrl,
         role: users.role,
         balance: users.balance,
         createdAt: users.createdAt,
@@ -98,13 +104,16 @@ export class DatabaseStorage implements IStorage {
   }
   
   async getUserByEmail(email: string): Promise<User | undefined> {
-    // เลือกเฉพาะคอลัมน์ที่มีอยู่แล้วในฐานข้อมูล
     const [dbUser] = await db
       .select({
         id: users.id,
         username: users.username,
         password: users.password,
         email: users.email,
+        fullName: users.fullName,
+        displayName: users.displayName,
+        phoneNumber: users.phoneNumber,
+        avatarUrl: users.avatarUrl,
         role: users.role,
         balance: users.balance,
         createdAt: users.createdAt,
@@ -122,7 +131,6 @@ export class DatabaseStorage implements IStorage {
   }
   
   async getAllUsers(): Promise<User[]> {
-    // เลือกเฉพาะคอลัมน์ที่มีอยู่แล้วในฐานข้อมูล
     const dbUsers = await db
       .select({
         id: users.id,
@@ -130,19 +138,17 @@ export class DatabaseStorage implements IStorage {
         password: users.password,
         email: users.email,
         fullName: users.fullName,
+        displayName: users.displayName,
+        phoneNumber: users.phoneNumber,
+        avatarUrl: users.avatarUrl,
         role: users.role,
         balance: users.balance,
-        createdAt: users.createdAt
+        createdAt: users.createdAt,
+        updatedAt: users.updatedAt
       })
       .from(users);
     
-    // เพิ่มคอลัมน์ใหม่สำหรับทุกผู้ใช้
-    return dbUsers.map(user => ({
-      ...user,
-      displayName: null,
-      phoneNumber: null,
-      avatarUrl: null
-    }));
+    return dbUsers;
   }
   
   // ฟังก์ชันสำหรับดึงข้อมูลยอดเงินของผู้ใช้
@@ -496,19 +502,17 @@ export class DatabaseStorage implements IStorage {
         password: users.password,
         email: users.email,
         fullName: users.fullName,
+        displayName: users.displayName,
+        phoneNumber: users.phoneNumber,
+        avatarUrl: users.avatarUrl,
         role: users.role,
         balance: users.balance,
-        createdAt: users.createdAt
+        createdAt: users.createdAt,
+        updatedAt: users.updatedAt
       });
     
     if (dbUser) {
-      // สร้าง User object ที่มีคอลัมน์ใหม่ด้วย
-      return {
-        ...dbUser,
-        displayName: profileData.displayName ?? null,
-        phoneNumber: profileData.phoneNumber ?? null,
-        avatarUrl: profileData.avatarUrl ?? null
-      };
+      return dbUser;
     }
     
     return undefined;
@@ -527,19 +531,17 @@ export class DatabaseStorage implements IStorage {
         password: users.password,
         email: users.email,
         fullName: users.fullName,
+        displayName: users.displayName,
+        phoneNumber: users.phoneNumber,
+        avatarUrl: users.avatarUrl,
         role: users.role,
         balance: users.balance,
-        createdAt: users.createdAt
+        createdAt: users.createdAt,
+        updatedAt: users.updatedAt
       });
     
     if (dbUser) {
-      // สร้าง User object ที่มีคอลัมน์ใหม่ด้วย
-      return {
-        ...dbUser,
-        displayName: null,
-        phoneNumber: null,
-        avatarUrl: null
-      };
+      return dbUser;
     }
     
     return undefined;
