@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute, AdminRoute } from "@/lib/protected-route";
 import { WebSocketProvider } from "@/contexts/websocket-context";
+import { GlobalTradeStatus } from "@/components/global-trade-status";
 import { SplashScreen } from "@/components/splash-screen";
 import { useState, useEffect } from "react";
 import { ThemeProvider } from "next-themes";
@@ -69,7 +70,10 @@ function App() {
               {showSplash ? (
                 <SplashScreen onComplete={handleSplashComplete} />
               ) : (
-                <Router />
+                <>
+                  <Router />
+                  <GlobalTradeStatus />
+                </>
               )}
             </TooltipProvider>
           </WebSocketProvider>
