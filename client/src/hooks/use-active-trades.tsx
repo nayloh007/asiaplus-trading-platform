@@ -58,6 +58,15 @@ export function useActiveTrades() {
     });
   };
 
+  // ล้างข้อมูล active trades เก่าเมื่อผู้ใช้เข้าระบบใหม่
+  useEffect(() => {
+    if (user) {
+      // ล้าง active trades เก่าเมื่อเข้าระบบใหม่
+      queryClient.setQueryData([ACTIVE_TRADES_KEY], []);
+      console.log('Cleared old active trades for user:', user.id);
+    }
+  }, [user, queryClient]);
+
   // Listen สำหรับการเทรดที่เสร็จสิ้นจาก WebSocket
   useEffect(() => {
     if (socket && isConnected) {
