@@ -10,35 +10,31 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 // Import รูปภาพจาก assets
-import asiaPlus1 from "@assets/462601494_2872254826265363_8039408733850352485_n.png";
-import asiaPlus2 from "@assets/462884981_2876000042557508_8492050558665398215_n.jpg";
-import asiaPlus3 from "@assets/463194602_2877123072445205_400290765798955497_n.png";
-import asiaPlus4 from "@assets/463199942_2878974105593435_496135016965127313_n.png";
-import asiaPlus5 from "@assets/463883305_2883588198465359_7359262269516360381_n.png";
-import asiaPlus6 from "@assets/469260309_2928765837280928_8586244591954648374_n.png";
-import asiaPlus7 from "@assets/475770537_2978550502302461_2285734999134478019_n.png";
-import asiaPlus8 from "@assets/481193256_3003680446456133_1544279445465180161_n.jpg";
-import asiaPlus9 from "@assets/481247539_3003680433122801_4202088951531435287_n.jpg";
-import asiaPlus10 from "@assets/481265377_3001713059986205_2798521872516734220_n.jpg";
-import asiaPlus11 from "@assets/485370924_3024524554371722_736050699631465514_n.jpg";
+import aspSlide1 from "@assets/ASP_1758695654331.jpg";
+import aspSlide2 from "@assets/เอเซีย-พลัส_1758695663097.jpg";
+import aspSlide3 from "@assets/9e580530fe2e1b35827f96b7f38b3804_1758695673871.jpg";
+import aspSlide4 from "@assets/w644 (1)_1758695727957.jpg";
+import aspSlide5 from "@assets/gVPK6VaFv8EDKlvFu0Ae_1758695731786.webp";
+import aspSlide6 from "@assets/Asia-Plus-Securities_1758695735624.jpg";
+import aspSlide7 from "@assets/cover-2025-03-12T160142.887-728x485_1758695739619.jpg";
+import aspSlide8 from "@assets/maxresdefault_1758695766041.jpg";
+import aspSlide9 from "@assets/dFQROr7oWzulq5Fa6rMcj3s4BADfMk6633SASIAgmAUBeoX55uRZ6D6gsPq1bLs2t84_1758695773000.jpg";
 
 export function AdSlider() {
   const [api, setApi] = useState<any>();
   const [activeIndex, setActiveIndex] = useState(0);
   
-  // ใช้รูปภาพจาก Asia Plus Securities
+  // ใช้รูปภาพใหม่จาก Asia Plus Securities
   const imageArray = [
-    { src: asiaPlus1, alt: "Asia Plus Securities - การลงทุนที่ให้ผลตอบแทนดี" },
-    { src: asiaPlus2, alt: "Asia Plus Securities - บริการซื้อขายหลักทรัพย์" },
-    { src: asiaPlus3, alt: "Asia Plus Securities - ปีเสือ SET ขึ้นเหนือ 1800 จุด" },
-    { src: asiaPlus4, alt: "Asia Plus Securities - วิเคราะห์ตลาดหุ้น" },
-    { src: asiaPlus5, alt: "Asia Plus Securities - แนวโน้มตลาดหุ้น" },
-    { src: asiaPlus6, alt: "Asia Plus Securities - ที่ปรึกษาการลงทุนมืออาชีพ" },
-    { src: asiaPlus7, alt: "Asia Plus Securities - โลโก้บริษัท" },
-    { src: asiaPlus8, alt: "Asia Plus Securities - วิเคราะห์ตลาด" },
-    { src: asiaPlus9, alt: "Asia Plus Securities - ข้อมูลการลงทุน" },
-    { src: asiaPlus10, alt: "Asia Plus Securities - แนะนำ 7 หุ้นเด่น Q3" },
-    { src: asiaPlus11, alt: "Asia Plus Securities - วิเคราะห์การลงทุน" }
+    { src: aspSlide1, alt: "Asia Plus Securities - ที่ปรึกษาการลงทุนมืออาชีพ" },
+    { src: aspSlide2, alt: "Asia Plus Securities - เทคโนโลยีการลงทุนสมัยใหม่" },
+    { src: aspSlide3, alt: "Asia Plus Securities - ส่อง 15 หุ้นไทย ต่างชาติซื้อขายมากสุดในปี 67" },
+    { src: aspSlide4, alt: "Asia Plus Securities - เอเชียพลัส ส่องกำไรกู้วิกฤติ ซื้อเหมาะเทนตรอลหาร์ ชู Top Pick" },
+    { src: aspSlide5, alt: "Asia Plus Securities - การลงทุนอัจฉริยะด้วยเทคโนโลยี" },
+    { src: aspSlide6, alt: "Asia Plus Securities - วิเคราะห์ตลาดหุ้นด้วยข้อมูลแม่นยำ" },
+    { src: aspSlide7, alt: "Asia Plus Securities - ผู้บริหารมืออาชีพ" },
+    { src: aspSlide8, alt: "Asia Plus Securities - เปิดโอกาสการลงทุนในต่างประเทศ" },
+    { src: aspSlide9, alt: "Asia Plus Securities - การลงทุนในตลาดไทย" }
   ];
 
   useEffect(() => {
@@ -86,7 +82,7 @@ export function AdSlider() {
                   onError={(e) => {
                     console.error(`Failed to load image: ${image.alt}`);
                     e.currentTarget.onerror = null;
-                    e.currentTarget.src = asiaPlus1; 
+                    e.currentTarget.src = aspSlide1; 
                   }}
                 />
               </div>
