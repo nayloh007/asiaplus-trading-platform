@@ -1,88 +1,179 @@
-# Asia Plus Securities Trading Platform
+# Asia Plus Trading Platform
 
-A modern trading platform built with React, TypeScript, and Node.js.
+ระบบเทรดดิ้งสำหรับ Asia Plus Securities พัฒนาด้วย React, TypeScript และ Node.js
 
-## Features
+## คุณสมบัติหลัก
 
-- Real-time trading interface
-- User authentication and management
-- Portfolio tracking
-- Transaction history
-- Bank account integration
-- Responsive design
+- 🔐 ระบบล็อกอิน/สมัครสมาชิก
+- 💰 ระบบกระเป๋าเงิน (ฝาก-ถอน)
+- 📊 ระบบเทรดดิ้ง
+- 🏦 จัดการบัญชีธนาคาร
+- 👥 ระบบจัดการผู้ใช้ (Admin/Agent/User)
+- 📈 แดชบอร์ดสำหรับแอดมิน
+- 🎨 UI/UX ที่ทันสมัยและใช้งานง่าย
 
-## Tech Stack
+## เทคโนโลยีที่ใช้
 
-- **Frontend**: React, TypeScript, Vite, Tailwind CSS
-- **Backend**: Node.js, Express, TypeScript
-- **Database**: PostgreSQL with Drizzle ORM
-- **Real-time**: WebSocket connections
+### Frontend
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- Shadcn/ui Components
+- React Query (TanStack Query)
+- React Router
 
-## Setup Instructions
+### Backend
+- Node.js
+- Express.js
+- TypeScript
+- SQLite / PostgreSQL
+- Drizzle ORM
+- Passport.js (Authentication)
+- bcrypt (Password Hashing)
 
-### Prerequisites
+## การติดตั้งและรัน
 
-- Node.js (v18 or higher)
-- PostgreSQL database
-- npm or yarn
+### ข้อกำหนดเบื้องต้น
+- Node.js 18+ 
+- npm หรือ yarn
 
-### Installation
+### ขั้นตอนการติดตั้ง
 
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/asiaplus2-trading.git
-cd asiaplus2-trading
+1. **Clone repository**
+   ```bash
+   git clone <repository-url>
+   cd asiaplus2
+   ```
+
+2. **ติดตั้ง dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **ตั้งค่า environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+   แก้ไขไฟล์ `.env` ตามความต้องการ
+
+4. **รันโปรเจ็ค**
+   
+   **Development mode:**
+   ```bash
+   # รัน backend และ frontend พร้อมกัน
+   npm run dev
+   ```
+   
+   **หรือรันแยกกัน:**
+   ```bash
+   # Terminal 1 - Backend
+   npm run server
+   
+   # Terminal 2 - Frontend  
+   npm run client
+   ```
+
+5. **เข้าใช้งาน**
+   - Frontend: http://localhost:5173
+   - Backend API: http://localhost:3000
+
+## ข้อมูลการล็อกอิน (Default)
+
+### Admin
+- Username: `admin`
+- Password: `admin@bigone`
+- Email: `admin@example.com`
+
+### Test Users (หลังจากใช้ Import Data)
+- Username: `agent001` / Password: `agent123` (Agent)
+- Username: `testuser1` / Password: `test123` (User)
+- Username: `demo` / Password: `demo123` (User)
+
+## โครงสร้างโปรเจ็ค
+
+```
+asiaplus2/
+├── client/                 # Frontend (React)
+│   ├── src/
+│   │   ├── components/     # React Components
+│   │   ├── pages/         # หน้าต่างๆ
+│   │   ├── hooks/         # Custom Hooks
+│   │   └── lib/           # Utilities
+├── server/                # Backend (Node.js)
+│   ├── auth.ts           # Authentication
+│   ├── routes.ts         # API Routes
+│   ├── storage.ts        # Database Operations
+│   └── index.ts          # Server Entry Point
+├── shared/               # Shared Types & Schemas
+└── database.db          # SQLite Database
 ```
 
-2. Install dependencies:
+## API Endpoints
+
+### Authentication
+- `POST /api/register` - สมัครสมาชิก
+- `POST /api/login` - ล็อกอิน
+- `POST /api/logout` - ล็อกเอาท์
+- `GET /api/user` - ข้อมูลผู้ใช้ปัจจุบัน
+
+### Trading
+- `GET /api/trades` - รายการเทรด
+- `POST /api/trades` - สร้างเทรดใหม่
+- `PATCH /api/trades/:id` - อัพเดทเทรด
+
+### Wallet
+- `POST /api/wallet/deposit` - ฝากเงิน
+- `POST /api/wallet/withdraw` - ถอนเงิน
+- `GET /api/wallet/transactions` - ประวัติธุรกรรม
+
+### Admin
+- `GET /api/admin/users` - จัดการผู้ใช้
+- `PATCH /api/admin/users/:id` - แก้ไขผู้ใช้
+- `POST /api/admin/import-data` - นำเข้าข้อมูลทดสอบ
+
+## การ Deploy
+
+### Production Build
 ```bash
-npm install
+npm run build
 ```
 
-3. Set up environment variables:
-```bash
-cp .env.example .env
-# Edit .env with your actual database credentials
+### Environment Variables สำหรับ Production
+```env
+NODE_ENV=production
+USE_SQLITE=true
+SESSION_SECRET=your-super-secure-session-secret
+ADMIN_PASSWORD=your-secure-admin-password
 ```
 
-4. Run database migrations:
-```bash
-npm run db:migrate
-```
+## การพัฒนา
 
-5. Start the development server:
+### รัน Development Server
 ```bash
 npm run dev
 ```
 
-## Environment Variables
+### Build สำหรับ Production
+```bash
+npm run build
+```
 
-Create a `.env` file based on `.env.example`:
+### Type Checking
+```bash
+npm run type-check
+```
 
-- `DATABASE_URL`: PostgreSQL connection string
-- `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE`: Database connection details
-- `NODE_ENV`: Environment (development/production)
-- `PORT`: Server port (default: 3000)
+## ความปลอดภัย
 
-## Security
+⚠️ **สำคัญ**: ก่อน deploy ไปยัง production:
 
-- All sensitive data is stored in environment variables
-- Database credentials are never committed to version control
-- API endpoints are protected with authentication
-- Input validation and sanitization implemented
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+1. เปลี่ยนรหัสผ่าน admin เริ่มต้น
+2. ตั้งค่า SESSION_SECRET ที่ปลอดภัย
+3. ใช้ HTTPS
+4. ตั้งค่า environment variables อย่างถูกต้อง
+5. ลบข้อมูลทดสอบออก
 
 ## License
 
-This project is proprietary software of Asia Plus Securities.
-
-## Support
-
-For technical support, please contact the development team.
+Private Project - Asia Plus Securities

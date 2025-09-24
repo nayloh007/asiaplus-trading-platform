@@ -227,7 +227,7 @@ export class DatabaseStorage implements IStorage {
     // อัพเดทสถานะบัญชีหลัก
     const [updatedBankAccount] = await db
       .update(bankAccounts)
-      .set({ isDefault, updatedAt: new Date() })
+      .set({ isDefault, updatedAt: new Date().toISOString() })
       .where(eq(bankAccounts.id, id))
       .returning();
     
@@ -282,7 +282,7 @@ export class DatabaseStorage implements IStorage {
       .update(bankAccounts)
       .set({ 
         ...bankAccountData,
-        updatedAt: new Date() 
+        updatedAt: new Date().toISOString() 
       })
       .where(eq(bankAccounts.id, id))
       .returning();
@@ -425,7 +425,7 @@ export class DatabaseStorage implements IStorage {
       .where(eq(transactions.userId, userId));
     
     // เรียงตาม createdAt จากล่าสุดไปเก่าสุด
-    return userTransactions.sort((a, b) => 
+    return userTransactions.sort((a: any, b: any) => 
       new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
   }
@@ -436,7 +436,7 @@ export class DatabaseStorage implements IStorage {
     const allTransactions = await db.select().from(transactions);
     
     // เรียงตาม createdAt จากล่าสุดไปเก่าสุด
-    return allTransactions.sort((a, b) => 
+    return allTransactions.sort((a: any, b: any) => 
       new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
   }
@@ -455,7 +455,7 @@ export class DatabaseStorage implements IStorage {
       .set({ 
         status, 
         note: note || originalTransaction.note,
-        updatedAt: new Date()
+        updatedAt: new Date().toISOString()
       })
       .where(eq(transactions.id, id))
       .returning();
@@ -593,5 +593,5 @@ export class DatabaseStorage implements IStorage {
   }
 }
 
-// Export shared storage instance
+// Export shared storage instance - using DatabaseStorage
 export const storage = new DatabaseStorage();

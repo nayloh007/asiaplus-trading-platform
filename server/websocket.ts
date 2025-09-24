@@ -1,10 +1,7 @@
 import { Server as SocketIOServer } from "socket.io";
 import { Server as HttpServer } from "http";
-import { DatabaseStorage } from "./storage";
+import { storage } from "./storage";
 import { getCryptoById } from "./crypto-api";
-
-// สร้าง storage instance
-const storage = new DatabaseStorage();
 
 let io: SocketIOServer | null = null;
 

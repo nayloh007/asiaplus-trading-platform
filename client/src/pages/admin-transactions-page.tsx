@@ -69,7 +69,7 @@ export default function AdminTransactionsPage() {
     return (
       transaction.id.toString().includes(searchQuery) ||
       user?.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user?.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user?.fullName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       transaction.amount.includes(searchQuery) ||
       transaction.type.includes(searchQuery) ||
       transaction.status.includes(searchQuery)
@@ -571,7 +571,7 @@ export default function AdminTransactionsPage() {
                       src={selectedTransaction.paymentProof} 
                       alt="หลักฐานการชำระเงิน" 
                       className="w-full h-auto object-contain cursor-pointer"
-                      onClick={() => window.open(selectedTransaction.paymentProof, '_blank')}
+                      onClick={() => selectedTransaction.paymentProof && window.open(selectedTransaction.paymentProof, '_blank')}
                     />
                   </div>
                   <div className="text-xs text-muted-foreground text-center mt-1">

@@ -5,11 +5,24 @@ import session from "express-session";
 import bcrypt from "bcryptjs";
 import { storage } from "./storage";
 import MemoryStore from "memorystore";
-import { User as SelectUser } from "@shared/schema";
+import type { User as UserType } from "@shared/schema";
 
 declare global {
   namespace Express {
-    interface User extends SelectUser {}
+    interface User {
+      id: number;
+      username: string;
+      email: string;
+      password: string;
+      fullName: string | null;
+      displayName: string | null;
+      phoneNumber: string | null;
+      avatarUrl: string | null;
+      role: string;
+      balance: string;
+      createdAt: string;
+      updatedAt: string;
+    }
   }
 }
 
@@ -57,7 +70,11 @@ export function setupAuth(app: Express) {
         if (!user || !(await comparePasswords(password, user.password))) {
           return done(null, false);
         } else {
-          return done(null, user);
+          return done(null, {
+            ...user,
+            createdAt: user.createdAt instanceof Date ? user.createdAt.toISOString() : user.createdAt,
+            updatedAt: user.updatedAt instanceof Date ? user.updatedAt.toISOString() : user.updatedAt,
+          });
         }
       } catch (error) {
         return done(error);
@@ -69,7 +86,15 @@ export function setupAuth(app: Express) {
   passport.deserializeUser(async (id: number, done) => {
     try {
       const user = await storage.getUser(id);
-      done(null, user);
+      if (user) {
+        done(null, {
+          ...user,
+          createdAt: user.createdAt instanceof Date ? user.createdAt.toISOString() : user.createdAt,
+          updatedAt: user.updatedAt instanceof Date ? user.updatedAt.toISOString() : user.updatedAt,
+        });
+      } else {
+        done(null, user);
+      }
     } catch (error) {
       done(error);
     }
@@ -99,7 +124,11 @@ export function setupAuth(app: Express) {
         password: undefined,
       };
 
-      req.login(user, (err) => {
+      req.login({
+        ...user,
+        createdAt: user.createdAt instanceof Date ? user.createdAt.toISOString() : user.createdAt,
+        updatedAt: user.updatedAt instanceof Date ? user.updatedAt.toISOString() : user.updatedAt,
+      }, (err) => {
         if (err) return next(err);
         res.status(201).json(userWithoutPassword);
       });

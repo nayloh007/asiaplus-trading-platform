@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useQuery } from '@tanstack/react-query';
-import type { Trade } from '@shared/schema';
+import { trades, type Trade } from '@shared/schema';
 import { useAuth } from '@/hooks/use-auth';
 
 interface WebSocketContextType {
@@ -78,22 +78,29 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
           trade.id === updatedTrade.id ? updatedTrade : trade
         );
         
-        // ถ้าไม่เจอการเทรดที่อัปเดต ให้เพิ่มเข้าไป (ในกরณีที่เป็นการเทรดใหม่)
+        // ถ้าไม่พบการเทรดที่ต้องการอัปเดต ให้เพิ่มใหม่
         if (!prevTrades.find(trade => trade.id === updatedTrade.id)) {
-          return [...updatedTrades, updatedTrade];
+          return [...prevTrades, updatedTrade];
         }
         
         return updatedTrades;
       });
       
-      // Refresh trades query เพื่อให้แน่ใจว่าข้อมูลถูกต้อง
-      setTimeout(() => {
-        refetchTrades();
-      }, 100);
+      // Refetch trades เพื่อให้แน่ใจว่าข้อมูลล่าสุด
+      refetchTrades();
     });
 
+    // Cleanup function
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [userId]); // เพิ่ม dependency array ที่ถูกต้อง
+
+  useEffect(() => {
+    if (!socket || !userId) return;
+
     // รับการอัปเดตการเทรดที่เสร็จสิ้น
-    newSocket.on('trade-completed', (completedTradeInfo) => {
+    socket.on('trade-completed', (completedTradeInfo) => {
       console.log('Trade completed:', completedTradeInfo);
       
       // รีเฟรชข้อมูลการเทรดทันที
@@ -108,9 +115,11 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     });
 
     return () => {
-      newSocket.close();
+      if (socket) {
+        socket.off('trade-completed');
+      }
     };
-  }, [userId]);
+  }, [socket, userId, refetchTrades]); // เพิ่ม refetchTrades ใน dependency array
 
   const refreshTrades = useCallback(() => {
     refetchTrades();

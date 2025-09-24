@@ -374,7 +374,7 @@ export default function AdminUsersPage() {
               
               <div className="space-y-2">
                 <Label htmlFor="edit-fullName">ชื่อ-นามสกุล</Label>
-                <Input id="edit-fullName" defaultValue={selectedUser.fullName} />
+                <Input id="edit-fullName" defaultValue={selectedUser.fullName || ''} />
               </div>
               
               {/* เฉพาะ admin เท่านั้นที่สามารถแก้ไขบทบาทได้ */}

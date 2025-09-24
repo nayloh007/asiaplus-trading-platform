@@ -65,7 +65,7 @@ export default function AdminPage() {
       cell: (user: User) => (
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
-            {user.fullName.charAt(0)}
+            {(user.fullName || user.username).charAt(0)}
           </div>
           <span>{user.username}</span>
         </div>

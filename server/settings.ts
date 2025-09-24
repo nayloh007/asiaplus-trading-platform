@@ -348,7 +348,7 @@ export function registerSettingsRoutes(app: Express) {
       const result = await pool.query('SELECT key, value FROM settings');
       
       // แปลงข้อมูลจาก DB เป็น object
-      const dbSettings = result.rows.reduce((acc, row) => {
+      const dbSettings = result.rows.reduce((acc: any, row: any) => {
         acc[row.key] = row.value;
         return acc;
       }, {} as Record<string, string>);
@@ -408,7 +408,7 @@ export function registerSettingsRoutes(app: Express) {
         const result = await pool.query('SELECT key, value FROM settings WHERE key IN (\'bank_name\', \'bank_account_number\', \'bank_account_name\', \'promptpay_number\', \'promptpay_tax_id\', \'promptpay_name\')');
         
         // แปลงข้อมูลจาก DB เป็น object
-        const dbSettings = result.rows.reduce((acc, row) => {
+        const dbSettings = result.rows.reduce((acc: any, row: any) => {
           acc[row.key] = row.value;
           return acc;
         }, {} as Record<string, string>);

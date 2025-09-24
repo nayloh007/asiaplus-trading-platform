@@ -136,7 +136,7 @@ export function GlobalTradeStatus() {
                                 direction={trade.direction as "up" | "down"}
                                 profitPercentage={parseInt(trade.profitPercentage || '30')}
                                 cryptoSymbol={trade.cryptoId?.toUpperCase() || 'BTC'}
-                                endTime={trade.endTime}
+                                endTime={typeof trade.endTime === 'string' ? new Date(trade.endTime) : trade.endTime}
                                 onComplete={() => {
                                   // อัปเดตข้อมูลหลังจากการเทรดเสร็จสิ้น
                                   console.log(`Trade ${trade.id} completed`);

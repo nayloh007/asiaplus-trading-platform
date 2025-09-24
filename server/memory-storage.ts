@@ -50,10 +50,14 @@ export class MemoryStorage {
   }
 
   async createUser(user: InsertUser): Promise<User> {
-    const now = new Date();
+    const now = new Date().toISOString();
     const newUser: User = {
       id: this.nextUserId++,
       ...user,
+      fullName: user.fullName || null,
+      displayName: null,
+      phoneNumber: null,
+      avatarUrl: null,
       createdAt: now,
       updatedAt: now
     };
@@ -69,10 +73,12 @@ export class MemoryStorage {
     const userIndex = this.users.findIndex(user => user.id === userId);
     if (userIndex === -1) return undefined;
     
+    const existingUser = this.users[userIndex];
     this.users[userIndex] = {
-      ...this.users[userIndex],
+      ...existingUser,
       ...profileData,
-      updatedAt: new Date()
+      createdAt: typeof existingUser.createdAt === 'string' ? existingUser.createdAt : existingUser.createdAt.toISOString(),
+      updatedAt: new Date().toISOString()
     };
     
     return this.users[userIndex];
@@ -82,10 +88,12 @@ export class MemoryStorage {
     const userIndex = this.users.findIndex(user => user.id === userId);
     if (userIndex === -1) return undefined;
     
+    const existingUser = this.users[userIndex];
     this.users[userIndex] = {
-      ...this.users[userIndex],
+      ...existingUser,
       password: newPassword,
-      updatedAt: new Date()
+      createdAt: typeof existingUser.createdAt === 'string' ? existingUser.createdAt : existingUser.createdAt.toISOString(),
+      updatedAt: new Date().toISOString()
     };
     
     return this.users[userIndex];
@@ -95,10 +103,12 @@ export class MemoryStorage {
     const userIndex = this.users.findIndex(user => user.id === userId);
     if (userIndex === -1) return undefined;
     
+    const existingUser = this.users[userIndex];
     this.users[userIndex] = {
-      ...this.users[userIndex],
+      ...existingUser,
       ...userData,
-      updatedAt: new Date()
+      createdAt: typeof existingUser.createdAt === 'string' ? existingUser.createdAt : existingUser.createdAt.toISOString(),
+      updatedAt: new Date().toISOString()
     };
     
     return this.users[userIndex];
@@ -114,10 +124,12 @@ export class MemoryStorage {
     const userIndex = this.users.findIndex(user => user.id === userId);
     if (userIndex === -1) return undefined;
     
+    const existingUser = this.users[userIndex];
     this.users[userIndex] = {
-      ...this.users[userIndex],
+      ...existingUser,
       balance: newBalance,
-      updatedAt: new Date()
+      createdAt: typeof existingUser.createdAt === 'string' ? existingUser.createdAt : existingUser.createdAt.toISOString(),
+      updatedAt: new Date().toISOString()
     };
     
     return this.users[userIndex];
@@ -125,7 +137,7 @@ export class MemoryStorage {
 
   // Bank account operations
   async createBankAccount(bankAccount: InsertBankAccount): Promise<BankAccount> {
-    const now = new Date();
+    const now = new Date().toISOString();
     const newBankAccount: BankAccount = {
       id: this.nextBankAccountId++,
       ...bankAccount,
@@ -150,10 +162,12 @@ export class MemoryStorage {
           if (a.id !== id) {
             const index = this.bankAccounts.findIndex(ba => ba.id === a.id);
             if (index !== -1) {
+              const existingAccount = this.bankAccounts[index];
               this.bankAccounts[index] = {
-                ...this.bankAccounts[index],
+                ...existingAccount,
                 isDefault: false,
-                updatedAt: new Date()
+                createdAt: typeof existingAccount.createdAt === 'string' ? existingAccount.createdAt : existingAccount.createdAt.toISOString(),
+                updatedAt: new Date().toISOString()
               };
             }
           }
@@ -164,10 +178,12 @@ export class MemoryStorage {
     const accountIndex = this.bankAccounts.findIndex(a => a.id === id);
     if (accountIndex === -1) return undefined;
     
+    const existingAccount = this.bankAccounts[accountIndex];
     this.bankAccounts[accountIndex] = {
-      ...this.bankAccounts[accountIndex],
+      ...existingAccount,
       isDefault,
-      updatedAt: new Date()
+      createdAt: typeof existingAccount.createdAt === 'string' ? existingAccount.createdAt : existingAccount.createdAt.toISOString(),
+      updatedAt: new Date().toISOString()
     };
     
     return this.bankAccounts[accountIndex];
@@ -177,10 +193,12 @@ export class MemoryStorage {
     const accountIndex = this.bankAccounts.findIndex(a => a.id === id);
     if (accountIndex === -1) return undefined;
     
+    const existingAccount = this.bankAccounts[accountIndex];
     this.bankAccounts[accountIndex] = {
-      ...this.bankAccounts[accountIndex],
+      ...existingAccount,
       ...bankAccountData,
-      updatedAt: new Date()
+      createdAt: typeof existingAccount.createdAt === 'string' ? existingAccount.createdAt : existingAccount.createdAt.toISOString(),
+      updatedAt: new Date().toISOString()
     };
     
     return this.bankAccounts[accountIndex];
@@ -199,7 +217,7 @@ export class MemoryStorage {
 
   // Trade operations
   async createTrade(trade: InsertTrade): Promise<Trade> {
-    const now = new Date();
+    const now = new Date().toISOString();
     const newTrade: Trade = {
       id: this.nextTradeId++,
       ...trade,
@@ -207,6 +225,7 @@ export class MemoryStorage {
       status: "active",
       result: null,
       predeterminedResult: null,
+      closedAt: null,
       endTime: trade.endTime || null
     };
     this.trades.push(newTrade);
@@ -236,11 +255,11 @@ export class MemoryStorage {
 
   // Transaction operations
   async createTransaction(transaction: InsertTransaction): Promise<Transaction> {
-    const now = new Date();
+    const now = new Date().toISOString();
     const newTransaction: Transaction = {
       id: this.nextTransactionId++,
       ...transaction,
-      status: transaction.status || "pending",
+      status: "pending",
       method: transaction.method || null,
       bankName: transaction.bankName || null,
       bankAccount: transaction.bankAccount || null,
@@ -265,33 +284,34 @@ export class MemoryStorage {
     const txIndex = this.transactions.findIndex(tx => tx.id === id);
     if (txIndex === -1) return undefined;
     
+    const existingTransaction = this.transactions[txIndex];
     this.transactions[txIndex] = {
-      ...this.transactions[txIndex],
+      ...existingTransaction,
       status,
-      note: note || this.transactions[txIndex].note,
-      updatedAt: new Date()
+      note: note || existingTransaction.note,
+      createdAt: typeof existingTransaction.createdAt === 'string' ? existingTransaction.createdAt : existingTransaction.createdAt.toISOString(),
+      updatedAt: new Date().toISOString()
     };
     
     return this.transactions[txIndex];
   }
 
-  // เพิ่มเมธอดสำหรับจัดการการตั้งค่า
-  async getSetting(key: string): Promise<string | null> {
-    return this.settings[key] || null;
-  }
-
-  async getAllSettings(): Promise<{[key: string]: string}> {
+  // Settings operations
+  async getAllSettings(): Promise<Record<string, string>> {
     return { ...this.settings };
   }
 
-  async saveSetting(key: string, value: string): Promise<void> {
+  async getSetting(key: string): Promise<string | undefined> {
+    return this.settings[key];
+  }
+
+  async setSetting(key: string, value: string): Promise<void> {
     this.settings[key] = value;
   }
 
-  async saveMultipleSettings(settings: {key: string, value: string}[]): Promise<void> {
-    for (const setting of settings) {
-      this.settings[setting.key] = setting.value;
-    }
+  // Get all bank accounts (for admin)
+  async getAllBankAccounts(): Promise<BankAccount[]> {
+    return [...this.bankAccounts];
   }
 
   async getDepositAccounts(): Promise<{

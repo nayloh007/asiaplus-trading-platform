@@ -1,10 +1,8 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import { DatabaseStorage } from "./storage";
+import { storage } from "./storage";
 import { setupWebSocket } from "./websocket";
-
-const storage = new DatabaseStorage();
 import bcrypt from "bcryptjs";
 
 const app = express();
@@ -50,32 +48,48 @@ app.use((req, res, next) => {
 
 // ฟังก์ชันสำหรับสร้างผู้ใช้แอดมิน
 async function createAdminUser() {
-  try {
-    // ตรวจสอบว่ามีผู้ใช้แอดมินอยู่แล้วหรือไม่
-    const existingAdmin = await storage.getUserByUsername('admin');
-    if (existingAdmin) {
-      console.log('Admin user already exists');
-      return;
-    }
+  const maxRetries = 3;
+  let retryCount = 0;
+  
+  while (retryCount < maxRetries) {
+    try {
+      // ตรวจสอบว่ามีผู้ใช้แอดมินอยู่แล้วหรือไม่
+      const existingAdmin = await storage.getUserByUsername('admin');
+      if (existingAdmin) {
+        console.log('Admin user already exists');
+        return;
+      }
 
-    // เข้ารหัสรหัสผ่าน
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash('admin@bigone', salt);
-    
-    // สร้างข้อมูลผู้ใช้แอดมิน
-    const adminUser = {
-      username: 'admin',
-      password: hashedPassword,
-      email: 'admin@example.com',
-      role: 'admin' as const,
-      balance: '1000000',
-    };
-    
-    // บันทึกผู้ใช้แอดมิน
-    const newUser = await storage.createUser(adminUser);
-    console.log('Admin user created successfully:', newUser.username);
-  } catch (error) {
-    console.error('Error creating admin user:', error);
+      // เข้ารหัสรหัสผ่าน
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash('admin@bigone', salt);
+      
+      // สร้างข้อมูลผู้ใช้แอดมิน
+      const adminUser = {
+        username: 'admin',
+        password: hashedPassword,
+        email: 'admin@example.com',
+        role: 'admin' as const,
+        balance: '1000000',
+      };
+      
+      // บันทึกผู้ใช้แอดมิน
+      const newUser = await storage.createUser(adminUser);
+      console.log('Admin user created successfully:', newUser.username);
+      return; // สำเร็จแล้ว ออกจาก loop
+    } catch (error) {
+      retryCount++;
+      console.error(`Error creating admin user (attempt ${retryCount}/${maxRetries}):`, error);
+      
+      if (retryCount >= maxRetries) {
+        console.error('Failed to create admin user after maximum retries. The application will continue without admin user.');
+        console.error('You can create admin user manually later using the API or database.');
+        return;
+      }
+      
+      // รอ 2 วินาทีก่อน retry
+      await new Promise(resolve => setTimeout(resolve, 2000));
+    }
   }
 }
 
@@ -109,11 +123,7 @@ async function createAdminUser() {
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
   const port = 5000;
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
+  server.listen(port, "localhost", () => {
     log(`serving on port ${port}`);
   });
 })();

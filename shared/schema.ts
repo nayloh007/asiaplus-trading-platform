@@ -1,8 +1,25 @@
 import { pgTable, serial, text, timestamp, boolean, integer, json } from 'drizzle-orm/pg-core';
+import { sqliteTable, integer as sqliteInteger, text as sqliteText } from 'drizzle-orm/sqlite-core';
 import { z } from 'zod';
 
+// Check if we're using SQLite (safe for browser)
+const useSqlite = typeof process !== 'undefined' && process.env?.USE_SQLITE === 'true';
+
 // User model
-export const users = pgTable('users', {
+export const users = useSqlite ? sqliteTable('users', {
+  id: sqliteInteger('id').primaryKey({ autoIncrement: true }),
+  username: sqliteText('username').notNull().unique(),
+  email: sqliteText('email').notNull().unique(),
+  password: sqliteText('password').notNull(),
+  fullName: sqliteText('full_name'),
+  displayName: sqliteText('display_name'),
+  phoneNumber: sqliteText('phone_number'),
+  avatarUrl: sqliteText('avatar_url'),
+  role: sqliteText('role').default('user').notNull(),
+  balance: sqliteText('balance').default('0').notNull(),
+  createdAt: sqliteText('created_at').default('CURRENT_TIMESTAMP').notNull(),
+  updatedAt: sqliteText('updated_at').default('CURRENT_TIMESTAMP').notNull(),
+}) : pgTable('users', {
   id: serial('id').primaryKey(),
   username: text('username').notNull().unique(),
   email: text('email').notNull().unique(),
@@ -18,9 +35,18 @@ export const users = pgTable('users', {
 });
 
 // Bank account model
-export const bankAccounts = pgTable('bank_accounts', {
+export const bankAccounts = useSqlite ? sqliteTable('bank_accounts', {
+  id: sqliteInteger('id').primaryKey({ autoIncrement: true }),
+  userId: sqliteInteger('user_id').notNull().references(() => (users as any).id),
+  bankName: sqliteText('bank_name').notNull(),
+  accountNumber: sqliteText('account_number').notNull(),
+  accountName: sqliteText('account_name').notNull(),
+  isDefault: sqliteInteger('is_default', { mode: 'boolean' }).default(false).notNull(),
+  createdAt: sqliteText('created_at').default('CURRENT_TIMESTAMP').notNull(),
+  updatedAt: sqliteText('updated_at').default('CURRENT_TIMESTAMP').notNull(),
+}) : pgTable('bank_accounts', {
   id: serial('id').primaryKey(),
-  userId: integer('user_id').notNull().references(() => users.id),
+  userId: integer('user_id').notNull().references(() => (users as any).id),
   bankName: text('bank_name').notNull(),
   accountNumber: text('account_number').notNull(),
   accountName: text('account_name').notNull(),
@@ -30,9 +56,24 @@ export const bankAccounts = pgTable('bank_accounts', {
 });
 
 // Trade model
-export const trades = pgTable('trades', {
+export const trades = useSqlite ? sqliteTable('trades', {
+  id: sqliteInteger('id').primaryKey({ autoIncrement: true }),
+  userId: sqliteInteger('user_id').notNull().references(() => (users as any).id),
+  cryptoId: sqliteText('crypto_id').notNull(),
+  entryPrice: sqliteText('entry_price').notNull(),
+  amount: sqliteText('amount').notNull(),
+  direction: sqliteText('direction').notNull(), // 'up' or 'down'
+  duration: sqliteInteger('duration').notNull(), // in seconds
+  status: sqliteText('status').default('active').notNull(), // 'active', 'completed', 'cancelled'
+  result: sqliteText('result'), // 'win' or 'lose'
+  predeterminedResult: sqliteText('predetermined_result'), // 'win' or 'lose'
+  profitPercentage: sqliteText('profit_percentage').notNull(),
+  createdAt: sqliteText('created_at').default('CURRENT_TIMESTAMP').notNull(),
+  closedAt: sqliteText('closed_at'),
+  endTime: sqliteText('end_time'),
+}) : pgTable('trades', {
   id: serial('id').primaryKey(),
-  userId: integer('user_id').notNull().references(() => users.id),
+  userId: integer('user_id').notNull().references(() => (users as any).id),
   cryptoId: text('crypto_id').notNull(),
   entryPrice: text('entry_price').notNull(),
   amount: text('amount').notNull(),
@@ -48,9 +89,22 @@ export const trades = pgTable('trades', {
 });
 
 // Transaction model
-export const transactions = pgTable('transactions', {
+export const transactions = useSqlite ? sqliteTable('transactions', {
+  id: sqliteInteger('id').primaryKey({ autoIncrement: true }),
+  userId: sqliteInteger('user_id').notNull().references(() => (users as any).id),
+  type: sqliteText('type').notNull(), // 'deposit' or 'withdraw'
+  amount: sqliteText('amount').notNull(),
+  status: sqliteText('status').default('pending').notNull(), // 'pending', 'approved', 'rejected', 'frozen'
+  method: sqliteText('method'), // 'bank_transfer', 'promptpay', etc.
+  bankName: sqliteText('bank_name'),
+  bankAccount: sqliteText('bank_account'),
+  paymentProof: sqliteText('payment_proof'),
+  note: sqliteText('note'),
+  createdAt: sqliteText('created_at').default('CURRENT_TIMESTAMP').notNull(),
+  updatedAt: sqliteText('updated_at').default('CURRENT_TIMESTAMP').notNull(),
+}) : pgTable('transactions', {
   id: serial('id').primaryKey(),
-  userId: integer('user_id').notNull().references(() => users.id),
+  userId: integer('user_id').notNull().references(() => (users as any).id),
   type: text('type').notNull(), // 'deposit' or 'withdraw'
   amount: text('amount').notNull(),
   status: text('status').default('pending').notNull(), // 'pending', 'approved', 'rejected', 'frozen'
@@ -59,6 +113,21 @@ export const transactions = pgTable('transactions', {
   bankAccount: text('bank_account'),
   paymentProof: text('payment_proof'),
   note: text('note'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+// Settings model
+export const settings = useSqlite ? sqliteTable('settings', {
+  id: sqliteInteger('id').primaryKey({ autoIncrement: true }),
+  key: sqliteText('key').notNull().unique(),
+  value: sqliteText('value').notNull(), // Store JSON as text in SQLite
+  createdAt: sqliteText('created_at').default('CURRENT_TIMESTAMP').notNull(),
+  updatedAt: sqliteText('updated_at').default('CURRENT_TIMESTAMP').notNull(),
+}) : pgTable('settings', {
+  id: serial('id').primaryKey(),
+  key: text('key').notNull().unique(),
+  value: json('value').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -98,7 +167,7 @@ export const insertTradeSchema = z.object({
   direction: z.enum(['up', 'down']),
   duration: z.number(),
   profitPercentage: z.string(),
-  endTime: z.date().optional(),
+  endTime: z.string().optional(),
 });
 
 export const insertTransactionSchema = z.object({
@@ -125,15 +194,6 @@ export type InsertTrade = z.infer<typeof insertTradeSchema>;
 
 export type Transaction = typeof transactions.$inferSelect;
 export type InsertTransaction = z.infer<typeof insertTransactionSchema>;
-
-// Settings model
-export const settings = pgTable('settings', {
-  id: serial('id').primaryKey(),
-  key: text('key').notNull().unique(),
-  value: json('value').notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
-});
 
 export const insertSettingsSchema = z.object({
   key: z.string(),

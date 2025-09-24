@@ -51,7 +51,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowUpDown, ChevronDown, Search, MoreHorizontal, Trophy, X, Check, RefreshCcw } from "lucide-react";
 
 // ฟังก์ชันช่วยจัดรูปแบบวันที่
-const formatDate = (date: Date | null) => {
+const formatDate = (date: Date | string | null) => {
   if (!date) return "-";
   return format(new Date(date), "dd MMM yyyy HH:mm", { locale: th });
 };

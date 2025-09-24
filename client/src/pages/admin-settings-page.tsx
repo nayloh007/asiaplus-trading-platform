@@ -45,6 +45,17 @@ import {
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { BankAccount } from "@shared/schema";
 
+// กำหนดประเภทข้อมูลสำหรับการตั้งค่าระบบ
+interface AdminSettings {
+  allow_trading?: string;
+  allow_registrations?: string;
+  maintenance_mode?: string;
+  trade_fee_percentage?: string;
+  withdrawal_fee_percentage?: string;
+  min_deposit_amount?: string;
+  min_withdrawal_amount?: string;
+}
+
 // กำหนดประเภทข้อมูลสำหรับบัญชีธนาคารและพร้อมเพย์
 interface DepositAccounts {
   bank: {
@@ -111,7 +122,7 @@ export default function AdminSettingsPage() {
   const {
     data: settings,
     isLoading: isLoadingSettings
-  } = useQuery({
+  } = useQuery<AdminSettings>({
     queryKey: ['/api/admin/settings'],
     enabled: activeTab === "general" || activeTab === "trading", // ดึงข้อมูลเมื่ออยู่ที่แท็บ general หรือ trading
   });
@@ -122,10 +133,10 @@ export default function AdminSettingsPage() {
       setAllowTrading(settings.allow_trading === 'true');
       setAllowRegistrations(settings.allow_registrations === 'true');
       setMaintenanceMode(settings.maintenance_mode === 'true');
-      setTradeFeePercentage(parseFloat(settings.trade_fee_percentage) || 1.5);
-      setWithdrawalFeePercentage(parseFloat(settings.withdrawal_fee_percentage) || 0.1);
-      setMinDepositAmount(parseInt(settings.min_deposit_amount) || 100);
-      setMinWithdrawalAmount(parseInt(settings.min_withdrawal_amount) || 100);
+      setTradeFeePercentage(parseFloat(settings.trade_fee_percentage || '1.5') || 1.5);
+      setWithdrawalFeePercentage(parseFloat(settings.withdrawal_fee_percentage || '0.1') || 0.1);
+      setMinDepositAmount(parseInt(settings.min_deposit_amount || '100') || 100);
+      setMinWithdrawalAmount(parseInt(settings.min_withdrawal_amount || '100') || 100);
     }
   }, [settings]);
   

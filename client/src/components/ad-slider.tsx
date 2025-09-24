@@ -10,15 +10,12 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 // Import รูปภาพจาก assets
-import aspSlide1 from "@assets/ASP_1758695654331.jpg";
-import aspSlide2 from "@assets/เอเซีย-พลัส_1758695663097.jpg";
-import aspSlide3 from "@assets/9e580530fe2e1b35827f96b7f38b3804_1758695673871.jpg";
-import aspSlide4 from "@assets/w644 (1)_1758695727957.jpg";
-import aspSlide5 from "@assets/gVPK6VaFv8EDKlvFu0Ae_1758695731786.webp";
-import aspSlide6 from "@assets/Asia-Plus-Securities_1758695735624.jpg";
-import aspSlide7 from "@assets/cover-2025-03-12T160142.887-728x485_1758695739619.jpg";
-import aspSlide8 from "@assets/maxresdefault_1758695766041.jpg";
-import aspSlide9 from "@assets/dFQROr7oWzulq5Fa6rMcj3s4BADfMk6633SASIAgmAUBeoX55uRZ6D6gsPq1bLs2t84_1758695773000.jpg";
+import aspSlide1 from "@/assets/ASP.jpg";
+import aspSlide2 from "@/assets/เอเซีย-พลัส_1758695663097.jpg";
+import aspSlide3 from "@/assets/9e580530fe2e1b35827f96b7f38b3804_1758695673871.jpg";
+import aspSlide4 from "@/assets/w644 (1)_1758695727957.jpg";
+import aspSlide5 from "@/assets/gVPK6VaFv8EDKlvFu0Ae_1758695731786.webp";
+import aspSlide6 from "@/assets/Asia-Plus-Securities_1758695735624.jpg";
 
 export function AdSlider() {
   const [api, setApi] = useState<any>();
@@ -31,10 +28,7 @@ export function AdSlider() {
     { src: aspSlide3, alt: "Asia Plus Securities - ส่อง 15 หุ้นไทย ต่างชาติซื้อขายมากสุดในปี 67" },
     { src: aspSlide4, alt: "Asia Plus Securities - เอเชียพลัส ส่องกำไรกู้วิกฤติ ซื้อเหมาะเทนตรอลหาร์ ชู Top Pick" },
     { src: aspSlide5, alt: "Asia Plus Securities - การลงทุนอัจฉริยะด้วยเทคโนโลยี" },
-    { src: aspSlide6, alt: "Asia Plus Securities - วิเคราะห์ตลาดหุ้นด้วยข้อมูลแม่นยำ" },
-    { src: aspSlide7, alt: "Asia Plus Securities - ผู้บริหารมืออาชีพ" },
-    { src: aspSlide8, alt: "Asia Plus Securities - เปิดโอกาสการลงทุนในต่างประเทศ" },
-    { src: aspSlide9, alt: "Asia Plus Securities - การลงทุนในตลาดไทย" }
+    { src: aspSlide6, alt: "Asia Plus Securities - วิเคราะห์ตลาดหุ้นด้วยข้อมูลแม่นยำ" }
   ];
 
   useEffect(() => {

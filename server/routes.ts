@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth } from "./auth";
 import { getMarketData, getCryptoById } from "./crypto-api";
-import { insertTradeSchema, insertBankAccountSchema, trades, bankAccounts, settings, type User } from "@shared/schema";
+import { insertTradeSchema, insertBankAccountSchema, trades, bankAccounts, settings, users, transactions, type User } from "@shared/schema";
 import { ZodError } from "zod";
 import { z } from "zod";
 import { fromZodError } from "zod-validation-error";
@@ -11,6 +11,7 @@ import bcrypt from "bcryptjs";
 import { registerSettingsRoutes } from "./settings";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
+import fs from 'fs';
 
 // Helper function for hashing passwords - ใช้ bcrypt เหมือนใน auth.ts
 async function hashPassword(password: string) {
@@ -111,6 +112,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const trades = await storage.getTradesByUser(req.user.id);
       res.json(trades);
     } catch (error) {
+      console.error("Error fetching trades:", error);
       res.status(500).json({ message: "Failed to fetch trades" });
     }
   });
@@ -255,12 +257,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // แก้ไขข้อมูลบัญชี
-      const updatedBankAccount = await storage.updateBankAccount(bankAccountId, {
-        bankName,
-        accountNumber,
-        accountName,
-        isDefault: isDefault === true
-      });
+      const updatedBankAccount = await db
+        .update(bankAccounts)
+        .set({
+          bankName: bankName,
+          accountNumber: accountNumber,
+          accountName: accountName,
+          isDefault: isDefault === true,
+          updatedAt: new Date().toISOString()
+        })
+        .where(eq(bankAccounts.id, bankAccountId))
+        .returning();
       
       res.json(updatedBankAccount);
     } catch (error) {
@@ -715,7 +722,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // อัพเดทข้อมูลใน session
-      req.login(updatedUser, (err) => {
+      req.login({
+        ...updatedUser,
+        createdAt: updatedUser.createdAt instanceof Date ? updatedUser.createdAt.toISOString() : updatedUser.createdAt,
+        updatedAt: updatedUser.updatedAt instanceof Date ? updatedUser.updatedAt.toISOString() : updatedUser.updatedAt,
+      }, (err) => {
         if (err) {
           return res.status(500).json({ message: "Session update failed" });
         }
@@ -784,7 +795,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ดึงข้อมูลบัญชีธนาคารทั้งหมดสำหรับแอดมิน
   app.get("/api/admin/bank-accounts", isAuthenticated, isAdmin, async (req, res) => {
     try {
-      // ใช้วิธีดึงข้อมูลแบบง่ายๆ แทนการใช้ relation เพื่อหลีกเลี่ยงปัญหา
+      // ใช้ MemoryStorage แทน database
       const allBankAccounts = await db.select().from(bankAccounts);
       
       // ดึงข้อมูลผู้ใช้ทั้งหมด
@@ -792,7 +803,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const usersMap = new Map(users.map(user => [user.id, user]));
       
       // รวมข้อมูลบัญชีธนาคารกับข้อมูลผู้ใช้
-      const bankAccountsWithUsers = allBankAccounts.map(account => {
+      const bankAccountsWithUsers = allBankAccounts.map((account: any) => {
         const user = usersMap.get(account.userId);
         return {
           ...account,
@@ -838,18 +849,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Account number must contain only digits" });
       }
       
-      // อัปเดตข้อมูลบัญชี
-      await db.update(bankAccounts)
-        .set({
-          bankName,
-          accountNumber,
-          accountName,
-          updatedAt: new Date()
-        })
-        .where(eq(bankAccounts.id, bankAccountId));
+      // อัปเดตข้อมูลบัญชี - ใช้ MemoryStorage
+      const updatedBankAccount = await storage.updateBankAccount(bankAccountId, {
+        bankName,
+        accountNumber,
+        accountName
+      });
       
       // ดึงข้อมูลที่อัปเดตแล้ว
-      const updatedBankAccount = await storage.getBankAccountById(bankAccountId);
       res.json(updatedBankAccount);
     } catch (error) {
       console.error("Error updating bank account:", error);
@@ -915,14 +922,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin Settings API
   app.get("/api/admin/settings", isAuthenticated, isAdmin, async (req, res) => {
     try {
-      // ดึงการตั้งค่าทั้งหมดจากฐานข้อมูล
+      // ดึงการตั้งค่าทั้งหมดจาก database
       const allSettings = await db.select().from(settings);
       
       // แปลงเป็น object
-      const settingsObj = allSettings.reduce((acc: any, setting) => {
+      const settingsObj = allSettings.reduce((acc: any, setting: any) => {
         acc[setting.key] = setting.value;
         return acc;
-      }, {});
+      }, {} as Record<string, string>);
       
       res.json(settingsObj);
     } catch (error) {
@@ -955,22 +962,145 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
       
       // อัปเดตแต่ละการตั้งค่า
-      for (const [key, value] of Object.entries(allowedSettings)) {
-        if (value !== undefined) {
-          await db
-            .insert(settings)
-            .values({ key, value: String(value) })
-            .onConflictDoUpdate({
-              target: settings.key,
-              set: { value: String(value), updatedAt: new Date() }
-            });
-        }
-      }
+       for (const [key, value] of Object.entries(allowedSettings)) {
+         if (value !== undefined) {
+           await db
+             .insert(settings)
+             .values({ key, value: String(value) })
+             .onConflictDoUpdate({
+               target: settings.key,
+               set: { value: String(value), updatedAt: new Date().toISOString() }
+             });
+         }
+       }
       
       res.json({ message: "Settings updated successfully" });
     } catch (error) {
       console.error("Error updating settings:", error);
       res.status(500).json({ message: "Failed to update settings" });
+    }
+  });
+
+  // Admin data import route
+  app.post("/api/admin/import-data", isAuthenticated, isAdmin, async (req: Request, res: Response) => {
+    try {
+      console.log('🚀 Starting admin data import...');
+      
+      // Import production users first
+      console.log('📥 Importing production users...');
+      await db.insert(users).values([
+        { id: 1, username: 'admin', email: 'admin@asiaplus.com', password: await hashPassword('admin123'), fullName: 'System Administrator', role: 'admin', balance: '0' },
+        { id: 2, username: 'agent001', email: 'agent001@asiaplus.com', password: await hashPassword('agent123'), fullName: 'Agent 001', role: 'agent', balance: '0' },
+        { id: 3, username: 'testuser1', email: 'test1@example.com', password: await hashPassword('test123'), fullName: 'Test User 1', role: 'user', balance: '10000' },
+        { id: 4, username: 'testuser2', email: 'test2@example.com', password: await hashPassword('test123'), fullName: 'Test User 2', role: 'user', balance: '5000' },
+        { id: 5, username: 'testuser3', email: 'test3@example.com', password: await hashPassword('test123'), fullName: 'Test User 3', role: 'user', balance: '15000' },
+        { id: 6, username: 'demo', email: 'demo@example.com', password: await hashPassword('demo123'), fullName: 'Demo User', role: 'user', balance: '1000' },
+        { id: 7, username: 'olduser', email: 'old@example.com', password: await hashPassword('old123'), fullName: 'Old User (from JSON)', role: 'user', balance: '50000' }
+      ]).onConflictDoNothing();
+      
+      console.log('📥 Importing system settings...');
+      await db.insert(settings).values([
+        { id: 1, key: 'system_name', value: 'Asia Plus Trading System' },
+        { id: 2, key: 'maintenance_mode', value: 'false' },
+        { id: 3, key: 'trading_enabled', value: 'true' },
+        { id: 4, key: 'min_trade_amount', value: '100' },
+        { id: 5, key: 'max_trade_amount', value: '100000' },
+        { id: 6, key: 'trade_fee_percentage', value: '2.5' },
+        { id: 7, key: 'withdrawal_fee_percentage', value: '1.0' },
+        { id: 8, key: 'min_deposit_amount', value: '100' },
+        { id: 9, key: 'min_withdrawal_amount', value: '500' },
+        { id: 10, key: 'allow_trading', value: 'true' },
+        { id: 11, key: 'allow_registrations', value: 'true' }
+      ]).onConflictDoNothing();
+      
+      console.log('📥 Importing bank accounts...');
+      await db.insert(bankAccounts).values([
+        { id: 1, userId: 3, bankName: 'Bangkok Bank', accountNumber: '1234567890', accountName: 'Test User 1', isActive: 1 },
+        { id: 2, userId: 4, bankName: 'Kasikorn Bank', accountNumber: '0987654321', accountName: 'Test User 2', isActive: 1 },
+        { id: 3, userId: 5, bankName: 'SCB Bank', accountNumber: '1122334455', accountName: 'Test User 3', isActive: 1 }
+      ]).onConflictDoNothing();
+      
+      // Read and import JSON data
+      console.log('📥 Reading JSON data files...');
+      let tradesData = [];
+      let transactionsData = [];
+      
+      try {
+        tradesData = JSON.parse(fs.readFileSync('./data/trades.json', 'utf8'));
+      } catch (error) {
+        console.log('No trades.json file found, skipping trades import');
+      }
+      
+      try {
+        transactionsData = JSON.parse(fs.readFileSync('./data/transactions.json', 'utf8'));
+      } catch (error) {
+        console.log('No transactions.json file found, skipping transactions import');
+      }
+      
+      if (tradesData.length > 0) {
+        console.log('📥 Importing trades from JSON...');
+        const tradesForImport = tradesData.map((trade: any, index: number) => ({
+          id: 21 + index,
+          userId: 7,
+          cryptoId: trade.symbol || trade.cryptoId,
+          entryPrice: trade.entryPrice,
+          amount: trade.amount,
+          direction: trade.direction,
+          duration: trade.duration,
+          profitPercentage: trade.profitPercentage || '0',
+          createdAt: new Date(trade.createdAt).toISOString(),
+          status: trade.status,
+          result: trade.result || null,
+          predeterminedResult: trade.predeterminedResult || null,
+          endTime: trade.endTime ? new Date(trade.endTime).toISOString() : null,
+          closedAt: trade.updatedAt ? new Date(trade.updatedAt).toISOString() : null
+        }));
+        
+        await db.insert(trades).values(tradesForImport).onConflictDoNothing();
+      }
+      
+      if (transactionsData.length > 0) {
+        console.log('📥 Importing transactions from JSON...');
+        const transactionsForImport = transactionsData.map((transaction: any, index: number) => ({
+          id: 2 + index,
+          userId: 7,
+          type: transaction.type,
+          amount: transaction.amount,
+          method: transaction.method,
+          status: transaction.status || 'completed',
+          createdAt: new Date(transaction.createdAt || Date.now()).toISOString(),
+          updatedAt: new Date(transaction.updatedAt || Date.now()).toISOString()
+        }));
+        
+        await db.insert(transactions).values(transactionsForImport).onConflictDoNothing();
+      }
+      
+      // Get summary
+      const userCount = await db.select().from(users);
+      const settingsCount = await db.select().from(settings);
+      const bankAccountsCount = await db.select().from(bankAccounts);
+      const tradesCount = await db.select().from(trades);
+      const transactionsCount = await db.select().from(transactions);
+      
+      const summary = {
+        users: userCount.length,
+        settings: settingsCount.length,
+        bankAccounts: bankAccountsCount.length,
+        trades: tradesCount.length,
+        transactions: transactionsCount.length,
+        adminUsers: userCount.filter((user: any) => user.role === 'admin' || user.role === 'agent')
+      };
+      
+      console.log('✅ Data import completed successfully!');
+      console.log('📊 Import Summary:', summary);
+      console.log('👤 Admin Credentials: admin/admin123');
+      console.log('👤 Agent Credentials: agent001/agent123');
+      
+      res.json({ success: true, message: 'Data imported successfully', summary });
+      
+    } catch (error) {
+      console.error('❌ Error importing data:', error);
+      res.status(500).json({ success: false, message: 'Import failed', error: (error as Error).message });
     }
   });
 

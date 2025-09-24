@@ -41,7 +41,7 @@ const fetchWithRetry = async (url: string, retries = 3, backoff = 1000) => {
 async function fetchCryptoDirectly(id: string): Promise<CryptoCurrency | null> {
   try {
     const url = `${API_BASE_URL}/coins/${id}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=true`;
-    const data = await fetchWithRetry(url);
+    const data: any = await fetchWithRetry(url);
     
     return {
       id: data.id,
@@ -49,6 +49,11 @@ async function fetchCryptoDirectly(id: string): Promise<CryptoCurrency | null> {
       name: data.name,
       image: data.image.large,
       current_price: data.market_data.current_price.usd,
+      market_cap: data.market_data.market_cap.usd,
+      market_cap_rank: data.market_data.market_cap_rank,
+      total_volume: data.market_data.total_volume.usd,
+      high_24h: data.market_data.high_24h.usd,
+      low_24h: data.market_data.low_24h.usd,
       price_change_percentage_24h: data.market_data.price_change_percentage_24h,
       sparkline_in_7d: {
         price: data.market_data.sparkline_7d?.price || []

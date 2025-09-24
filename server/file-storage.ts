@@ -114,8 +114,8 @@ export class FileStorage implements IStorage {
       displayName: null,
       phoneNumber: null,
       avatarUrl: null,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
     this.users.push(newUser);
     this.saveData();
@@ -133,7 +133,10 @@ export class FileStorage implements IStorage {
     const updatedUser = {
       ...this.users[userIndex],
       ...profileData,
-      updatedAt: new Date()
+      createdAt: typeof this.users[userIndex].createdAt === 'string' 
+        ? this.users[userIndex].createdAt 
+        : this.users[userIndex].createdAt.toISOString(),
+      updatedAt: new Date().toISOString()
     };
     this.users[userIndex] = updatedUser;
     this.saveData();
@@ -147,7 +150,10 @@ export class FileStorage implements IStorage {
     const updatedUser = {
       ...this.users[userIndex],
       password: newPassword,
-      updatedAt: new Date()
+      createdAt: typeof this.users[userIndex].createdAt === 'string' 
+        ? this.users[userIndex].createdAt 
+        : this.users[userIndex].createdAt.toISOString(),
+      updatedAt: new Date().toISOString()
     };
     this.users[userIndex] = updatedUser;
     this.saveData();
@@ -161,7 +167,10 @@ export class FileStorage implements IStorage {
     const updatedUser = {
       ...this.users[userIndex],
       ...userData,
-      updatedAt: new Date()
+      createdAt: typeof this.users[userIndex].createdAt === 'string' 
+        ? this.users[userIndex].createdAt 
+        : this.users[userIndex].createdAt.toISOString(),
+      updatedAt: new Date().toISOString()
     };
     this.users[userIndex] = updatedUser;
     this.saveData();
@@ -181,7 +190,10 @@ export class FileStorage implements IStorage {
     const updatedUser = {
       ...this.users[userIndex],
       balance: newBalance,
-      updatedAt: new Date()
+      createdAt: typeof this.users[userIndex].createdAt === 'string' 
+        ? this.users[userIndex].createdAt 
+        : this.users[userIndex].createdAt.toISOString(),
+      updatedAt: new Date().toISOString()
     };
     this.users[userIndex] = updatedUser;
     this.saveData();
@@ -193,8 +205,8 @@ export class FileStorage implements IStorage {
     const newBankAccount: BankAccount = {
       id: this.nextBankAccountId++,
       ...bankAccount,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
     this.bankAccounts.push(newBankAccount);
     this.saveData();
@@ -214,7 +226,14 @@ export class FileStorage implements IStorage {
       const userId = this.bankAccounts[accountIndex].userId;
       this.bankAccounts.forEach((account, index) => {
         if (account.userId === userId && account.id !== id) {
-          this.bankAccounts[index] = { ...account, isDefault: false };
+          this.bankAccounts[index] = { 
+            ...account, 
+            isDefault: false,
+            createdAt: typeof account.createdAt === 'string' 
+              ? account.createdAt 
+              : account.createdAt.toISOString(),
+            updatedAt: new Date().toISOString()
+          };
         }
       });
     }
@@ -222,7 +241,10 @@ export class FileStorage implements IStorage {
     const updatedAccount = {
       ...this.bankAccounts[accountIndex],
       isDefault,
-      updatedAt: new Date()
+      createdAt: typeof this.bankAccounts[accountIndex].createdAt === 'string' 
+        ? this.bankAccounts[accountIndex].createdAt 
+        : this.bankAccounts[accountIndex].createdAt.toISOString(),
+      updatedAt: new Date().toISOString()
     };
     this.bankAccounts[accountIndex] = updatedAccount;
     this.saveData();
@@ -236,7 +258,10 @@ export class FileStorage implements IStorage {
     const updatedAccount = {
       ...this.bankAccounts[accountIndex],
       ...bankAccountData,
-      updatedAt: new Date()
+      createdAt: typeof this.bankAccounts[accountIndex].createdAt === 'string' 
+        ? this.bankAccounts[accountIndex].createdAt 
+        : this.bankAccounts[accountIndex].createdAt.toISOString(),
+      updatedAt: new Date().toISOString()
     };
     this.bankAccounts[accountIndex] = updatedAccount;
     this.saveData();
@@ -281,11 +306,11 @@ export class FileStorage implements IStorage {
     const newTrade: Trade = {
       id: this.nextTradeId++,
       ...trade,
-      createdAt: new Date(),
+      createdAt: new Date().toISOString(),
       status: "active",
       result: null,
       predeterminedResult: null,
-      endTime: null,
+      endTime: null as string | null,
       closedAt: null
     };
     
@@ -302,6 +327,10 @@ export class FileStorage implements IStorage {
     return [...this.trades];
   }
 
+  async getActiveTrades(): Promise<Trade[]> {
+    return this.trades.filter(trade => trade.status === 'active');
+  }
+
   async updateTradeStatus(id: number, status: string, result?: string, predeterminedResult?: string): Promise<Trade | undefined> {
     const tradeIndex = this.trades.findIndex(trade => trade.id === id);
     if (tradeIndex === -1) return undefined;
@@ -313,7 +342,17 @@ export class FileStorage implements IStorage {
     const updatedTrade: Trade = {
       ...originalTrade,
       status,
-      closedAt: status === 'completed' ? new Date() : originalTrade.closedAt,
+      createdAt: typeof originalTrade.createdAt === 'string' 
+        ? originalTrade.createdAt 
+        : originalTrade.createdAt.toISOString(),
+      endTime: originalTrade.endTime instanceof Date 
+        ? originalTrade.endTime.toISOString() 
+        : originalTrade.endTime,
+      closedAt: status === 'completed' 
+        ? new Date().toISOString() 
+        : (originalTrade.closedAt instanceof Date 
+          ? originalTrade.closedAt.toISOString() 
+          : originalTrade.closedAt),
     };
 
     if (result !== undefined) {
@@ -325,7 +364,7 @@ export class FileStorage implements IStorage {
     }
 
     if (status === 'completed') {
-      updatedTrade.endTime = new Date();
+      updatedTrade.endTime = new Date().toISOString();
       
       // ถ้าการเทรดสิ้นสุดและผลลัพธ์เป็นชนะ ให้เพิ่มเงินเข้าบัญชี
       if (finalResult === 'win') {
@@ -350,7 +389,7 @@ export class FileStorage implements IStorage {
           console.log(`[TRADE WIN] เพิ่มเงินในบัญชีผู้ใช้ ${user.username} เงินลงทุน ${investmentAmount} บาท + กำไร ${profit.toFixed(2)} บาท = ${totalReturn.toFixed(2)} บาท ยอดคงเหลือใหม่ ${newBalance} บาท`);
         }
       } else if (finalResult === 'lose') {
-        // กรณีแพ้ไม่ต้องทำอะไร เพราะหักเงินไปแล้วตอนเริ่มเทรด
+        // กรณีแพ้ไม่ต้องทำอะไร เพราะหักเงินไปแก้วกัน
         console.log(`[TRADE LOSE] ผู้ใช้ ID ${originalTrade.userId} แพ้การเทรด จำนวนเงิน ${originalTrade.amount} บาท ไม่ได้รับเงินคืน`);
       }
     }
@@ -371,8 +410,8 @@ export class FileStorage implements IStorage {
       bankAccount: transaction.bankAccount || null,
       paymentProof: transaction.paymentProof || null,
       note: transaction.note || null,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
     this.transactions.push(newTransaction);
     this.saveData();
@@ -396,7 +435,10 @@ export class FileStorage implements IStorage {
     const updatedTransaction: Transaction = {
       ...originalTransaction,
       status,
-      updatedAt: new Date()
+      createdAt: typeof originalTransaction.createdAt === 'string' 
+        ? originalTransaction.createdAt 
+        : originalTransaction.createdAt.toISOString(),
+      updatedAt: new Date().toISOString()
     };
 
     if (note) {

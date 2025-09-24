@@ -29,7 +29,8 @@ interface TradeFormData {
   amount: string;
   direction: "up" | "down";
   entryPrice: string;
-  duration: string; // เพิ่มเวลาชำระราคา 
+  duration: number; // เพิ่มเวลาชำระราคา (in seconds)
+  profitPercentage: string;
 }
 
 type TradeOption = {
