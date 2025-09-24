@@ -1,0 +1,29 @@
+Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn&#x27;t have a dependency array, or one of the dependencies changes on every render.
+    at WebSocketProvider (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/src/contexts/websocket-context.tsx:34:37)
+    at AuthProvider (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/src/hooks/use-auth.tsx:35:32)
+    at V (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=ebebf14b:44:25)
+    at J (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=ebebf14b:42:18)
+    at QueryClientProvider (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=ebebf14b:2875:3)
+    at App (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/src/App.tsx?v=M2rq4j-J1SZyzFC8wvxvn:130:39)
+Warning: Cannot update a component (&#x60;Switch&#x60;) while rendering a different component (&#x60;AuthPage&#x60;). To locate the bad setState() call inside &#x60;AuthPage&#x60;, follow the stack trace as described in https://reactjs.org/link/setstate-in-render
+    at AuthPage (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/src/pages/auth-page.tsx:47:37)
+    at Route (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=ebebf14b:338:16)
+    at Switch (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=ebebf14b:394:17)
+    at Router
+    at Provider (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=ebebf14b:38:15)
+    at TooltipProvider (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=ebebf14b:64:5)
+    at WebSocketProvider (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/src/contexts/websocket-context.tsx:34:37)
+    at AuthProvider (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/src/hooks/use-auth.tsx:35:32)
+    at V (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=ebebf14b:44:25)
+    at J (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=ebebf14b:42:18)
+    at QueryClientProvider (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=ebebf14b:2875:3)
+    at App (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/src/App.tsx?v=M2rq4j-J1SZyzFC8wvxvn:130:39)
+WebSocket disconnected
+Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn&#x27;t have a dependency array, or one of the dependencies changes on every render.
+    at WebSocketProvider (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/src/contexts/websocket-context.tsx:34:37)
+    at AuthProvider (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/src/hooks/use-auth.tsx:35:32)
+    at V (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=ebebf14b:44:25)
+    at J (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/next-themes.js?v=ebebf14b:42:18)
+    at QueryClientProvider (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=ebebf14b:2875:3)
+    at App (https://2318d5ca-0ffe-4b4b-a2a4-1911292e228d-00-2gjqmhmve5yoj.sisko.replit.dev/src/App.tsx?v=M2rq4j-J1SZyzFC8wvxvn:130:39)
+WebSocket connected

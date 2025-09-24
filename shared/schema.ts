@@ -68,6 +68,7 @@ export const insertUserSchema = z.object({
   username: z.string().min(1),
   email: z.string().email(),
   password: z.string().min(6),
+  fullName: z.string().optional(),
   role: z.enum(['user', 'admin', 'agent']).default('user'),
   balance: z.string().default('0'),
 });
@@ -77,6 +78,9 @@ export const loginSchema = z.object({
   username: z.string().min(1, { message: "กรุณากรอกชื่อผู้ใช้" }),
   password: z.string().min(1, { message: "กรุณากรอกรหัสผ่าน" }),
 });
+
+// Login data type
+export type LoginData = z.infer<typeof loginSchema>;
 
 export const insertBankAccountSchema = z.object({
   userId: z.number(),

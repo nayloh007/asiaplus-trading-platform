@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useQuery } from '@tanstack/react-query';
 import type { Trade } from '@shared/schema';
@@ -112,9 +112,9 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     };
   }, [userId]);
 
-  const refreshTrades = () => {
+  const refreshTrades = useCallback(() => {
     refetchTrades();
-  };
+  }, [refetchTrades]);
 
   return (
     <WebSocketContext.Provider value={{
