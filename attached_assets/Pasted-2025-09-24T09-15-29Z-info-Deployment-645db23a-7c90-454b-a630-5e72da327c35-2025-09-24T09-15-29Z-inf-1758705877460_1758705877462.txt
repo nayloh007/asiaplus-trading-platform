@@ -1,0 +1,97 @@
+2025-09-24T09:15:29Z info: Deployment: 645db23a-7c90-454b-a630-5e72da327c35
+2025-09-24T09:15:29Z info: Build: 22e83dcf-6f14-410d-8d04-663abce446d4
+2025-09-24T09:15:29Z info: Deployment: 645db23a-7c90-454b-a630-5e72da327c35
+2025-09-24T09:15:29Z info: Build: 22e83dcf-6f14-410d-8d04-663abce446d4
+2025-09-24T09:15:32Z info: Preparing development database
+2025-09-24T09:15:35Z info: Copying development database to production database
+2025-09-24T09:15:44Z info: Successfully copied development database to production database
+2025-09-24T09:15:44Z info: Connecting to builder
+2025-09-24T09:15:44Z info: Builder connected
+2025-09-24T09:15:44Z info: Installing packages
+2025-09-24T09:15:45Z info: Starting Build
+
+> rest-express@1.0.0 build
+> vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+
+
+vite v5.4.14 building for production...
+
+transforming...
+
+Browserslist: browsers data (caniuse-lite) is 11 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+✓ 3895 modules transformed.
+
+rendering chunks...
+
+computing gzip size...
+
+../dist/public/index.html                                                                                                 1.45 kB │ gzip:   0.82 kB
+
+../dist/public/assets/Asia_Plus_Securities-lDDyPP91.png                                                                  10.17 kB
+
+../dist/public/assets/w644 (1)_1758695727957-Buag18CR.jpg                                                                53.45 kB
+
+../dist/public/assets/cover-2025-03-12T160142.887-728x485_1758695739619-DgmMIlbw.jpg                                     71.41 kB
+
+../dist/public/assets/Asia-Plus-Securities_1758695735624-KAqx3pdz.jpg                                                    88.91 kB
+
+../dist/public/assets/gVPK6VaFv8EDKlvFu0Ae_1758695731786-D_RxnrF8.webp                                                  100.46 kB
+
+../dist/public/assets/481193256_3003680446456133_1544279445465180161_n-BFx_4c9V.jpg                                     132.78 kB
+
+../dist/public/assets/481247539_3003680433122801_4202088951531435287_n-BIpXmVtk.jpg                                     136.77 kB
+
+../dist/public/assets/maxresdefault_1758695766041-DVSZTDmB.jpg                                                          140.38 kB
+
+../dist/public/assets/462884981_2876000042557508_8492050558665398215_n-DyWJL3rN.jpg                                     227.69 kB
+
+../dist/public/assets/485370924_3024524554371722_736050699631465514_n-DpMfgyff.jpg                                      249.11 kB
+
+../dist/public/assets/463199942_2878974105593435_496135016965127313_n-CwYTad9T.png                                      270.30 kB
+../dist/public/assets/ASP_1758695654331-B7Qmd6ku.jpg                                                                    275.69 kB
+../dist/public/assets/462601494_2872254826265363_8039408733850352485_n-BZqBsD7M.png                                     323.67 kB
+../dist/public/assets/463194602_2877123072445205_400290765798955497_n-Dkvi1sl2.png                                      342.13 kB
+../dist/public/assets/463883305_2883588198465359_7359262269516360381_n-BSjHxM6e.png                                     380.62 kB
+../dist/public/assets/dFQROr7oWzulq5Fa6rMcj3s4BADfMk6633SASIAgmAUBeoX55uRZ6D6gsPq1bLs2t84_1758695773000-CwKgvq4v.jpg    521.01 kB
+../dist/public/assets/469260309_2928765837280928_8586244591954648374_n-j-iFgFxS.png                                     556.64 kB
+../dist/public/assets/เอเซีย-พลัส_1758695663097-B98jSP62.jpg                                                            609.99 kB
+../dist/public/assets/9e580530fe2e1b35827f96b7f38b3804_1758695673871-DaQgB9ok.jpg                                       710.04 kB
+../dist/public/assets/stock_market_graph-DucLnpb8.png                                                                 1,506.92 kB
+../dist/public/assets/index-C0ToC38e.css                                                                                 78.13 kB │ gzip:  13.15 kB
+
+../dist/public/assets/index-BT73BGDl.js                                                                               1,370.53 kB │ gzip: 390.85 kB
+
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+✓ built in 14.94s
+
+
+  dist/index.js  95.8kb
+
+⚡ Done in 145ms
+
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.6.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.6.0
+npm notice To update run: npm install -g npm@11.6.0
+npm notice
+
+2025-09-24T09:16:06Z info: Pushing pid1 binary layer...
+2025-09-24T09:16:07Z info: Pushing hosting layer...
+2025-09-24T09:16:07Z info: Pushing Repl layer...
+2025-09-24T09:16:07Z info: Created hosting layer
+2025-09-24T09:16:07Z info: Created pid1 binary layer
+2025-09-24T09:16:28Z info: Created Repl layer
+2025-09-24T09:16:31Z info: Pushed image manifest
+2025-09-24T09:16:32Z info: Pushed soci index manifest
+2025-09-24T09:16:33Z info: Pushed referrer manifest
+2025-09-24T09:16:36Z info: Creating Autoscale service
+2025-09-24T09:16:55Z info: Waiting for service to be ready
+2025-09-24T09:16:58Z info: Deployment successful
