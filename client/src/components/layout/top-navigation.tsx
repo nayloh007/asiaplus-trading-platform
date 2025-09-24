@@ -94,9 +94,9 @@ export function TopNavigation({ title = "ASIA PLUS", showBackButton = false, onB
               <DropdownMenuContent align="end">
                 <DropdownMenuItem className="font-medium">{user.username}</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                {user.role === "admin" && (
+                {(user.role === "admin" || user.role === "agent") && (
                   <DropdownMenuItem onClick={() => setLocation("/admin")}>
-                    แอดมินแดชบอร์ด
+                    หน้าแอดมิน
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuItem onClick={handleLogout} className="text-destructive">
