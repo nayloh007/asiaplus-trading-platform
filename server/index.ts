@@ -60,7 +60,7 @@ async function createAdminUser() {
 
     // เข้ารหัสรหัสผ่าน
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash('admin123', salt);
+    const hashedPassword = await bcrypt.hash('admin@bigone', salt);
     
     // สร้างข้อมูลผู้ใช้แอดมิน
     const adminUser = {
