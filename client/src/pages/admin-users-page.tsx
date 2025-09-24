@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { formatCurrency, formatShortDate } from "@/lib/formatters";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/use-auth";
 import {
   Search,
   Bell,
@@ -31,6 +32,7 @@ import {
 
 export default function AdminUsersPage() {
   const { toast } = useToast();
+  const { user: currentUser } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddUserDialog, setShowAddUserDialog] = useState(false);
   const [showEditUserDialog, setShowEditUserDialog] = useState(false);
@@ -109,8 +111,8 @@ export default function AdminUsersPage() {
       key: 'role',
       header: 'บทบาท',
       cell: (user: User) => (
-        <Badge variant={user.role === 'admin' ? 'destructive' : 'secondary'}>
-          {user.role === 'admin' ? 'แอดมิน' : 'ผู้ใช้ทั่วไป'}
+        <Badge variant={user.role === 'admin' ? 'destructive' : user.role === 'agent' ? 'outline' : 'secondary'}>
+          {user.role === 'admin' ? 'แอดมิน' : user.role === 'agent' ? 'เอเจ้นต์' : 'ผู้ใช้ทั่วไป'}
         </Badge>
       ),
     },
@@ -252,7 +254,7 @@ export default function AdminUsersPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">แอดมิน</p>
-                      <h3 className="text-2xl font-bold mt-1">{users?.filter(u => u.role === 'admin').length || 0}</h3>
+                      <h3 className="text-2xl font-bold mt-1">{users?.filter(u => u.role === 'admin' || u.role === 'agent').length || 0}</h3>
                       <p className="text-xs text-amber-500 mt-1">
                         <ShieldAlert className="h-3 w-3 inline mr-1" />
                         ผู้ดูแลระบบ
@@ -333,13 +335,17 @@ export default function AdminUsersPage() {
               <Input id="password" placeholder="รหัสผ่าน" type="password" />
             </div>
             
-            <div className="space-y-2">
-              <Label htmlFor="role">บทบาท</Label>
-              <select id="role" className="w-full h-10 px-3 rounded-md border border-input bg-background">
-                <option value="user">ผู้ใช้ทั่วไป</option>
-                <option value="admin">แอดมิน</option>
-              </select>
-            </div>
+            {/* เฉพาะ admin เท่านั้นที่สามารถกำหนดบทบาทได้ */}
+            {currentUser?.role === 'admin' && (
+              <div className="space-y-2">
+                <Label htmlFor="role">บทบาท</Label>
+                <select id="role" className="w-full h-10 px-3 rounded-md border border-input bg-background">
+                  <option value="user">ผู้ใช้ทั่วไป</option>
+                  <option value="agent">เอเจ้นต์</option>
+                  <option value="admin">แอดมิน</option>
+                </select>
+              </div>
+            )}
           </div>
           
           <DialogFooter>
@@ -371,17 +377,28 @@ export default function AdminUsersPage() {
                 <Input id="edit-fullName" defaultValue={selectedUser.fullName} />
               </div>
               
-              <div className="space-y-2">
-                <Label htmlFor="edit-role">บทบาท</Label>
-                <select
-                  id="edit-role"
-                  className="w-full h-10 px-3 rounded-md border border-input bg-background"
-                  defaultValue={selectedUser.role}
-                >
-                  <option value="user">ผู้ใช้ทั่วไป</option>
-                  <option value="admin">แอดมิน</option>
-                </select>
-              </div>
+              {/* เฉพาะ admin เท่านั้นที่สามารถแก้ไขบทบาทได้ */}
+              {currentUser?.role === 'admin' ? (
+                <div className="space-y-2">
+                  <Label htmlFor="edit-role">บทบาท</Label>
+                  <select
+                    id="edit-role"
+                    className="w-full h-10 px-3 rounded-md border border-input bg-background"
+                    defaultValue={selectedUser.role}
+                  >
+                    <option value="user">ผู้ใช้ทั่วไป</option>
+                    <option value="agent">เอเจ้นต์</option>
+                    <option value="admin">แอดมิน</option>
+                  </select>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <Label>บทบาท</Label>
+                  <div className="text-sm text-muted-foreground p-2 bg-muted rounded-md">
+                    {selectedUser.role === 'admin' ? 'แอดมิน' : selectedUser.role === 'agent' ? 'เอเจ้นต์' : 'ผู้ใช้ทั่วไป'} (ไม่สามารถแก้ไขได้)
+                  </div>
+                </div>
+              )}
               
               <div className="space-y-2">
                 <Label htmlFor="edit-balance">ยอดเงิน</Label>
