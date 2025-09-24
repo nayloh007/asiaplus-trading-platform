@@ -119,11 +119,12 @@ async function createAdminUser() {
     serveStatic(app);
   }
 
-  // ALWAYS serve the app on port 5000
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
-  const port = 5000;
-  server.listen(port, "localhost", () => {
-    log(`serving on port ${port}`);
+  // Use PORT environment variable (default 5000 for development)
+  // Bind to 0.0.0.0 for production deployment on Render
+  const port = process.env.PORT || 5000;
+  const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost';
+  
+  server.listen(port, host, () => {
+    log(`serving on port ${port} (${host})`);
   });
 })();
