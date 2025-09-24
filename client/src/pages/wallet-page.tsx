@@ -389,7 +389,7 @@ export default function WalletPage() {
 
   return (
     <MobileContainer>
-      <TopNavigation showBackButton />
+      <TopNavigation />
       
       {/* ไดอะล็อกสำหรับเพิ่มบัญชีธนาคาร */}
       <AddBankAccountDialog

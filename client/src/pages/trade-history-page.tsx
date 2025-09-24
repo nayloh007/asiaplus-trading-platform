@@ -86,7 +86,7 @@ export default function TradeHistoryPage() {
 
   return (
     <MobileContainer>
-      <TopNavigation title="" showBackButton />
+      <TopNavigation title="" />
 
       <div className="flex-1 overflow-y-auto">
         <Card className="rounded-none border-x-0 shadow-none">
