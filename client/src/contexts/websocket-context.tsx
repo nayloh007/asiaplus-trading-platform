@@ -78,7 +78,7 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
           trade.id === updatedTrade.id ? updatedTrade : trade
         );
         
-        // ถ้าไม่เจอการเทรดที่อัปเดต ให้เพิ่มเข้าไป (ในกรณีที่เป็นการเทรดใหม่)
+        // ถ้าไม่เจอการเทรดที่อัปเดต ให้เพิ่มเข้าไป (ในกরณีที่เป็นการเทรดใหม่)
         if (!prevTrades.find(trade => trade.id === updatedTrade.id)) {
           return [...updatedTrades, updatedTrade];
         }
@@ -110,7 +110,7 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     return () => {
       newSocket.close();
     };
-  }, [userId, refetchTrades]);
+  }, [userId]);
 
   const refreshTrades = () => {
     refetchTrades();
