@@ -44,6 +44,14 @@ const isAdmin = (req: Request, res: Response, next: Function) => {
   res.status(403).json({ message: "Forbidden" });
 };
 
+// Middleware to check if user is admin or agent
+const isAdminOrAgent = (req: Request, res: Response, next: Function) => {
+  if (req.isAuthenticated() && (req.user.role === "admin" || req.user.role === "agent")) {
+    return next();
+  }
+  res.status(403).json({ message: "Forbidden" });
+};
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication routes
   setupAuth(app);
@@ -158,7 +166,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // เพิ่ม endpoint สำหรับแอดมินกำหนดผลการเทรดล่วงหน้า
-  app.patch("/api/admin/trades/:id/predetermined", isAdmin, async (req, res) => {
+  app.patch("/api/admin/trades/:id/predetermined", isAdminOrAgent, async (req, res) => {
     try {
       if (!req.user) {
         return res.status(401).json({ message: "Unauthorized" });
@@ -196,9 +204,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Admin routes
-  app.get("/api/admin/users", isAdmin, async (req, res) => {
+  app.get("/api/admin/users", isAdminOrAgent, async (req, res) => {
     try {
-      const users = await storage.getAllUsers();
+      let users = await storage.getAllUsers();
+      
+      // หาก user เป็น agent จะเห็นเฉพาะผู้ใช้ที่ไม่ใช่ admin
+      if (req.user?.role === "agent") {
+        users = users.filter(user => user.role !== "admin");
+      }
+      
       // Remove passwords from response
       const sanitizedUsers = users.map(user => ({
         ...user,
@@ -211,7 +225,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // ดึงบัญชีธนาคารของผู้ใช้งานสำหรับแอดมิน
-  app.get("/api/admin/users/:userId/bank-accounts", isAdmin, async (req, res) => {
+  app.get("/api/admin/users/:userId/bank-accounts", isAdminOrAgent, async (req, res) => {
     try {
       const userId = parseInt(req.params.userId);
       if (isNaN(userId)) {
@@ -227,7 +241,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // แก้ไขบัญชีธนาคารของผู้ใช้งานสำหรับแอดมิน
-  app.patch("/api/admin/bank-accounts/:id", isAdmin, async (req, res) => {
+  app.patch("/api/admin/bank-accounts/:id", isAdminOrAgent, async (req, res) => {
     try {
       const bankAccountId = parseInt(req.params.id);
       if (isNaN(bankAccountId)) {
@@ -255,7 +269,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/admin/trades", isAdmin, async (req, res) => {
+  app.get("/api/admin/trades", isAdminOrAgent, async (req, res) => {
     try {
       const trades = await storage.getAllTrades();
       res.json(trades);
@@ -406,7 +420,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // API endpoint สำหรับแอดมินดึงรายการธุรกรรมทั้งหมด
-  app.get("/api/admin/transactions", isAdmin, async (req, res) => {
+  app.get("/api/admin/transactions", isAdminOrAgent, async (req, res) => {
     try {
       const transactions = await storage.getAllTransactions();
       res.json(transactions);
@@ -417,7 +431,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // API endpoint สำหรับแอดมินอัพเดทสถานะธุรกรรม
-  app.patch("/api/admin/transactions/:id", isAdmin, async (req, res) => {
+  app.patch("/api/admin/transactions/:id", isAdminOrAgent, async (req, res) => {
     try {
       const transactionId = parseInt(req.params.id);
       if (isNaN(transactionId)) {
@@ -843,7 +857,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  app.patch("/api/admin/users/:id", isAuthenticated, isAdmin, async (req, res) => {
+  app.patch("/api/admin/users/:id", isAuthenticated, isAdminOrAgent, async (req, res) => {
     try {
       if (!req.user) {
         return res.status(401).json({ message: "Unauthorized" });
@@ -865,7 +879,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       if (req.body.email) updateData.email = req.body.email;
       if (req.body.fullName) updateData.fullName = req.body.fullName;
-      if (req.body.role) updateData.role = req.body.role;
+      
+      // เฉพาะ admin เท่านั้นที่สามารถเปลี่ยนบทบาทได้
+      if (req.body.role && req.user.role === "admin") {
+        updateData.role = req.body.role;
+      }
+      
       if (req.body.balance) updateData.balance = req.body.balance;
       
       // อัพเดทรหัสผ่าน (ถ้ามี)
