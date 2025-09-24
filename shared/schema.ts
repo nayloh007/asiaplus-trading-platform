@@ -68,7 +68,7 @@ export const insertUserSchema = z.object({
   username: z.string().min(1),
   email: z.string().email(),
   password: z.string().min(6),
-  role: z.string().default('user'),
+  role: z.enum(['user', 'admin', 'agent']).default('user'),
   balance: z.string().default('0'),
 });
 

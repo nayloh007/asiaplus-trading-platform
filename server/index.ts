@@ -67,7 +67,7 @@ async function createAdminUser() {
       username: 'admin',
       password: hashedPassword,
       email: 'admin@example.com',
-      role: 'admin',
+      role: 'admin' as const,
       balance: '1000000',
     };
     

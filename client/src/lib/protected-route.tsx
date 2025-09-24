@@ -59,7 +59,7 @@ export function AdminRoute({
     );
   }
 
-  if (user.role !== "admin") {
+  if (user.role !== "admin" && user.role !== "agent") {
     return (
       <Route path={path}>
         <Redirect to="/" />
