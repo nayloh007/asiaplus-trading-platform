@@ -65,7 +65,7 @@ export default function AdminUsersPage() {
     return (
       user.id.toString().includes(searchQuery) ||
       user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.fullName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.role.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -384,7 +384,7 @@ export default function AdminUsersPage() {
                   <select
                     id="edit-role"
                     className="w-full h-10 px-3 rounded-md border border-input bg-background"
-                    defaultValue={selectedUser.role}
+                    defaultValue={selectedUser.role ?? 'user'}
                   >
                     <option value="user">ผู้ใช้ทั่วไป</option>
                     <option value="agent">เอเจ้นต์</option>
