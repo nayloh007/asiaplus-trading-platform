@@ -121,6 +121,7 @@ async function createAdminUser() {
 
   // Use PORT environment variable (default 5000 for development)
   // Bind to 0.0.0.0 for production deployment on Render
+  // This ensures proper port binding for cloud deployment platforms
   const port = process.env.PORT || 5000;
   const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost';
   
