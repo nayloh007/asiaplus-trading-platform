@@ -1,13 +1,9 @@
-import { Pool, neonConfig } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-serverless';
+import { Pool } from 'pg';
+import { drizzle } from 'drizzle-orm/node-postgres';
 import { drizzle as drizzleSqlite } from 'drizzle-orm/better-sqlite3';
 import Database from 'better-sqlite3';
-import ws from "ws";
 import fs from "fs";
 import * as schema from "@shared/schema";
-
-// Integration: javascript_database
-neonConfig.webSocketConstructor = ws;
 
 // Check if we should use SQLite instead of PostgreSQL
 const useSqlite = process.env.USE_SQLITE === 'true';
@@ -51,7 +47,7 @@ if (useSqlite) {
     max: 10, // maximum number of connections
     min: 1, // minimum number of connections
   });
-  db = drizzle({ client: pool, schema });
+  db = drizzle(pool, { schema });
 }
 
 export { db, pool };
