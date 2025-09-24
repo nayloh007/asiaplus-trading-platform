@@ -110,7 +110,7 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     return () => {
       newSocket.close();
     };
-  }, [userId]);
+  }, [userId, refetchTrades]);
 
   const refreshTrades = () => {
     refetchTrades();
