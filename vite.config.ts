@@ -17,5 +17,18 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    // Optimize for low memory environments like Render Free tier
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          utils: ['date-fns', 'clsx']
+        }
+      }
+    },
+    // Reduce memory usage during build
+    minify: 'esbuild',
+    target: 'es2020',
+    chunkSizeWarningLimit: 1000
   },
 });
