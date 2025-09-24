@@ -103,23 +103,31 @@ async function processActiveTrades() {
 
 async function completeTrade(trade: any) {
   try {
-    // ดึงข้อมูลราคาปัจจุบัน
-    const cryptoData = await getCryptoById(trade.cryptoId);
-    if (!cryptoData) {
-      console.error(`Failed to get crypto data for ${trade.cryptoId}`);
-      return;
-    }
-
-    const entryPrice = parseFloat(trade.entryPrice);
-    const currentPrice = cryptoData.current_price;
-    
     let result: 'win' | 'lose';
     
-    // คำนวณผลลัพธ์ตามทิศทาง
-    if (trade.direction === 'up') {
-      result = currentPrice > entryPrice ? 'win' : 'lose';
+    // ตรวจสอบว่ามีการกำหนดผลล่วงหน้าหรือไม่
+    if (trade.predeterminedResult) {
+      result = trade.predeterminedResult;
+      console.log(`กำลังใช้ผลลัพธ์ที่กำหนดล่วงหน้า: ${result} สำหรับ Trade ID: ${trade.id}`);
     } else {
-      result = currentPrice < entryPrice ? 'win' : 'lose';
+      // ดึงข้อมูลราคาปัจจุบันเฉพาะเมื่อไม่มีการกำหนดผลล่วงหน้า
+      const cryptoData = await getCryptoById(trade.cryptoId);
+      if (!cryptoData) {
+        console.error(`Failed to get crypto data for ${trade.cryptoId}`);
+        return;
+      }
+
+      const entryPrice = parseFloat(trade.entryPrice);
+      const currentPrice = cryptoData.current_price;
+      
+      // คำนวณผลลัพธ์ตามทิศทาง
+      if (trade.direction === 'up') {
+        result = currentPrice > entryPrice ? 'win' : 'lose';
+      } else {
+        result = currentPrice < entryPrice ? 'win' : 'lose';
+      }
+      
+      console.log(`คำนวณผลลัพธ์จากราคาจริง: ราคาเข้า ${entryPrice}, ราคาปัจจุบัน ${currentPrice}, ทิศทาง ${trade.direction}`);
     }
 
     console.log(`กำลังอัพเดทสถานะการเทรด ID: ${trade.id} เป็น completed ผลลัพธ์: ${result}`);
