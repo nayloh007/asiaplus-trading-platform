@@ -392,9 +392,11 @@ export function registerSettingsRoutes(app: Express) {
     try {
       let depositAccounts;
       
-      // ตรวจสอบโหมดการทำงาน: in-memory หรือ database
-      if (process.env.NODE_ENV === 'development') {
-        // ใช้งานใน Memory Storage
+      // ตรวจสอบโหมดการทำงาน: SQLite หรือ PostgreSQL
+      const useSqlite = process.env.USE_SQLITE === 'true';
+      
+      if (useSqlite || process.env.NODE_ENV === 'development') {
+        // ใช้งานใน Memory Storage สำหรับ development หรือ SQLite
         const { memoryStorage } = await import('./memory-storage');
         
         // ดึงข้อมูลจาก in-memory storage
@@ -402,13 +404,17 @@ export function registerSettingsRoutes(app: Express) {
         
         console.log("ดึงข้อมูลบัญชีธนาคารจากโหมด in-memory:", depositAccounts);
       } else {
-        // ใช้ pool ที่มีอยู่แล้วจาก server/db.ts
+        // ใช้ PostgreSQL pool สำหรับ production
         const { pool } = await import('./db');
         
         // ตรวจสอบว่า pool มีค่าหรือไม่
         if (!pool) {
-          throw new Error('Database pool is not initialized');
-        }
+          console.error('Database pool is not initialized, falling back to memory storage');
+          // Fallback to memory storage if pool is not available
+          const { memoryStorage } = await import('./memory-storage');
+          depositAccounts = await memoryStorage.getDepositAccounts();
+          console.log("ดึงข้อมูลบัญชีธนาคารจากโหมด fallback in-memory:", depositAccounts);
+        } else {
         
         const result = await pool.query('SELECT key, value FROM settings WHERE key IN (\'bank_name\', \'bank_account_number\', \'bank_account_name\', \'promptpay_number\', \'promptpay_tax_id\', \'promptpay_name\')');
         
@@ -432,6 +438,7 @@ export function registerSettingsRoutes(app: Express) {
         };
         
         console.log("ดึงข้อมูลบัญชีธนาคารจากฐานข้อมูล:", depositAccounts);
+        }
       }
       
       // ส่งข้อมูลไปยังผู้ใช้
