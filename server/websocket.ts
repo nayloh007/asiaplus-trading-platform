@@ -80,7 +80,20 @@ async function processActiveTrades() {
     for (const trade of activeTrades) {
       const now = new Date();
       const tradeCreatedAt = new Date(trade.createdAt);
+      
+      // ตรวจสอบว่า createdAt เป็น date ที่ถูกต้องหรือไม่
+      if (isNaN(tradeCreatedAt.getTime())) {
+        console.error(`Trade ${trade.id} has invalid createdAt date: ${trade.createdAt}, skipping...`);
+        continue;
+      }
+      
       const tradeEndTime = new Date(tradeCreatedAt.getTime() + (trade.duration * 1000));
+      
+      // ตรวจสอบว่า endTime เป็น date ที่ถูกต้องหรือไม่
+      if (isNaN(tradeEndTime.getTime())) {
+        console.error(`Trade ${trade.id} has invalid endTime calculation, skipping...`);
+        continue;
+      }
       
       console.log(`Trade ${trade.id}: Created at ${tradeCreatedAt.toISOString()}, Ends at ${tradeEndTime.toISOString()}, Now: ${now.toISOString()}`);
       
