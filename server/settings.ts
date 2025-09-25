@@ -405,6 +405,11 @@ export function registerSettingsRoutes(app: Express) {
         // ใช้ pool ที่มีอยู่แล้วจาก server/db.ts
         const { pool } = await import('./db');
         
+        // ตรวจสอบว่า pool มีค่าหรือไม่
+        if (!pool) {
+          throw new Error('Database pool is not initialized');
+        }
+        
         const result = await pool.query('SELECT key, value FROM settings WHERE key IN (\'bank_name\', \'bank_account_number\', \'bank_account_name\', \'promptpay_number\', \'promptpay_tax_id\', \'promptpay_name\')');
         
         // แปลงข้อมูลจาก DB เป็น object

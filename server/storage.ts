@@ -332,9 +332,9 @@ export class DatabaseStorage implements IStorage {
     }
     
     // ถ้ามีการกำหนดผลล่วงหน้า ให้อัพเดทผลการเทรดพร้อมกัน
-    const updateData: Partial<typeof trades.$inferSelect> = { 
-      status, 
-      closedAt: new Date() 
+    const updateData: any = { 
+      status: status, 
+      closedAt: new Date().toISOString()
     };
     
     if (result) {

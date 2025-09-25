@@ -1,5 +1,6 @@
 import { pgTable, serial, text, timestamp, boolean, integer, json } from 'drizzle-orm/pg-core';
 import { sqliteTable, integer as sqliteInteger, text as sqliteText } from 'drizzle-orm/sqlite-core';
+import { sql } from 'drizzle-orm';
 import { z } from 'zod';
 
 // Check if we're using SQLite (safe for browser)
@@ -17,8 +18,8 @@ export const users = useSqlite ? sqliteTable('users', {
   avatarUrl: sqliteText('avatar_url'),
   role: sqliteText('role').default('user').notNull(),
   balance: sqliteText('balance').default('0').notNull(),
-  createdAt: sqliteText('created_at').default('CURRENT_TIMESTAMP').notNull(),
-  updatedAt: sqliteText('updated_at').default('CURRENT_TIMESTAMP').notNull(),
+  createdAt: sqliteText('created_at').default(sql`(datetime('now'))`).notNull(),
+  updatedAt: sqliteText('updated_at').default(sql`(datetime('now'))`).notNull(),
 }) : pgTable('users', {
   id: serial('id').primaryKey(),
   username: text('username').notNull().unique(),
@@ -68,7 +69,7 @@ export const trades = useSqlite ? sqliteTable('trades', {
   result: sqliteText('result'), // 'win' or 'lose'
   predeterminedResult: sqliteText('predetermined_result'), // 'win' or 'lose'
   profitPercentage: sqliteText('profit_percentage').notNull(),
-  createdAt: sqliteText('created_at').default('CURRENT_TIMESTAMP').notNull(),
+  createdAt: sqliteText('created_at').default(sql`(datetime('now'))`).notNull(),
   closedAt: sqliteText('closed_at'),
   endTime: sqliteText('end_time'),
 }) : pgTable('trades', {

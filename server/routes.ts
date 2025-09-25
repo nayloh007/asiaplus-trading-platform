@@ -31,9 +31,17 @@ async function comparePasswords(supplied: string, stored: string) {
 
 // Middleware to check if user is authenticated
 const isAuthenticated = (req: Request, res: Response, next: Function) => {
+  console.log('Authentication check:', {
+    isAuthenticated: req.isAuthenticated(),
+    sessionID: req.sessionID,
+    user: req.user ? { id: req.user.id, username: req.user.username } : null
+  });
+  
   if (req.isAuthenticated()) {
     return next();
   }
+  
+  console.log('Authentication failed - returning 401');
   res.status(401).json({ message: "Unauthorized" });
 };
 
@@ -82,8 +90,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Trading routes
   app.post("/api/trades", isAuthenticated, async (req, res) => {
     try {
+      console.log('Trade request received:', {
+        sessionID: req.sessionID,
+        user: req.user ? { id: req.user.id, username: req.user.username } : null,
+        body: req.body
+      });
+      
       if (!req.user) {
-        return res.status(401).json({ message: "Unauthorized" });
+        console.log('No user found in request - returning 401');
+        return res.status(401).json({ message: "Unauthorized - No user session" });
       }
       
       const tradeData = insertTradeSchema.parse({
@@ -91,9 +106,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userId: req.user.id
       });
       
+      console.log('Creating trade with data:', tradeData);
       const trade = await storage.createTrade(tradeData);
+      console.log('Trade created successfully:', trade);
       res.status(201).json(trade);
     } catch (error) {
+      console.error('Trade creation error:', error);
       if (error instanceof ZodError) {
         const validationError = fromZodError(error);
         res.status(400).json({ message: validationError.message });
@@ -380,7 +398,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         method: data.method,
         bankName: data.bankName,
         bankAccount: data.bankAccount,
-        note: "เงินถูกตัดจากบัญชีแล้ว รอการอนุมัติ"
+        note: `เงินถูกตัดจากบัญชีแล้ว รอการอนุมัติ | ค่าธรรมเนียม 3%: ${fee.toFixed(2)} บาท ยอดสุทธิ: ${finalAmount.toFixed(2)} บาท`,
       };
       
       const transaction = await storage.createTransaction(transactionData);
@@ -604,7 +622,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // ปรับปรุง API endpoint สำหรับถอนเงินให้รองรับการใช้บัญชีที่ผูกไว้
+  // ปรับปรุง API endpoint สำหรับถอนเงินให้รองรับการใชูบัญชีที่ผูกไว้
   app.post("/api/wallet/withdraw-with-saved-account", isAuthenticated, async (req, res) => {
     try {
       if (!req.user) {

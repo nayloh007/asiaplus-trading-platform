@@ -33,8 +33,8 @@ if (useSqlite) {
         avatar_url TEXT,
         role TEXT DEFAULT 'user' NOT NULL,
         balance TEXT DEFAULT '0' NOT NULL,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL,
-        updated_at TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL
+        created_at TEXT DEFAULT (datetime('now')) NOT NULL,
+        updated_at TEXT DEFAULT (datetime('now')) NOT NULL
       )
     `);
     
@@ -52,7 +52,7 @@ if (useSqlite) {
         result TEXT,
         predetermined_result TEXT,
         profit_percentage TEXT NOT NULL,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        created_at TEXT DEFAULT (datetime('now')) NOT NULL,
         closed_at TEXT,
         end_time TEXT
       )
@@ -67,8 +67,8 @@ if (useSqlite) {
         account_number TEXT NOT NULL,
         account_name TEXT NOT NULL,
         is_default INTEGER DEFAULT 0 NOT NULL,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL,
-        updated_at TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL
+        created_at TEXT DEFAULT (datetime('now')) NOT NULL,
+        updated_at TEXT DEFAULT (datetime('now')) NOT NULL
       )
     `);
     
@@ -85,8 +85,8 @@ if (useSqlite) {
         bank_account TEXT,
         payment_proof TEXT,
         note TEXT,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL,
-        updated_at TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL
+        created_at TEXT DEFAULT (datetime('now')) NOT NULL,
+        updated_at TEXT DEFAULT (datetime('now')) NOT NULL
       )
     `);
     
@@ -96,8 +96,8 @@ if (useSqlite) {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         key TEXT NOT NULL UNIQUE,
         value TEXT NOT NULL,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL,
-        updated_at TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL
+        created_at TEXT DEFAULT (datetime('now')) NOT NULL,
+        updated_at TEXT DEFAULT (datetime('now')) NOT NULL
       )
     `);
     
