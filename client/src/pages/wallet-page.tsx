@@ -474,7 +474,23 @@ export default function WalletPage() {
                     {/* แท็บแสดงธุรกรรมทั้งหมด */}
                     <TabsContent value="all" className="space-y-3 mt-2">
                       {transactions
-                        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                        .sort((a, b) => {
+                          const dateA = new Date(a.createdAt);
+                          const dateB = new Date(b.createdAt);
+                          
+                          // Handle invalid dates
+                          if (isNaN(dateA.getTime()) && isNaN(dateB.getTime())) return 0;
+                          if (isNaN(dateA.getTime())) {
+                            console.warn('Invalid date in transaction createdAt:', a.createdAt);
+                            return 1; // Put invalid dates at the end
+                          }
+                          if (isNaN(dateB.getTime())) {
+                            console.warn('Invalid date in transaction createdAt:', b.createdAt);
+                            return -1; // Put invalid dates at the end
+                          }
+                          
+                          return dateB.getTime() - dateA.getTime();
+                        })
                         .map((transaction) => (
                         <div key={transaction.id} className="border rounded-lg p-3">
                           <div className="flex justify-between items-start">
@@ -530,7 +546,23 @@ export default function WalletPage() {
                     <TabsContent value="deposit" className="space-y-3 mt-2">
                       {transactions
                         .filter(transaction => transaction.type === "deposit")
-                        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                        .sort((a, b) => {
+                          const dateA = new Date(a.createdAt);
+                          const dateB = new Date(b.createdAt);
+                          
+                          // Handle invalid dates
+                          if (isNaN(dateA.getTime()) && isNaN(dateB.getTime())) return 0;
+                          if (isNaN(dateA.getTime())) {
+                            console.warn('Invalid date in transaction createdAt:', a.createdAt);
+                            return 1; // Put invalid dates at the end
+                          }
+                          if (isNaN(dateB.getTime())) {
+                            console.warn('Invalid date in transaction createdAt:', b.createdAt);
+                            return -1; // Put invalid dates at the end
+                          }
+                          
+                          return dateB.getTime() - dateA.getTime();
+                        })
                         .map((transaction) => (
                         <div key={transaction.id} className="border rounded-lg p-3">
                           <div className="flex justify-between items-start">
@@ -582,7 +614,23 @@ export default function WalletPage() {
                     <TabsContent value="withdraw" className="space-y-3 mt-2">
                       {transactions
                         .filter(transaction => transaction.type === "withdraw")
-                        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                        .sort((a, b) => {
+                          const dateA = new Date(a.createdAt);
+                          const dateB = new Date(b.createdAt);
+                          
+                          // Handle invalid dates
+                          if (isNaN(dateA.getTime()) && isNaN(dateB.getTime())) return 0;
+                          if (isNaN(dateA.getTime())) {
+                            console.warn('Invalid date in transaction createdAt:', a.createdAt);
+                            return 1; // Put invalid dates at the end
+                          }
+                          if (isNaN(dateB.getTime())) {
+                            console.warn('Invalid date in transaction createdAt:', b.createdAt);
+                            return -1; // Put invalid dates at the end
+                          }
+                          
+                          return dateB.getTime() - dateA.getTime();
+                        })
                         .map((transaction) => (
                         <div key={transaction.id} className="border rounded-lg p-3">
                           <div className="flex justify-between items-start">

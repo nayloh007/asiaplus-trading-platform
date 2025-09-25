@@ -123,9 +123,18 @@ export default function TradeHistoryPage() {
                 <TabsContent value="all" className="space-y-3 mt-2">
                   {[...trades]
                     .sort(
-                      (a, b) =>
-                        new Date(b.createdAt).getTime() -
-                        new Date(a.createdAt).getTime(),
+                      (a, b) => {
+                        // Add validation for date sorting
+                        const dateA = new Date(a.createdAt);
+                        const dateB = new Date(b.createdAt);
+                        
+                        if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
+                          console.warn('Invalid date found in trade sorting:', { a: a.createdAt, b: b.createdAt });
+                          return 0; // Keep original order if dates are invalid
+                        }
+                        
+                        return dateB.getTime() - dateA.getTime();
+                      }
                     )
                     .map((trade) => (
                       <div key={trade.id} className="border rounded-lg p-3">
@@ -227,10 +236,16 @@ export default function TradeHistoryPage() {
                         new Date(a.createdAt).getTime(),
                     )
                     .map((trade) => {
-                      // คำนวณเวลาสิ้นสุดการเทรด
-                      const endTime = new Date(
-                        new Date(trade.createdAt).getTime() + trade.duration * 1000
-                      );
+                      // คำนวณเวลาสิ้นสุดการเทรด with validation
+                      let endTime: Date;
+                      const createdAt = new Date(trade.createdAt);
+                      
+                      if (isNaN(createdAt.getTime())) {
+                        console.warn('Invalid createdAt date for trade:', trade.id, trade.createdAt);
+                        endTime = new Date(); // Use current time as fallback
+                      } else {
+                        endTime = new Date(createdAt.getTime() + trade.duration * 1000);
+                      }
                       
                       return (
                         <div key={trade.id} className="space-y-3">
@@ -320,9 +335,18 @@ export default function TradeHistoryPage() {
                   {trades
                     .filter((trade) => trade.status === "completed")
                     .sort(
-                      (a, b) =>
-                        new Date(b.createdAt).getTime() -
-                        new Date(a.createdAt).getTime(),
+                      (a, b) => {
+                        // Add validation for date sorting
+                        const dateA = new Date(a.createdAt);
+                        const dateB = new Date(b.createdAt);
+                        
+                        if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
+                          console.warn('Invalid date found in trade sorting:', { a: a.createdAt, b: b.createdAt });
+                          return 0; // Keep original order if dates are invalid
+                        }
+                        
+                        return dateB.getTime() - dateA.getTime();
+                      }
                     )
                     .map((trade) => (
                       <div key={trade.id} className="border rounded-lg p-3">

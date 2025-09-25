@@ -138,9 +138,23 @@ export default function AdminReportsPage() {
     if (!users) return [];
     
     // Sort users by creation date
-    const sortedUsers = [...users].sort(
-      (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-    );
+    const sortedUsers = [...users].sort((a, b) => {
+      const dateA = new Date(a.createdAt);
+      const dateB = new Date(b.createdAt);
+      
+      // Handle invalid dates
+      if (isNaN(dateA.getTime()) && isNaN(dateB.getTime())) return 0;
+      if (isNaN(dateA.getTime())) {
+        console.warn('Invalid date in user createdAt:', a.createdAt);
+        return 1; // Put invalid dates at the end
+      }
+      if (isNaN(dateB.getTime())) {
+        console.warn('Invalid date in user createdAt:', b.createdAt);
+        return -1; // Put invalid dates at the end
+      }
+      
+      return dateA.getTime() - dateB.getTime();
+    });
     
     // Count users by date
     const usersByDate = dateList.map(day => {
@@ -192,9 +206,15 @@ export default function AdminReportsPage() {
   
   // Calculate summary metrics
   const totalUsers = users?.length || 0;
-  const newUsers = users?.filter(
-    u => new Date(u.createdAt) > new Date(Date.now() - (pastDays * 24 * 60 * 60 * 1000))
-  ).length || 0;
+  const newUsers = users?.filter(u => {
+    if (!u.createdAt) return false;
+    const userDate = new Date(u.createdAt);
+    if (isNaN(userDate.getTime())) {
+      console.warn('Invalid date in user createdAt for newUsers calculation:', u.createdAt);
+      return false;
+    }
+    return userDate > new Date(Date.now() - (pastDays * 24 * 60 * 60 * 1000));
+  }).length || 0;
   
   const totalTrades = trades?.length || 0;
   const totalTradeVolume = trades?.reduce(

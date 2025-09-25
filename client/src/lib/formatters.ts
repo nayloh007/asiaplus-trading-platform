@@ -20,6 +20,13 @@ export function formatPercentage(value: number): string {
 export function formatShortDate(date: Date | string | null): string {
   if (!date) return '';
   const dateObj = typeof date === 'string' ? new Date(date) : date;
+  
+  // Check if the date is valid to prevent RangeError
+  if (isNaN(dateObj.getTime())) {
+    console.warn('Invalid date value passed to formatShortDate:', date);
+    return 'Invalid Date';
+  }
+  
   return new Intl.DateTimeFormat('en-US', {
     month: 'short',
     day: 'numeric',
