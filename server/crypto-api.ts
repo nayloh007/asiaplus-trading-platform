@@ -4,7 +4,7 @@ import { CryptoCurrency } from "@shared/schema";
 const cache = {
   marketData: null as CryptoCurrency[] | null,
   lastFetched: 0,
-  cacheTime: 60000, // 1 minute
+  cacheTime: 300000, // 5 minutes - increased to reduce API calls
 };
 
 // CoinGecko API URLs
@@ -12,7 +12,7 @@ const API_BASE_URL = "https://api.coingecko.com/api/v3";
 const MARKET_DATA_URL = `${API_BASE_URL}/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=true&price_change_percentage=24h`;
 
 // Handle rate limiting with exponential backoff
-const fetchWithRetry = async (url: string, retries = 3, backoff = 1000) => {
+const fetchWithRetry = async (url: string, retries = 5, backoff = 2000) => {
   try {
     const response = await fetch(url);
     
@@ -74,20 +74,9 @@ async function ensureBitcoinCash(marketData: CryptoCurrency[]): Promise<CryptoCu
     return marketData; // BCH already exists, no need to add it
   }
   
-  try {
-    // Fetch BCH data specifically, without using getCryptoById to avoid circular dependency
-    const bchData = await fetchCryptoDirectly('bitcoin-cash');
-    
-    if (bchData) {
-      // Add BCH to the market data
-      return [...marketData, bchData];
-    }
-    
-    return marketData; // If we couldn't fetch BCH data, return original data
-  } catch (error) {
-    console.error("Error fetching Bitcoin Cash data:", error);
-    return marketData; // Return original data on error
-  }
+  // Skip adding BCH if we're already rate limited to avoid additional API calls
+  console.log("Bitcoin Cash not found in market data, but skipping additional API call to avoid rate limiting");
+  return marketData;
 }
 
 export async function getMarketData(): Promise<CryptoCurrency[]> {
