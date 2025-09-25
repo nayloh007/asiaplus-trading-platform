@@ -3,6 +3,7 @@ import { io, Socket } from 'socket.io-client';
 import { useQuery } from '@tanstack/react-query';
 import { type Trade } from '@shared/schema';
 import { useAuth } from '@/hooks/use-auth';
+import { queryClient } from '@/lib/queryClient';
 
 interface WebSocketContextType {
   socket: Socket | null;
@@ -48,7 +49,9 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
 
   // Stable refresh function
   const refreshTrades = useCallback(() => {
-    window.location.reload();
+    // Use React Query invalidation instead of page reload
+    queryClient.invalidateQueries({ queryKey: ['/api/trades'] });
+    queryClient.invalidateQueries({ queryKey: ['/api/user'] });
   }, []);
 
   // Initialize WebSocket connection once
