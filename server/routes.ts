@@ -1066,7 +1066,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           direction: trade.direction,
           duration: trade.duration,
           profitPercentage: trade.profitPercentage || '0',
-          createdAt: new Date(trade.createdAt).toISOString(),
+          createdAt: trade.createdAt ? new Date(trade.createdAt).toISOString() : new Date().toISOString(),
           status: trade.status,
           result: trade.result || null,
           predeterminedResult: trade.predeterminedResult || null,

@@ -1,7 +1,7 @@
-import { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import { createContext, useContext, useEffect, useRef, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useQuery } from '@tanstack/react-query';
-import { trades, type Trade } from '@shared/schema';
+import { type Trade } from '@shared/schema';
 import { useAuth } from '@/hooks/use-auth';
 
 interface WebSocketContextType {
@@ -29,107 +29,96 @@ interface WebSocketProviderProps {
 export function WebSocketProvider({ children }: WebSocketProviderProps) {
   const { user } = useAuth();
   const userId = user?.id;
-  const [socket, setSocket] = useState<Socket | null>(null);
-  const [isConnected, setIsConnected] = useState(false);
-  const [trades, setTrades] = useState<Trade[]>([]);
+  const socketRef = useRef<Socket | null>(null);
+  const isConnectedRef = useRef(false);
+  const tradesRef = useRef<Trade[]>([]);
 
   // Query สำหรับ trades ของผู้ใช้
-  const { data: userTrades = [], refetch: refetchTrades } = useQuery({
+  const { data: userTrades = [] } = useQuery({
     queryKey: ['/api/trades'],
     enabled: !!userId,
   });
 
+  // Update trades ref when userTrades changes
   useEffect(() => {
     if (userTrades && Array.isArray(userTrades)) {
-      setTrades(userTrades);
+      tradesRef.current = userTrades;
     }
   }, [userTrades]);
 
+  // Stable refresh function
+  const refreshTrades = useCallback(() => {
+    window.location.reload();
+  }, []);
+
+  // Initialize WebSocket connection once
   useEffect(() => {
-    // สร้าง WebSocket connection
+    if (!userId) return;
+
+    // Prevent multiple connections
+    if (socketRef.current) {
+      socketRef.current.disconnect();
+    }
+
+    // Create WebSocket connection
     const newSocket = io('/', {
       transports: ['websocket', 'polling']
     });
 
-    setSocket(newSocket);
+    socketRef.current = newSocket;
 
-    // Event handlers
+    // Connection event handlers
     newSocket.on('connect', () => {
       console.log('WebSocket connected');
-      setIsConnected(true);
-      
-      // เข้าร่วม room ของผู้ใช้
-      if (userId) {
-        newSocket.emit('join-user-room', userId);
-      }
+      isConnectedRef.current = true;
+      newSocket.emit('join-user-room', userId);
     });
 
     newSocket.on('disconnect', () => {
       console.log('WebSocket disconnected');
-      setIsConnected(false);
+      isConnectedRef.current = false;
     });
 
-    // รับการอัปเดตการเทรด
+    // Trade update handlers
     newSocket.on('trade-updated', (updatedTrade: Trade) => {
       console.log('Trade updated:', updatedTrade);
       
-      setTrades(prevTrades => {
-        const updatedTrades = prevTrades.map(trade => 
-          trade.id === updatedTrade.id ? updatedTrade : trade
-        );
-        
-        // ถ้าไม่พบการเทรดที่ต้องการอัปเดต ให้เพิ่มใหม่
-        if (!prevTrades.find(trade => trade.id === updatedTrade.id)) {
-          return [...prevTrades, updatedTrade];
-        }
-        
-        return updatedTrades;
-      });
+      const currentTrades = tradesRef.current;
+      const existingTradeIndex = currentTrades.findIndex(trade => trade.id === updatedTrade.id);
       
-      // Refetch trades เพื่อให้แน่ใจว่าข้อมูลล่าสุด
-      refetchTrades();
+      if (existingTradeIndex >= 0) {
+        // Update existing trade
+        const newTrades = [...currentTrades];
+        newTrades[existingTradeIndex] = updatedTrade;
+        tradesRef.current = newTrades;
+      } else {
+        // Add new trade
+        tradesRef.current = [...currentTrades, updatedTrade];
+      }
+    });
+
+    newSocket.on('trade-completed', (completedTradeInfo) => {
+      console.log('Trade completed:', completedTradeInfo);
+      
+      // Remove completed trade from local state
+      tradesRef.current = tradesRef.current.filter(
+        trade => trade.id !== completedTradeInfo.tradeId
+      );
     });
 
     // Cleanup function
     return () => {
       newSocket.disconnect();
+      socketRef.current = null;
+      isConnectedRef.current = false;
     };
-  }, [userId]); // เพิ่ม dependency array ที่ถูกต้อง
-
-  useEffect(() => {
-    if (!socket || !userId) return;
-
-    // รับการอัปเดตการเทรดที่เสร็จสิ้น
-    socket.on('trade-completed', (completedTradeInfo) => {
-      console.log('Trade completed:', completedTradeInfo);
-      
-      // รีเฟรชข้อมูลการเทรดทันที
-      setTimeout(() => {
-        refetchTrades();
-      }, 100);
-      
-      // อัปเดต local state โดยการลบการเทรดที่เสร็จแล้วออกจาก active trades
-      setTrades(prevTrades => 
-        prevTrades.filter(trade => trade.id !== completedTradeInfo.tradeId)
-      );
-    });
-
-    return () => {
-      if (socket) {
-        socket.off('trade-completed');
-      }
-    };
-  }, [socket, userId, refetchTrades]); // เพิ่ม refetchTrades ใน dependency array
-
-  const refreshTrades = useCallback(() => {
-    refetchTrades();
-  }, [refetchTrades]);
+  }, [userId]);
 
   return (
     <WebSocketContext.Provider value={{
-      socket,
-      isConnected,
-      trades,
+      socket: socketRef.current,
+      isConnected: isConnectedRef.current,
+      trades: tradesRef.current,
       refreshTrades
     }}>
       {children}

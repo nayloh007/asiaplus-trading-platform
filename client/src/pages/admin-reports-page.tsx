@@ -79,7 +79,10 @@ export default function AdminReportsPage() {
   const getTransactionData = () => {
     const data = dateList.map(day => {
       const dayTransactions = transactions?.filter(t => {
-        const transactionDate = new Date(t.createdAt).toISOString().slice(0, 10);
+        if (!t.createdAt) return false;
+        const date = new Date(t.createdAt);
+        if (isNaN(date.getTime())) return false;
+        const transactionDate = date.toISOString().slice(0, 10);
         return transactionDate === day.date;
       }) || [];
       
@@ -106,7 +109,10 @@ export default function AdminReportsPage() {
   const getTradeData = () => {
     const data = dateList.map(day => {
       const dayTrades = trades?.filter(t => {
-        const tradeDate = new Date(t.createdAt).toISOString().slice(0, 10);
+        if (!t.createdAt) return false;
+        const date = new Date(t.createdAt);
+        if (isNaN(date.getTime())) return false;
+        const tradeDate = date.toISOString().slice(0, 10);
         return tradeDate === day.date;
       }) || [];
       
@@ -139,7 +145,10 @@ export default function AdminReportsPage() {
     // Count users by date
     const usersByDate = dateList.map(day => {
       const count = sortedUsers.filter(user => {
-        const userDate = new Date(user.createdAt).toISOString().slice(0, 10);
+        if (!user.createdAt) return false;
+        const date = new Date(user.createdAt);
+        if (isNaN(date.getTime())) return false;
+        const userDate = date.toISOString().slice(0, 10);
         return userDate <= day.date;
       }).length;
       

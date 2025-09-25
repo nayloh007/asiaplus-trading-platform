@@ -86,7 +86,10 @@ export default function AdminDashboardPage() {
   // Transaction data for chart
   const transactionData = last7Days.map(day => {
     const dayTransactions = transactions?.filter(t => {
-      const transactionDate = new Date(t.createdAt).toISOString().slice(0, 10);
+      if (!t.createdAt) return false;
+      const date = new Date(t.createdAt);
+      if (isNaN(date.getTime())) return false;
+      const transactionDate = date.toISOString().slice(0, 10);
       return transactionDate === day.date;
     }) || [];
     
@@ -108,7 +111,10 @@ export default function AdminDashboardPage() {
   // User data for chart
   const userRegistrationData = last7Days.map(day => {
     const newUsers = users?.filter(user => {
-      const userDate = new Date(user.createdAt).toISOString().slice(0, 10);
+      if (!user.createdAt) return false;
+      const date = new Date(user.createdAt);
+      if (isNaN(date.getTime())) return false;
+      const userDate = date.toISOString().slice(0, 10);
       return userDate === day.date;
     }).length || 0;
     
@@ -121,7 +127,10 @@ export default function AdminDashboardPage() {
   // Trade data for chart
   const tradeData = last7Days.map(day => {
     const dayTrades = trades?.filter(t => {
-      const tradeDate = new Date(t.createdAt).toISOString().slice(0, 10);
+      if (!t.createdAt) return false;
+      const date = new Date(t.createdAt);
+      if (isNaN(date.getTime())) return false;
+      const tradeDate = date.toISOString().slice(0, 10);
       return tradeDate === day.date;
     }) || [];
     
