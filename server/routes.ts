@@ -134,6 +134,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to fetch trades" });
     }
   });
+
+  // API endpoint สำหรับดึงเฉพาะการเทรดที่กำลังดำเนินอยู่ของผู้ใช้
+  app.get("/api/trades/active", isAuthenticated, async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+      
+      const allTrades = await storage.getTradesByUser(req.user.id);
+      const activeTrades = allTrades.filter(trade => trade.status === 'active');
+      res.json(activeTrades);
+    } catch (error) {
+      console.error("Error fetching active trades:", error);
+      res.status(500).json({ message: "Failed to fetch active trades" });
+    }
+  });
   
   // อัพเดทสถานะการเทรด
   app.patch("/api/trades/:id", isAuthenticated, async (req, res) => {
