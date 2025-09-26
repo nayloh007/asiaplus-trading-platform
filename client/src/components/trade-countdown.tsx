@@ -32,8 +32,8 @@ export function TradeCountdown({
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [isPulsing, setIsPulsing] = useState(false);
   
-  // คำนวณเปอร์เซ็นต์ของเวลาที่เหลือ (คำนวณใหม่ทุกครั้งที่ timeLeft เปลี่ยน)
-  const progressPercentage = Math.min(100, Math.max(0, ((duration - timeLeft) / duration) * 100));
+  // คำนวณเปอร์เซ็นต์ของเวลาที่เหลือ (เริ่มต้นที่ 100% และลดลงเมื่อเวลาผ่านไป)
+  const progressPercentage = Math.min(100, Math.max(0, (timeLeft / duration) * 100));
   
   // คำนวณผลกำไรที่อาจได้รับ
   const potentialProfit = amount * (profitPercentage / 100);
@@ -48,15 +48,29 @@ export function TradeCountdown({
   
   // คำนวณเวลาที่เหลือโดยใช้ endTime
   useEffect(() => {
+    console.log("🔄 TradeCountdown useEffect started", {
+      duration,
+      endTime: calculatedEndTime,
+      currentTime: new Date()
+    });
+    
     // ฟังก์ชั่นสำหรับคำนวณเวลาที่เหลือ
     const calculateTimeLeft = () => {
       const now = new Date();
       const diff = Math.max(0, Math.floor((calculatedEndTime.getTime() - now.getTime()) / 1000));
+      console.log("⏰ Calculating time left:", {
+        now: now.toISOString(),
+        endTime: calculatedEndTime.toISOString(),
+        diffMs: calculatedEndTime.getTime() - now.getTime(),
+        diffSeconds: diff
+      });
       return diff;
     };
     
     // ตั้งค่าเวลาเริ่มต้น
-    setTimeLeft(calculateTimeLeft());
+    const initialTimeLeft = calculateTimeLeft();
+    setTimeLeft(initialTimeLeft);
+    console.log("🚀 Initial time left set to:", initialTimeLeft);
     
     // เพิ่มเอฟเฟคที่จะทำให้การ์ดเต้นเมื่อเหลือเวลาไม่มาก
     const pulseTimer = setInterval(() => {
@@ -70,9 +84,11 @@ export function TradeCountdown({
     // ตั้งเวลานับถอยหลังโดยคำนวณจากเวลาจริง
     const timer = setInterval(() => {
       const newTimeLeft = calculateTimeLeft();
+      console.log("⏱️ Timer tick - new time left:", newTimeLeft);
       setTimeLeft(newTimeLeft);
       
       if (newTimeLeft <= 0) {
+        console.log("⏰ Timer completed!");
         clearInterval(timer);
         clearInterval(pulseTimer);
         if (onComplete) {
@@ -82,6 +98,7 @@ export function TradeCountdown({
     }, 1000);
     
     return () => {
+      console.log("🧹 TradeCountdown cleanup");
       clearInterval(timer);
       clearInterval(pulseTimer);
     };
