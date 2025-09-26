@@ -55,10 +55,15 @@ export function setupAuth(app: Express) {
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
       secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     }
   };
 
-  app.set("trust proxy", 1);
+  // Trust proxy for production deployment platforms like Render
+  if (process.env.NODE_ENV === "production") {
+    app.set("trust proxy", true);
+  }
   app.use(session(sessionSettings));
   app.use(passport.initialize());
   app.use(passport.session());

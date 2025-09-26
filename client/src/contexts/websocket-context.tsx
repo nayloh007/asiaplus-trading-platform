@@ -56,7 +56,15 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
 
   // Initialize WebSocket connection once
   useEffect(() => {
-    if (!userId) return;
+    if (!userId) {
+      // Clean up connection if no user
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = null;
+        setIsConnected(false);
+      }
+      return;
+    }
 
     // Prevent multiple connections
     if (socketRef.current) {
