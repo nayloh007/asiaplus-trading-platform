@@ -306,8 +306,22 @@ export class DatabaseStorage implements IStorage {
     const newBalance = (parseFloat(currentBalance) - tradeValue).toString();
     await this.updateUserBalance(insertTrade.userId, newBalance);
     
-    // บันทึกข้อมูลการเทรด
-    const [trade] = await db.insert(trades).values(insertTrade).returning();
+    // คำนวณ endTime จาก duration ถ้าไม่มี endTime
+    const now = new Date();
+    let endTime = insertTrade.endTime;
+    if (!endTime && insertTrade.duration) {
+      // duration อยู่ในหน่วยวินาที ต้องคูณ 1000 เพื่อแปลงเป็นมิลลิวินาที
+      const endTimeDate = new Date(now.getTime() + insertTrade.duration * 1000);
+      endTime = endTimeDate.toISOString();
+    }
+    
+    // บันทึกข้อมูลการเทรดพร้อม endTime
+    const tradeData = {
+      ...insertTrade,
+      endTime: endTime || null
+    };
+    
+    const [trade] = await db.insert(trades).values(tradeData).returning();
     return trade;
   }
   
