@@ -258,15 +258,26 @@ export default function TradeHistoryPage() {
                           new Date(a.createdAt).getTime(),
                       )
                       .map((trade) => {
-                        // คำนวณเวลาสิ้นสุดการเทรด with validation
+                        // ใช้ endTime จากฐานข้อมูลหรือคำนวณจาก createdAt + duration เป็น fallback
                         let endTime: Date;
-                        const createdAt = new Date(trade.createdAt);
                         
-                        if (isNaN(createdAt.getTime())) {
-                          console.warn('Invalid createdAt date for trade:', trade.id, trade.createdAt);
-                          endTime = new Date(); // Use current time as fallback
+                        if (trade.endTime) {
+                          endTime = new Date(trade.endTime);
+                          if (isNaN(endTime.getTime())) {
+                            console.warn('Invalid endTime for trade:', trade.id, trade.endTime);
+                            // Fallback to calculation
+                            const createdAt = new Date(trade.createdAt);
+                            endTime = new Date(createdAt.getTime() + trade.duration * 1000);
+                          }
                         } else {
-                          endTime = new Date(createdAt.getTime() + trade.duration * 1000);
+                          // Fallback: คำนวณจาก createdAt + duration
+                          const createdAt = new Date(trade.createdAt);
+                          if (isNaN(createdAt.getTime())) {
+                            console.warn('Invalid createdAt date for trade:', trade.id, trade.createdAt);
+                            endTime = new Date(); // Use current time as fallback
+                          } else {
+                            endTime = new Date(createdAt.getTime() + trade.duration * 1000);
+                          }
                         }
                         
                         return (
