@@ -217,16 +217,26 @@ export class MemoryStorage {
 
   // Trade operations
   async createTrade(trade: InsertTrade): Promise<Trade> {
-    const now = new Date().toISOString();
+    const now = new Date();
+    const nowISO = now.toISOString();
+    
+    // Calculate endTime from duration if not provided
+    let endTime = trade.endTime;
+    if (!endTime && trade.duration) {
+      // duration is in seconds, so multiply by 1000 to get milliseconds
+      const endTimeDate = new Date(now.getTime() + trade.duration * 1000);
+      endTime = endTimeDate.toISOString();
+    }
+    
     const newTrade: Trade = {
       id: this.nextTradeId++,
       ...trade,
-      createdAt: now,
+      createdAt: nowISO,
       status: "active",
       result: null,
       predeterminedResult: null,
       closedAt: null,
-      endTime: trade.endTime || null
+      endTime: endTime || null
     };
     this.trades.push(newTrade);
     return newTrade;

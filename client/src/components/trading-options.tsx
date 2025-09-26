@@ -148,7 +148,7 @@ export function TradingOptions({ crypto }: TradingOptionsProps) {
         direction: data.direction as "up" | "down",
         amount: data.amount,
         profitPercentage: profitPercent,
-        endTime,
+        endTime: data.endTime ? new Date(data.endTime) : endTime,
         cryptoId: data.cryptoId,
         cryptoSymbol: crypto.symbol.toUpperCase()
       });
