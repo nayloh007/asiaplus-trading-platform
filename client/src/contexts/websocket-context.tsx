@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef, useCallback, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useCallback, useState, useMemo } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useQuery } from '@tanstack/react-query';
 import { type Trade } from '@shared/schema';
@@ -29,23 +29,17 @@ interface WebSocketProviderProps {
 
 export function WebSocketProvider({ children }: WebSocketProviderProps) {
   const { user } = useAuth();
-  const userId = user?.id;
   const socketRef = useRef<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
-  const [trades, setTrades] = useState<Trade[]>([]);
+  
+  // Stabilize user ID to prevent unnecessary re-renders
+  const userId = useMemo(() => user?.id, [user?.id]);
 
   // Query สำหรับ trades ของผู้ใช้
   const { data: userTrades = [] } = useQuery({
     queryKey: ['/api/trades'],
     enabled: !!userId,
   });
-
-  // Update trades state when userTrades changes
-  useEffect(() => {
-    if (userTrades && Array.isArray(userTrades)) {
-      setTrades(userTrades);
-    }
-  }, [userTrades]);
 
   // Stable refresh function
   const refreshTrades = useCallback(() => {
@@ -54,11 +48,24 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     queryClient.invalidateQueries({ queryKey: ['/api/user'] });
   }, []);
 
-  // Initialize WebSocket connection once
+  // Initialize WebSocket connection once when user is available
   useEffect(() => {
-    if (!userId) return;
+    if (!userId) {
+      // Clean up if no user
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = null;
+        setIsConnected(false);
+      }
+      return;
+    }
 
-    // Prevent multiple connections
+    // Prevent multiple connections for the same user
+    if (socketRef.current?.connected) {
+      return;
+    }
+
+    // Disconnect existing socket if any
     if (socketRef.current) {
       socketRef.current.disconnect();
     }
@@ -82,47 +89,37 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
       setIsConnected(false);
     });
 
-    // Trade update handlers
+    // Trade update handlers - only invalidate queries, don't update state directly
     newSocket.on('trade-updated', (updatedTrade: Trade) => {
       console.log('Trade updated:', updatedTrade);
-      
-      setTrades(currentTrades => {
-        const existingTradeIndex = currentTrades.findIndex(trade => trade.id === updatedTrade.id);
-        
-        if (existingTradeIndex >= 0) {
-          // Update existing trade
-          const newTrades = [...currentTrades];
-          newTrades[existingTradeIndex] = updatedTrade;
-          return newTrades;
-        } else {
-          // Add new trade
-          return [...currentTrades, updatedTrade];
-        }
-      });
+      // Just invalidate queries to refetch data
+      queryClient.invalidateQueries({ queryKey: ['/api/trades'] });
     });
 
     newSocket.on('trade-completed', (completedTradeInfo) => {
       console.log('Trade completed:', completedTradeInfo);
-      
-      // Remove completed trade from local state
-      setTrades(currentTrades => 
-        currentTrades.filter(trade => trade.id !== completedTradeInfo.tradeId)
-      );
+      // Just invalidate queries to refetch data
+      queryClient.invalidateQueries({ queryKey: ['/api/trades'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/user'] });
     });
 
     // Cleanup function
     return () => {
-      newSocket.disconnect();
-      socketRef.current = null;
-      setIsConnected(false);
+      if (newSocket.connected) {
+        newSocket.disconnect();
+      }
+      if (socketRef.current === newSocket) {
+        socketRef.current = null;
+        setIsConnected(false);
+      }
     };
-  }, [userId]);
+  }, [userId]); // Only depend on stabilized userId
 
   return (
     <WebSocketContext.Provider value={{
       socket: socketRef.current,
       isConnected,
-      trades,
+      trades: userTrades || [],
       refreshTrades
     }}>
       {children}
