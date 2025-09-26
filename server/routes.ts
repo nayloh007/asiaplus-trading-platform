@@ -226,6 +226,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin routes
   app.get("/api/admin/users", isAdminOrAgent, async (req, res) => {
     try {
+      // Parse pagination parameters
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 50;
+      const offset = (page - 1) * limit;
+      
       let users = await storage.getAllUsers();
       
       // หาก user เป็น agent จะเห็นเฉพาะผู้ใช้ที่ไม่ใช่ admin
@@ -233,12 +238,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
         users = users.filter(user => user.role !== "admin");
       }
       
+      // Apply pagination
+      const totalUsers = users.length;
+      const paginatedUsers = users.slice(offset, offset + limit);
+      
       // Remove passwords from response
-      const sanitizedUsers = users.map(user => ({
+      const sanitizedUsers = paginatedUsers.map(user => ({
         ...user,
         password: undefined
       }));
-      res.json(sanitizedUsers);
+      
+      res.json({
+        users: sanitizedUsers,
+        pagination: {
+          page,
+          limit,
+          total: totalUsers,
+          totalPages: Math.ceil(totalUsers / limit),
+          hasNext: page < Math.ceil(totalUsers / limit),
+          hasPrev: page > 1
+        }
+      });
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch users" });
     }
@@ -296,8 +316,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/admin/trades", isAdminOrAgent, async (req, res) => {
     try {
-      const trades = await storage.getAllTrades();
-      res.json(trades);
+      // Parse pagination parameters
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 50;
+      const offset = (page - 1) * limit;
+      
+      const allTrades = await storage.getAllTrades();
+      
+      // Apply pagination
+      const totalTrades = allTrades.length;
+      const paginatedTrades = allTrades.slice(offset, offset + limit);
+      
+      res.json({
+        trades: paginatedTrades,
+        pagination: {
+          page,
+          limit,
+          total: totalTrades,
+          totalPages: Math.ceil(totalTrades / limit),
+          hasNext: page < Math.ceil(totalTrades / limit),
+          hasPrev: page > 1
+        }
+      });
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch trades" });
     }
@@ -447,8 +487,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // API endpoint สำหรับแอดมินดึงรายการธุรกรรมทั้งหมด
   app.get("/api/admin/transactions", isAdminOrAgent, async (req, res) => {
     try {
-      const transactions = await storage.getAllTransactions();
-      res.json(transactions);
+      // Parse pagination parameters
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 50;
+      const offset = (page - 1) * limit;
+      
+      const allTransactions = await storage.getAllTransactions();
+      
+      // Apply pagination
+      const totalTransactions = allTransactions.length;
+      const paginatedTransactions = allTransactions.slice(offset, offset + limit);
+      
+      res.json({
+        transactions: paginatedTransactions,
+        pagination: {
+          page,
+          limit,
+          total: totalTransactions,
+          totalPages: Math.ceil(totalTransactions / limit),
+          hasNext: page < Math.ceil(totalTransactions / limit),
+          hasPrev: page > 1
+        }
+      });
     } catch (error) {
       console.error("Error fetching all transactions:", error);
       res.status(500).json({ message: "Failed to fetch transactions" });

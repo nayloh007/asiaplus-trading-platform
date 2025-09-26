@@ -3,6 +3,37 @@ import { sqliteTable, integer as sqliteInteger, text as sqliteText } from 'drizz
 import { sql } from 'drizzle-orm';
 import { z } from 'zod';
 
+// Pagination types
+export interface PaginationInfo {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  pagination: PaginationInfo;
+}
+
+// Admin API response types
+export interface AdminUsersResponse {
+  users: User[];
+  pagination: PaginationInfo;
+}
+
+export interface AdminTradesResponse {
+  trades: Trade[];
+  pagination: PaginationInfo;
+}
+
+export interface AdminTransactionsResponse {
+  transactions: Transaction[];
+  pagination: PaginationInfo;
+}
+
 // Check if we're using SQLite (safe for browser)
 const useSqlite = typeof process !== 'undefined' && process.env?.USE_SQLITE === 'true';
 

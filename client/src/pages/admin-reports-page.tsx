@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { User, Trade, Transaction } from "@shared/schema";
+import { User, Trade, Transaction, AdminUsersResponse, AdminTradesResponse, AdminTransactionsResponse } from "@shared/schema";
 import { DesktopContainer } from "@/components/layout/desktop-container";
 import { AdminSidebar } from "@/components/layout/admin-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -58,18 +58,35 @@ export default function AdminReportsPage() {
   const [dateRange, setDateRange] = useState("last7days");
   const [chartType, setChartType] = useState("bar");
   
-  // Fetch data
-  const { data: users } = useQuery<User[]>({
-    queryKey: ["/api/admin/users"],
+  // Fetch data with pagination (get all data for reports)
+  const { data: usersResponse } = useQuery<AdminUsersResponse>({
+    queryKey: ["/api/admin/users", { page: 1, limit: 10000 }], // Get all users for reports
+    queryFn: async () => {
+      const response = await fetch("/api/admin/users?page=1&limit=10000");
+      return response.json();
+    }
   });
   
-  const { data: trades } = useQuery<Trade[]>({
-    queryKey: ["/api/admin/trades"],
+  const { data: tradesResponse } = useQuery<AdminTradesResponse>({
+    queryKey: ["/api/admin/trades", { page: 1, limit: 10000 }], // Get all trades for reports
+    queryFn: async () => {
+      const response = await fetch("/api/admin/trades?page=1&limit=10000");
+      return response.json();
+    }
   });
   
-  const { data: transactions } = useQuery<Transaction[]>({
-    queryKey: ["/api/admin/transactions"],
+  const { data: transactionsResponse } = useQuery<AdminTransactionsResponse>({
+    queryKey: ["/api/admin/transactions", { page: 1, limit: 10000 }], // Get all transactions for reports
+    queryFn: async () => {
+      const response = await fetch("/api/admin/transactions?page=1&limit=10000");
+      return response.json();
+    }
   });
+
+  // Extract data from paginated responses
+  const users = usersResponse?.users || [];
+  const trades = tradesResponse?.trades || [];
+  const transactions = transactionsResponse?.transactions || [];
 
   // Calculate metrics based on date range
   const pastDays = dateRange === "last7days" ? 7 : dateRange === "last30days" ? 30 : 90;

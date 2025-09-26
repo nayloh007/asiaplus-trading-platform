@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { User, Trade, Transaction } from "@shared/schema";
+import { User, Trade, Transaction, AdminUsersResponse, AdminTradesResponse, AdminTransactionsResponse } from "@shared/schema";
 import { DesktopContainer } from "@/components/layout/desktop-container";
 import { AdminSidebar } from "@/components/layout/admin-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -53,18 +53,35 @@ const getLast7Days = () => {
 };
 
 export default function AdminDashboardPage() {
-  // Fetch data
-  const { data: users } = useQuery<User[]>({
-    queryKey: ["/api/admin/users"],
+  // Fetch data with pagination (first page only for dashboard overview)
+  const { data: usersResponse } = useQuery<AdminUsersResponse>({
+    queryKey: ["/api/admin/users", { page: 1, limit: 1000 }], // Get more users for dashboard stats
+    queryFn: async () => {
+      const response = await fetch("/api/admin/users?page=1&limit=1000");
+      return response.json();
+    }
   });
   
-  const { data: trades } = useQuery<Trade[]>({
-    queryKey: ["/api/admin/trades"],
+  const { data: tradesResponse } = useQuery<AdminTradesResponse>({
+    queryKey: ["/api/admin/trades", { page: 1, limit: 1000 }], // Get more trades for dashboard stats
+    queryFn: async () => {
+      const response = await fetch("/api/admin/trades?page=1&limit=1000");
+      return response.json();
+    }
   });
   
-  const { data: transactions } = useQuery<Transaction[]>({
-    queryKey: ["/api/admin/transactions"],
+  const { data: transactionsResponse } = useQuery<AdminTransactionsResponse>({
+    queryKey: ["/api/admin/transactions", { page: 1, limit: 1000 }], // Get more transactions for dashboard stats
+    queryFn: async () => {
+      const response = await fetch("/api/admin/transactions?page=1&limit=1000");
+      return response.json();
+    }
   });
+
+  // Extract data from paginated responses
+  const users = usersResponse?.users || [];
+  const trades = tradesResponse?.trades || [];
+  const transactions = transactionsResponse?.transactions || [];
 
   // Calculate summary stats
   const totalUsers = users?.length || 0;

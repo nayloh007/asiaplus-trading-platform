@@ -1,6 +1,6 @@
 import { useState, ChangeEvent } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Transaction, User } from "@shared/schema";
+import { Transaction, User, AdminUsersResponse, AdminTransactionsResponse } from "@shared/schema";
 import { DesktopContainer } from "@/components/layout/desktop-container";
 import { AdminSidebar } from "@/components/layout/admin-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -42,18 +42,30 @@ export default function AdminTransactionsPage() {
   const [loadingApproval, setLoadingApproval] = useState(false);
   const [selectedTab, setSelectedTab] = useState("all");
   
-  // Fetch transactions and users
-  const { data: transactions, isLoading: loadingTransactions } = useQuery<Transaction[]>({
-    queryKey: ["/api/admin/transactions"],
+  // Fetch transactions and users with pagination
+  const { data: transactionsResponse, isLoading: loadingTransactions } = useQuery<AdminTransactionsResponse>({
+    queryKey: ["/api/admin/transactions", { page: 1, limit: 10000 }], // Get all transactions for admin management
+    queryFn: async () => {
+      const response = await fetch("/api/admin/transactions?page=1&limit=10000");
+      return response.json();
+    },
     refetchInterval: 15000, // รีเฟรชทุก 15 วินาที
   });
   
-  const { data: users } = useQuery<User[]>({
-    queryKey: ["/api/admin/users"],
+  const { data: usersResponse } = useQuery<AdminUsersResponse>({
+    queryKey: ["/api/admin/users", { page: 1, limit: 10000 }], // Get all users for lookup
+    queryFn: async () => {
+      const response = await fetch("/api/admin/users?page=1&limit=10000");
+      return response.json();
+    }
   });
 
+  // Extract data from paginated responses
+  const transactions = transactionsResponse?.transactions || [];
+  const users = usersResponse?.users || [];
+
   // Filter transactions based on search query and tab and sort by date (newest first)
-  const filteredTransactions = (transactions?.filter(transaction => {
+  const filteredTransactions = (transactions.filter(transaction => {
     // Filter by type based on selected tab
     if (selectedTab === "deposits" && transaction.type !== "deposit") return false;
     if (selectedTab === "withdrawals" && transaction.type !== "withdraw") return false; 
@@ -80,10 +92,10 @@ export default function AdminTransactionsPage() {
 
   // Calculate statistics
   const stats = {
-    totalDeposits: transactions?.filter(t => t.type === 'deposit').reduce((sum, t) => sum + parseFloat(t.amount), 0) || 0,
-    totalWithdrawals: transactions?.filter(t => t.type === 'withdraw').reduce((sum, t) => sum + parseFloat(t.amount), 0) || 0,
-    pendingCount: transactions?.filter(t => t.status === 'pending').length || 0,
-    pendingAmount: transactions?.filter(t => t.status === 'pending').reduce((sum, t) => sum + parseFloat(t.amount), 0) || 0,
+    totalDeposits: transactions.filter(t => t.type === 'deposit').reduce((sum, t) => sum + parseFloat(t.amount), 0) || 0,
+    totalWithdrawals: transactions.filter(t => t.type === 'withdraw').reduce((sum, t) => sum + parseFloat(t.amount), 0) || 0,
+    pendingCount: transactions.filter(t => t.status === 'pending').length || 0,
+    pendingAmount: transactions.filter(t => t.status === 'pending').reduce((sum, t) => sum + parseFloat(t.amount), 0) || 0,
   };
 
   // Transaction columns
@@ -98,7 +110,7 @@ export default function AdminTransactionsPage() {
       key: 'user',
       header: 'ผู้ใช้',
       cell: (transaction: Transaction) => {
-        const user = users?.find(u => u.id === transaction.userId);
+        const user = users.find(u => u.id === transaction.userId);
         return (
           <div className="flex flex-col">
             <span className="font-medium">{user?.fullName || `ผู้ใช้ ${transaction.userId}`}</span>
@@ -450,13 +462,13 @@ export default function AdminTransactionsPage() {
                       <TabsTrigger value="deposits" className="flex-1">
                         เงินฝาก
                         <Badge variant="default" className="ml-2 bg-green-500">
-                          {transactions?.filter(t => t.type === 'deposit').length || 0}
+                          {transactions.filter(t => t.type === 'deposit').length || 0}
                         </Badge>
                       </TabsTrigger>
                       <TabsTrigger value="withdrawals" className="flex-1">
                         เงินถอน
                         <Badge variant="default" className="ml-2 bg-blue-500">
-                          {transactions?.filter(t => t.type === 'withdraw').length || 0}
+                          {transactions.filter(t => t.type === 'withdraw').length || 0}
                         </Badge>
                       </TabsTrigger>
                       <TabsTrigger value="pending" className="flex-1">
@@ -515,7 +527,7 @@ export default function AdminTransactionsPage() {
                 
                 <div className="text-muted-foreground">ผู้ใช้งาน:</div>
                 <div>
-                  {users?.find(u => u.id === selectedTransaction.userId)?.username}
+                  {users.find(u => u.id === selectedTransaction.userId)?.username}
                   <div className="text-xs text-muted-foreground">
                     ผู้ใช้ #{selectedTransaction.userId}
                   </div>

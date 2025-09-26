@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef, useCallback } from 'react';
+import { createContext, useContext, useEffect, useRef, useCallback, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useQuery } from '@tanstack/react-query';
 import { type Trade } from '@shared/schema';
@@ -31,8 +31,8 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
   const { user } = useAuth();
   const userId = user?.id;
   const socketRef = useRef<Socket | null>(null);
-  const isConnectedRef = useRef(false);
-  const tradesRef = useRef<Trade[]>([]);
+  const [isConnected, setIsConnected] = useState(false);
+  const [trades, setTrades] = useState<Trade[]>([]);
 
   // Query สำหรับ trades ของผู้ใช้
   const { data: userTrades = [] } = useQuery({
@@ -40,10 +40,10 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     enabled: !!userId,
   });
 
-  // Update trades ref when userTrades changes
+  // Update trades state when userTrades changes
   useEffect(() => {
     if (userTrades && Array.isArray(userTrades)) {
-      tradesRef.current = userTrades;
+      setTrades(userTrades);
     }
   }, [userTrades]);
 
@@ -73,39 +73,40 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     // Connection event handlers
     newSocket.on('connect', () => {
       console.log('WebSocket connected');
-      isConnectedRef.current = true;
+      setIsConnected(true);
       newSocket.emit('join-user-room', userId);
     });
 
     newSocket.on('disconnect', () => {
       console.log('WebSocket disconnected');
-      isConnectedRef.current = false;
+      setIsConnected(false);
     });
 
     // Trade update handlers
     newSocket.on('trade-updated', (updatedTrade: Trade) => {
       console.log('Trade updated:', updatedTrade);
       
-      const currentTrades = tradesRef.current;
-      const existingTradeIndex = currentTrades.findIndex(trade => trade.id === updatedTrade.id);
-      
-      if (existingTradeIndex >= 0) {
-        // Update existing trade
-        const newTrades = [...currentTrades];
-        newTrades[existingTradeIndex] = updatedTrade;
-        tradesRef.current = newTrades;
-      } else {
-        // Add new trade
-        tradesRef.current = [...currentTrades, updatedTrade];
-      }
+      setTrades(currentTrades => {
+        const existingTradeIndex = currentTrades.findIndex(trade => trade.id === updatedTrade.id);
+        
+        if (existingTradeIndex >= 0) {
+          // Update existing trade
+          const newTrades = [...currentTrades];
+          newTrades[existingTradeIndex] = updatedTrade;
+          return newTrades;
+        } else {
+          // Add new trade
+          return [...currentTrades, updatedTrade];
+        }
+      });
     });
 
     newSocket.on('trade-completed', (completedTradeInfo) => {
       console.log('Trade completed:', completedTradeInfo);
       
       // Remove completed trade from local state
-      tradesRef.current = tradesRef.current.filter(
-        trade => trade.id !== completedTradeInfo.tradeId
+      setTrades(currentTrades => 
+        currentTrades.filter(trade => trade.id !== completedTradeInfo.tradeId)
       );
     });
 
@@ -113,15 +114,15 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     return () => {
       newSocket.disconnect();
       socketRef.current = null;
-      isConnectedRef.current = false;
+      setIsConnected(false);
     };
   }, [userId]);
 
   return (
     <WebSocketContext.Provider value={{
       socket: socketRef.current,
-      isConnected: isConnectedRef.current,
-      trades: tradesRef.current,
+      isConnected,
+      trades,
       refreshTrades
     }}>
       {children}

@@ -9,7 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
-// Import รูปภาพจาก assets
+// Import รูปภาพจาก assets (ใช้ WebP ที่ปรับปรุงแล้ว)
 import aspSlide1 from "@/assets/ASP.jpg";
 import aspSlide2 from "@/assets/เอเซีย-พลัส_1758695663097.jpg";
 import aspSlide3 from "@/assets/9e580530fe2e1b35827f96b7f38b3804_1758695673871.jpg";

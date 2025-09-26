@@ -7,44 +7,55 @@ import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute, AdminRoute } from "@/lib/protected-route";
 import { WebSocketProvider } from "@/contexts/websocket-context";
 import { SplashScreen } from "@/components/splash-screen";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense, lazy } from "react";
 import { ThemeProvider } from "next-themes";
+import { Loader2 } from "lucide-react";
 
-import NotFound from "@/pages/not-found";
-import HomePage from "@/pages/home-page";
-import AuthPage from "@/pages/auth-page";
-import TradingPage from "@/pages/trading-page";
-import AdminPage from "@/pages/admin-page";
-import AdminDashboardPage from "@/pages/admin-dashboard-page";
-import AdminUsersPage from "@/pages/admin-users-page";
-import AdminTransactionsPage from "@/pages/admin-transactions-page";
-import AdminTradesPage from "@/pages/admin-trades-page";
-import AdminReportsPage from "@/pages/admin-reports-page";
-import AdminSettingsPage from "@/pages/admin-settings-page";
-import WalletPage from "@/pages/wallet-page";
-import ProfilePage from "@/pages/profile-page";
-import NewsPage from "@/pages/news-page";
-import TradeHistoryPage from "@/pages/trade-history-page";
+// Lazy load all page components
+const NotFound = lazy(() => import("@/pages/not-found"));
+const HomePage = lazy(() => import("@/pages/home-page"));
+const AuthPage = lazy(() => import("@/pages/auth-page"));
+const TradingPage = lazy(() => import("@/pages/trading-page"));
+const AdminPage = lazy(() => import("@/pages/admin-page"));
+const AdminDashboardPage = lazy(() => import("@/pages/admin-dashboard-page"));
+const AdminUsersPage = lazy(() => import("@/pages/admin-users-page"));
+const AdminTransactionsPage = lazy(() => import("@/pages/admin-transactions-page"));
+const AdminTradesPage = lazy(() => import("@/pages/admin-trades-page"));
+const AdminReportsPage = lazy(() => import("@/pages/admin-reports-page"));
+const AdminSettingsPage = lazy(() => import("@/pages/admin-settings-page"));
+const WalletPage = lazy(() => import("@/pages/wallet-page"));
+const ProfilePage = lazy(() => import("@/pages/profile-page"));
+const NewsPage = lazy(() => import("@/pages/news-page"));
+const TradeHistoryPage = lazy(() => import("@/pages/trade-history-page"));
+
+// Loading component for lazy-loaded routes
+const PageLoader = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+  </div>
+);
 
 function Router() {
   return (
-    <Switch>
-      <ProtectedRoute path="/" component={HomePage} />
-      <ProtectedRoute path="/trade" component={TradingPage} />
-      <ProtectedRoute path="/trades/history" component={TradeHistoryPage} />
-      <ProtectedRoute path="/wallet" component={WalletPage} />
-      <ProtectedRoute path="/profile" component={ProfilePage} />
-      <ProtectedRoute path="/news" component={NewsPage} />
-      <AdminRoute path="/admin" component={AdminDashboardPage} />
-      <AdminRoute path="/admin/users" component={AdminUsersPage} />
-      <AdminRoute path="/admin/transactions" component={AdminTransactionsPage} />
-      <AdminRoute path="/admin/trades" component={AdminTradesPage} />
-      <AdminRoute path="/admin/reports" component={AdminReportsPage} />
-      <AdminRoute path="/admin/settings" component={AdminSettingsPage} />
-      <AdminRoute path="/admin/old" component={AdminPage} />
-      <Route path="/auth" component={AuthPage} />
-      <Route component={NotFound} />
-    </Switch>
+    <Suspense fallback={<PageLoader />}>
+      <Switch>
+        <ProtectedRoute path="/" component={HomePage} />
+        <ProtectedRoute path="/trade" component={TradingPage} />
+        <ProtectedRoute path="/trades/history" component={TradeHistoryPage} />
+        <ProtectedRoute path="/wallet" component={WalletPage} />
+        <ProtectedRoute path="/profile" component={ProfilePage} />
+        <ProtectedRoute path="/news" component={NewsPage} />
+        <AdminRoute path="/admin" component={AdminDashboardPage} />
+        <AdminRoute path="/admin/users" component={AdminUsersPage} />
+        <AdminRoute path="/admin/transactions" component={AdminTransactionsPage} />
+        <AdminRoute path="/admin/trades" component={AdminTradesPage} />
+        <AdminRoute path="/admin/reports" component={AdminReportsPage} />
+        <AdminRoute path="/admin/settings" component={AdminSettingsPage} />
+        <AdminRoute path="/admin/old" component={AdminPage} />
+        <Route path="/auth" component={AuthPage} />
+        <Route component={NotFound} />
+      </Switch>
+    </Suspense>
   );
 }
 

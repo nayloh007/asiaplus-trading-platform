@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import stockMarketGraph from "../assets/stock_market_graph.png";
+import stockMarketGraph from "../assets/optimized/stock_market_graph.webp";
 import asiaLogo from "../assets/Asia_Plus_Securities.png";
 
 interface SplashScreenProps {

@@ -1,54 +1,37 @@
 import { useState } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { AdminLayout } from "@/components/layout/admin-layout";
-import { Trade, User } from "@shared/schema";
-import { apiRequest, queryClient } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
-import { format } from "date-fns";
-import { th } from "date-fns/locale";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
-} from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { User, Trade, AdminUsersResponse, AdminTradesResponse } from "@shared/schema";
+import { DesktopContainer } from "@/components/layout/desktop-container";
+import { AdminSidebar } from "@/components/layout/admin-sidebar";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowUpDown, ChevronDown, Search, MoreHorizontal, Trophy, X, Check, RefreshCcw } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { formatCurrency, formatShortDate } from "@/lib/formatters";
+import { apiRequest } from "@/lib/api";
+import {
+  Search,
+  Bell,
+  TrendingUp,
+  TrendingDown,
+  Activity,
+  CheckCircle,
+  XCircle,
+  Clock,
+  AlertTriangle,
+  Eye,
+  Edit,
+  Filter,
+  Download,
+  RefreshCw,
+  DollarSign,
+  Users,
+  BarChart
+} from "lucide-react";
 
 // ฟังก์ชันช่วยจัดรูปแบบวันที่
 const formatDate = (date: Date | string | null) => {
@@ -72,16 +55,29 @@ export default function AdminTradesPage() {
   const [selectedTrade, setSelectedTrade] = useState<Trade | null>(null);
   const [openPredeterminedDialog, setOpenPredeterminedDialog] = useState(false);
   const [predeterminedResult, setPredeterminedResult] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
-  // ดึงข้อมูลการเทรด
-  const { data: trades, isLoading } = useQuery<Trade[]>({
-    queryKey: ["/api/admin/trades"],
+  // Fetch data with pagination
+  const { data: tradesResponse, isLoading } = useQuery<AdminTradesResponse>({
+    queryKey: ["/api/admin/trades", { page: 1, limit: 10000 }], // Get all trades for admin management
+    queryFn: async () => {
+      const response = await fetch("/api/admin/trades?page=1&limit=10000");
+      return response.json();
+    },
+    refetchInterval: 15000, // Refresh every 15 seconds
+  });
+  
+  const { data: usersResponse } = useQuery<AdminUsersResponse>({
+    queryKey: ["/api/admin/users", { page: 1, limit: 10000 }], // Get all users for lookup
+    queryFn: async () => {
+      const response = await fetch("/api/admin/users?page=1&limit=10000");
+      return response.json();
+    }
   });
 
-  // ดึงข้อมูลผู้ใช้ (เพื่อแสดงชื่อผู้ใช้แทน ID)
-  const { data: users } = useQuery<User[]>({
-    queryKey: ["/api/admin/users"],
-  });
+  // Extract data from paginated responses
+  const trades = tradesResponse?.trades || [];
+  const users = usersResponse?.users || [];
 
   // Mutation สำหรับอัพเดทผลลัพธ์ล่วงหน้าของการเทรด
   const predeterminedMutation = useMutation({
@@ -129,7 +125,7 @@ export default function AdminTradesPage() {
   };
 
   // กรองข้อมูลการเทรดตาม search query และ status filter และเรียงลำดับตามวันที่ล่าสุด
-  const filteredTrades = (trades?.filter((trade) => {
+  const filteredTrades = (trades.filter((trade) => {
     // กรองตาม search query
     const matchesSearch =
       searchQuery === "" ||

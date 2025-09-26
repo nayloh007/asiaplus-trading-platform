@@ -1,33 +1,36 @@
 import { useState } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { User, BankAccount } from "@shared/schema";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { User, BankAccount, AdminUsersResponse } from "@shared/schema";
 import { DesktopContainer } from "@/components/layout/desktop-container";
 import { AdminSidebar } from "@/components/layout/admin-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { DataTable } from "@/components/ui/data-table";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { formatCurrency, formatShortDate } from "@/lib/formatters";
-import { apiRequest, queryClient } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/hooks/use-auth";
+import { apiRequest } from "@/lib/api";
 import {
   Search,
   Bell,
   Users,
-  Plus,
+  Eye,
   Edit,
-  Trash2,
-  ShieldAlert,
   Shield,
-  RefreshCw,
-  FilePenLine,
+  ShieldCheck,
+  UserCheck,
+  UserX,
   CreditCard,
-  Landmark
+  Wallet,
+  Activity,
+  TrendingUp,
+  DollarSign,
+  AlertTriangle,
+  CheckCircle,
+  XCircle,
+  Clock
 } from "lucide-react";
 
 export default function AdminUsersPage() {
@@ -40,11 +43,19 @@ export default function AdminUsersPage() {
   const [showEditBankAccountDialog, setShowEditBankAccountDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedBankAccount, setSelectedBankAccount] = useState<BankAccount | null>(null);
+  const queryClient = useQueryClient();
   
-  // Fetch users
-  const { data: users, isLoading: loadingUsers } = useQuery<User[]>({
-    queryKey: ["/api/admin/users"],
+  // Fetch data with pagination
+  const { data: usersResponse, isLoading: loadingUsers } = useQuery<AdminUsersResponse>({
+    queryKey: ["/api/admin/users", { page: 1, limit: 10000 }], // Get all users for admin management
+    queryFn: async () => {
+      const response = await fetch("/api/admin/users?page=1&limit=10000");
+      return response.json();
+    }
   });
+
+  // Extract data from paginated response
+  const users = usersResponse?.users || [];
   
   // Fetch bank accounts for selected user
   const { data: userBankAccounts, isLoading: loadingBankAccounts, refetch: refetchBankAccounts } = useQuery<BankAccount[]>({

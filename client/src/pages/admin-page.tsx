@@ -4,7 +4,7 @@ import { BottomNavigation } from "@/components/layout/bottom-navigation";
 import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { DataTable } from "@/components/ui/data-table";
-import { User, Trade, Transaction } from "@shared/schema";
+import { User, Trade, Transaction, AdminUsersResponse, AdminTradesResponse, AdminTransactionsResponse } from "@shared/schema";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency, formatShortDate } from "@/lib/formatters";
 import { Badge } from "@/components/ui/badge";
@@ -26,19 +26,39 @@ export default function AdminPage() {
   const [showTransactionDialog, setShowTransactionDialog] = useState(false);
   const [adminNote, setAdminNote] = useState("");
   const [loadingApproval, setLoadingApproval] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   
-  const { data: users, isLoading: loadingUsers } = useQuery<User[]>({
-    queryKey: ["/api/admin/users"],
+  // Fetch data with pagination
+  const { data: usersResponse, isLoading: loadingUsers } = useQuery<AdminUsersResponse>({
+    queryKey: ["/api/admin/users", { page: 1, limit: 1000 }],
+    queryFn: async () => {
+      const response = await fetch("/api/admin/users?page=1&limit=1000");
+      return response.json();
+    }
   });
   
-  const { data: trades, isLoading: loadingTrades } = useQuery<Trade[]>({
-    queryKey: ["/api/admin/trades"],
+  const { data: tradesResponse, isLoading: loadingTrades } = useQuery<AdminTradesResponse>({
+    queryKey: ["/api/admin/trades", { page: 1, limit: 1000 }],
+    queryFn: async () => {
+      const response = await fetch("/api/admin/trades?page=1&limit=1000");
+      return response.json();
+    }
   });
   
-  const { data: transactions, isLoading: loadingTransactions } = useQuery<Transaction[]>({
-    queryKey: ["/api/admin/transactions"],
+  const { data: transactionsResponse, isLoading: loadingTransactions } = useQuery<AdminTransactionsResponse>({
+    queryKey: ["/api/admin/transactions", { page: 1, limit: 1000 }],
+    queryFn: async () => {
+      const response = await fetch("/api/admin/transactions?page=1&limit=1000");
+      return response.json();
+    },
     refetchInterval: 15000, // รีเฟรชทุก 15 วินาที
   });
+
+  // Extract data from paginated responses
+  const users = usersResponse?.users || [];
+  const trades = tradesResponse?.trades || [];
+  const transactions = transactionsResponse?.transactions || [];
 
   const userCount = users?.length || 0;
   const activeTradesCount = trades?.filter(t => t.status === 'active').length || 0;
