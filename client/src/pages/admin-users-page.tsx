@@ -32,7 +32,10 @@ import {
   AlertTriangle,
   CheckCircle,
   XCircle,
-  Clock
+  Clock,
+  FilePenLine,
+  Plus,
+  ShieldAlert
 } from "lucide-react";
 
 export default function AdminUsersPage() {
