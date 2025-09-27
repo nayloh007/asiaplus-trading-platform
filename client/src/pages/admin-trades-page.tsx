@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { DesktopContainer } from "@/components/layout/desktop-container";
 import { AdminSidebar } from "@/components/layout/admin-sidebar";
+import { AdminLayout } from "@/components/layout/admin-layout";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { DataTable } from "@/components/ui/data-table";
 import { formatCurrency, formatShortDate } from "@/lib/formatters";
 import { apiRequest } from "@/lib/api";
 import {
@@ -35,19 +37,9 @@ import {
   BarChart
 } from "lucide-react";
 
-// ฟังก์ชันช่วยจัดรูปแบบวันที่
+// ฟังก์ชันช่วยจัดรูปแบบวันที่ - ใช้ formatShortDate จาก formatters แทน
 const formatDate = (date: Date | string | null) => {
-  if (!date) return "-";
-  return format(new Date(date), "dd MMM yyyy HH:mm", { locale: th });
-};
-
-// ฟังก์ชันช่วยจัดรูปแบบจำนวนเงิน
-const formatCurrency = (amount: number) => {
-  return new Intl.NumberFormat("th-TH", {
-    style: "currency",
-    currency: "THB",
-    minimumFractionDigits: 2,
-  }).format(amount);
+  return formatShortDate(date);
 };
 
 export default function AdminTradesPage() {
