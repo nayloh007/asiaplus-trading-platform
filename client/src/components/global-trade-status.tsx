@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useWebSocket } from '@/contexts/websocket-context';
+import { useWebSocket } from '@/hooks/use-websocket';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -140,6 +140,11 @@ export function GlobalTradeStatus() {
                                 onComplete={() => {
                                   // อัปเดตข้อมูลหลังจากการเทรดเสร็จสิ้น
                                   console.log(`Trade ${trade.id} completed`);
+                                  // ตรวจสอบว่าการเทรดเสร็จสิ้นแล้วหรือไม่
+                                  if (trade.status === 'completed') {
+                                    // ลบการเทรดที่เสร็จสิ้นแล้วออกจาก active trades
+                                    removeActiveTrade(trade.id);
+                                  }
                                 }}
                               />
                             </div>

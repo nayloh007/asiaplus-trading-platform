@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "./use-auth";
 import { useEffect } from "react";
-import { useWebSocket } from "@/contexts/websocket-context";
+import { useWebSocket } from "@/hooks/use-websocket";
 
 export type ActiveTradeData = {
   id: number;

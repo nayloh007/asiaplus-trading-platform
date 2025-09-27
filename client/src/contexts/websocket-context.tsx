@@ -12,16 +12,12 @@ interface WebSocketContextType {
   refreshTrades: () => void;
 }
 
-const WebSocketContext = createContext<WebSocketContextType>({
+export const WebSocketContext = createContext<WebSocketContextType>({
   socket: null,
   isConnected: false,
   trades: [],
   refreshTrades: () => {}
 });
-
-export function useWebSocket() {
-  return useContext(WebSocketContext);
-}
 
 interface WebSocketProviderProps {
   children: React.ReactNode;
@@ -126,3 +122,8 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
     </WebSocketContext.Provider>
   );
 }
+
+
+
+// Add displayName for Fast Refresh compatibility
+WebSocketProvider.displayName = 'WebSocketProvider';

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Progress } from "./ui/progress";
 import { formatCurrency } from "@/lib/formatters";
@@ -46,31 +46,25 @@ export function TradeCountdown({
   // คำนวณว่าเป็นไปตามทิศทางที่ทายหรือไม่
   const isWinning = (direction === "up" && isPriceUp) || (direction === "down" && isPriceDown);
   
+  // Memoize onComplete to prevent unnecessary re-renders
+  const memoizedOnComplete = useCallback(() => {
+    if (onComplete) {
+      onComplete();
+    }
+  }, [onComplete]);
+  
   // คำนวณเวลาที่เหลือโดยใช้ endTime
   useEffect(() => {
-    console.log("🔄 TradeCountdown useEffect started", {
-      duration,
-      endTime: calculatedEndTime,
-      currentTime: new Date()
-    });
-    
     // ฟังก์ชั่นสำหรับคำนวณเวลาที่เหลือ
     const calculateTimeLeft = () => {
       const now = new Date();
       const diff = Math.max(0, Math.floor((calculatedEndTime.getTime() - now.getTime()) / 1000));
-      console.log("⏰ Calculating time left:", {
-        now: now.toISOString(),
-        endTime: calculatedEndTime.toISOString(),
-        diffMs: calculatedEndTime.getTime() - now.getTime(),
-        diffSeconds: diff
-      });
       return diff;
     };
     
     // ตั้งค่าเวลาเริ่มต้น
     const initialTimeLeft = calculateTimeLeft();
     setTimeLeft(initialTimeLeft);
-    console.log("🚀 Initial time left set to:", initialTimeLeft);
     
     // เพิ่มเอฟเฟคที่จะทำให้การ์ดเต้นเมื่อเหลือเวลาไม่มาก
     const pulseTimer = setInterval(() => {
@@ -84,25 +78,20 @@ export function TradeCountdown({
     // ตั้งเวลานับถอยหลังโดยคำนวณจากเวลาจริง
     const timer = setInterval(() => {
       const newTimeLeft = calculateTimeLeft();
-      console.log("⏱️ Timer tick - new time left:", newTimeLeft);
       setTimeLeft(newTimeLeft);
       
       if (newTimeLeft <= 0) {
-        console.log("⏰ Timer completed!");
         clearInterval(timer);
         clearInterval(pulseTimer);
-        if (onComplete) {
-          onComplete();
-        }
+        memoizedOnComplete();
       }
     }, 1000);
     
     return () => {
-      console.log("🧹 TradeCountdown cleanup");
       clearInterval(timer);
       clearInterval(pulseTimer);
     };
-  }, [calculatedEndTime, onComplete]);
+  }, [calculatedEndTime, memoizedOnComplete]);
   
   // แปลงวินาทีเป็นรูปแบบ MM:SS
   const formatTime = (seconds: number) => {
@@ -175,3 +164,6 @@ export function TradeCountdown({
     </Card>
   );
 }
+
+// Add displayName for Fast Refresh compatibility
+TradeCountdown.displayName = 'TradeCountdown';

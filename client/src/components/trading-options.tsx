@@ -21,7 +21,7 @@ import { Separator } from "@/components/ui/separator";
 import { useActiveTrades } from "@/hooks/use-active-trades";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { TradeCountdown } from "@/components/trade-countdown";
-import { useWebSocket } from "@/contexts/websocket-context";
+import { useWebSocket } from "@/hooks/use-websocket";
 
 interface TradingOptionsProps {
   crypto: CryptoCurrency;
@@ -116,8 +116,6 @@ export function TradingOptions({ crypto }: TradingOptionsProps) {
       
       // รีเฟรช real-time trades จาก WebSocket
       refreshTrades();
-      
-      console.log("ข้อมูลการเทรดที่ได้รับ:", data);
       
       // ดึงค่า seconds จาก tradeOptions โดยเปรียบเทียบกับ duration ที่ส่งไป
       const durationInSeconds = parseInt(data.duration);
