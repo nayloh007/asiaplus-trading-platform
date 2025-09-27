@@ -15,6 +15,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { DataTable } from "@/components/ui/data-table";
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { formatCurrency, formatShortDate } from "@/lib/formatters";
 import { apiRequest } from "@/lib/api";
 import {
@@ -34,7 +36,8 @@ import {
   RefreshCcw,
   DollarSign,
   Users,
-  BarChart
+  BarChart,
+  MoreHorizontal
 } from "lucide-react";
 
 // ฟังก์ชันช่วยจัดรูปแบบวันที่ - ใช้ formatShortDate จาก formatters แทน
