@@ -31,7 +31,7 @@ import {
   Edit,
   Filter,
   Download,
-  RefreshCw,
+  RefreshCcw,
   DollarSign,
   Users,
   BarChart
