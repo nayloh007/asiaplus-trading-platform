@@ -9,32 +9,22 @@ import {
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
-// Import รูปภาพจาก assets
-import slide1 from "@/assets/1.jpg";
-import slide2 from "@/assets/2.jpg";
-import slide3 from "@/assets/3.jpg";
-import slide4 from "@/assets/4.jpg";
-import slide5 from "@/assets/5.jpg";
-import slide6 from "@/assets/6.jpg";
-import slide7 from "@/assets/7.jpg";
-import slide8 from "@/assets/8.jpg";
-import slide9 from "@/assets/9.jpg";
-
+// ใช้ URL โดยตรงแทนการ import
 export function AdSlider() {
   const [api, setApi] = useState<any>();
   const [activeIndex, setActiveIndex] = useState(0);
   
-  // ใช้รูปภาพใหม่จากโฟลเดอร์ img
+  // ใช้รูปภาพจาก assets โดยตรง
   const imageArray = [
-    { src: slide1, alt: "รูปภาพสไลด์ 1" },
-    { src: slide2, alt: "รูปภาพสไลด์ 2" },
-    { src: slide3, alt: "รูปภาพสไลด์ 3" },
-    { src: slide4, alt: "รูปภาพสไลด์ 4" },
-    { src: slide5, alt: "รูปภาพสไลด์ 5" },
-    { src: slide6, alt: "รูปภาพสไลด์ 6" },
-    { src: slide7, alt: "รูปภาพสไลด์ 7" },
-    { src: slide8, alt: "รูปภาพสไลด์ 8" },
-    { src: slide9, alt: "รูปภาพสไลด์ 9" }
+    { src: "/assets/1.jpg", alt: "รูปภาพสไลด์ 1" },
+    { src: "/assets/2.jpg", alt: "รูปภาพสไลด์ 2" },
+    { src: "/assets/3.jpg", alt: "รูปภาพสไลด์ 3" },
+    { src: "/assets/4.jpg", alt: "รูปภาพสไลด์ 4" },
+    { src: "/assets/5.jpg", alt: "รูปภาพสไลด์ 5" },
+    { src: "/assets/6.jpg", alt: "รูปภาพสไลด์ 6" },
+    { src: "/assets/7.jpg", alt: "รูปภาพสไลด์ 7" },
+    { src: "/assets/8.jpg", alt: "รูปภาพสไลด์ 8" },
+    { src: "/assets/9.jpg", alt: "รูปภาพสไลด์ 9" }
   ];
 
   useEffect(() => {
