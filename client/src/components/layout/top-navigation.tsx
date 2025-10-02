@@ -19,7 +19,7 @@ interface TopNavigationProps {
   actionButton?: React.ReactNode;
 }
 
-export function TopNavigation({ title = "ASIA PLUS", showBackButton = false, onBack, actionButton }: TopNavigationProps) {
+export function TopNavigation({ title = "MAYBANK", showBackButton = false, onBack, actionButton }: TopNavigationProps) {
   const { user, logoutMutation } = useAuth();
   const [, setLocation] = useLocation();
 
@@ -49,11 +49,11 @@ export function TopNavigation({ title = "ASIA PLUS", showBackButton = false, onB
           )}
           <div className="text-xl font-bold flex items-center">
             <img 
-              src="https://cdn2.downdetector.com/static/uploads/c/300/e49bc/Asia_Plus_Securities.png" 
-              alt="โลโก้ ASIA PLUS" 
-              className="h-10 mr-2" 
+              src="/maybank-logo.svg" 
+              alt="โลโก้ MAYBANK" 
+              className="h-8 mr-2" 
             />
-            <span className={title === "ASIA PLUS" ? "hidden" : ""}>{title}</span>
+            <span className={title === "MAYBANK" ? "hidden" : ""}>{title}</span>
           </div>
         </div>
         
