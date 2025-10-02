@@ -31,7 +31,7 @@ import { useToast } from "@/hooks/use-toast";
 import { formatCurrency, formatShortDate } from "@/lib/formatters";
 import { Loader2, ArrowUp, ArrowDown, PlusCircle, Trash2, CheckCircle2 } from "lucide-react";
 import { Transaction, BankAccount } from "@shared/schema";
-import asiaLogo from "@assets/Asia_Plus_Securities.png";
+import customLogo from "@assets/custom-logo.png";
 import cryptoBgImage from "@assets/image_1748118681634.png";
 
 export default function WalletPage() {

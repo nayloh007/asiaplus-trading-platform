@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import stockMarketGraph from "../assets/optimized/stock_market_graph.webp";
-import asiaLogo from "../assets/Asia_Plus_Securities.png";
+import customLogo from "../assets/custom-logo.png";
 
 interface SplashScreenProps {
   onComplete: () => void;
@@ -123,8 +123,8 @@ export function SplashScreen({
             {/* โลโก้ Asia Plus Securities - ทำให้ใหญ่ขึ้นและไม่ถูกเบลอ */}
             <div className="relative z-20 backdrop-filter-none" style={{ filter: 'none' }}>
               <img 
-                src={asiaLogo} 
-                alt="Asia Plus Securities Logo" 
+                src={customLogo} 
+                alt="Custom Logo" 
                 className="w-64 h-32 object-contain"
                 style={{
                   filter: 'drop-shadow(0 0 10px rgba(30,100,200,0.7))'

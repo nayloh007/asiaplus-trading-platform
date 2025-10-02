@@ -9,26 +9,32 @@ import {
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
-// Import รูปภาพจาก assets (ใช้ WebP ที่ปรับปรุงแล้ว)
-import aspSlide1 from "@/assets/ASP.jpg";
-import aspSlide2 from "@/assets/เอเซีย-พลัส_1758695663097.jpg";
-import aspSlide3 from "@/assets/9e580530fe2e1b35827f96b7f38b3804_1758695673871.jpg";
-import aspSlide4 from "@/assets/w644 (1)_1758695727957.jpg";
-import aspSlide5 from "@/assets/gVPK6VaFv8EDKlvFu0Ae_1758695731786.webp";
-import aspSlide6 from "@/assets/Asia-Plus-Securities_1758695735624.jpg";
+// Import รูปภาพจาก assets
+import slide1 from "@/assets/1.jpg";
+import slide2 from "@/assets/2.jpg";
+import slide3 from "@/assets/3.jpg";
+import slide4 from "@/assets/4.jpg";
+import slide5 from "@/assets/5.jpg";
+import slide6 from "@/assets/6.jpg";
+import slide7 from "@/assets/7.jpg";
+import slide8 from "@/assets/8.jpg";
+import slide9 from "@/assets/9.jpg";
 
 export function AdSlider() {
   const [api, setApi] = useState<any>();
   const [activeIndex, setActiveIndex] = useState(0);
   
-  // ใช้รูปภาพใหม่จาก Asia Plus Securities
+  // ใช้รูปภาพใหม่จากโฟลเดอร์ img
   const imageArray = [
-    { src: aspSlide1, alt: "Asia Plus Securities - ที่ปรึกษาการลงทุนมืออาชีพ" },
-    { src: aspSlide2, alt: "Asia Plus Securities - เทคโนโลยีการลงทุนสมัยใหม่" },
-    { src: aspSlide3, alt: "Asia Plus Securities - ส่อง 15 หุ้นไทย ต่างชาติซื้อขายมากสุดในปี 67" },
-    { src: aspSlide4, alt: "Asia Plus Securities - เอเชียพลัส ส่องกำไรกู้วิกฤติ ซื้อเหมาะเทนตรอลหาร์ ชู Top Pick" },
-    { src: aspSlide5, alt: "Asia Plus Securities - การลงทุนอัจฉริยะด้วยเทคโนโลยี" },
-    { src: aspSlide6, alt: "Asia Plus Securities - วิเคราะห์ตลาดหุ้นด้วยข้อมูลแม่นยำ" }
+    { src: slide1, alt: "รูปภาพสไลด์ 1" },
+    { src: slide2, alt: "รูปภาพสไลด์ 2" },
+    { src: slide3, alt: "รูปภาพสไลด์ 3" },
+    { src: slide4, alt: "รูปภาพสไลด์ 4" },
+    { src: slide5, alt: "รูปภาพสไลด์ 5" },
+    { src: slide6, alt: "รูปภาพสไลด์ 6" },
+    { src: slide7, alt: "รูปภาพสไลด์ 7" },
+    { src: slide8, alt: "รูปภาพสไลด์ 8" },
+    { src: slide9, alt: "รูปภาพสไลด์ 9" }
   ];
 
   useEffect(() => {
@@ -76,7 +82,7 @@ export function AdSlider() {
                   onError={(e) => {
                     console.error(`Failed to load image: ${image.alt}`);
                     e.currentTarget.onerror = null;
-                    e.currentTarget.src = aspSlide1; 
+                    e.currentTarget.src = slide1; 
                   }}
                 />
               </div>
