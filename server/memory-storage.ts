@@ -18,11 +18,11 @@ export class MemoryStorage {
   private settings: { [key: string]: string } = {
     // ข้อมูลตั้งต้นสำหรับบัญชีธนาคารและพร้อมเพย์
     bank_name: "ธนาคารกสิกรไทย",
-    bank_account_number: "123-456-7890",
-    bank_account_name: "บริษัท เอเซีย พลัส จำกัด",
-    promptpay_number: "012-345-6789",
-    promptpay_tax_id: "0123456789012",
-    promptpay_name: "บริษัท เอเซีย พลัส จำกัด"
+    bank_account_number: ".",
+    bank_account_name: ".",
+    promptpay_number: ".",
+    promptpay_tax_id: ".",
+    promptpay_name: "."
   };
   private nextUserId = 1;
   private nextTradeId = 1;
