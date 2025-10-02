@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: maybank-trading-platform
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 18.18.0
