@@ -1,6 +1,6 @@
-# Asia Plus Trading Platform
+# Maybank Trading Platform
 
-ระบบเทรดดิ้งสำหรับ Asia Plus Securities พัฒนาด้วย React, TypeScript และ Node.js
+ระบบเทรดดิ้งสำหรับ Maybank พัฒนาด้วย React, TypeScript และ Node.js
 
 ## คุณสมบัติหลัก
 
@@ -43,7 +43,7 @@
 1. **Clone repository**
    ```bash
    git clone <repository-url>
-   cd asiaplus2
+   cd maybank
    ```
 
 2. **ติดตั้ง dependencies**
@@ -93,7 +93,7 @@
 ## โครงสร้างโปรเจ็ค
 
 ```
-asiaplus2/
+maybank/
 ├── client/                 # Frontend (React)
 │   ├── src/
 │   │   ├── components/     # React Components
@@ -176,4 +176,4 @@ npm run type-check
 
 ## License
 
-Private Project - Asia Plus Securities
+Private Project - Maybank

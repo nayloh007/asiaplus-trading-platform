@@ -120,15 +120,13 @@ export function SplashScreen({
             {/* เอฟเฟกต์เรืองแสงด้านหลัง */}
             <div className="absolute w-full h-full rounded-full bg-blue-500/30 blur-xl animate-pulse"></div>
             
-            {/* โลโก้ Asia Plus Securities - ทำให้ใหญ่ขึ้นและไม่ถูกเบลอ */}
+            {/* โลโก้ MAYBANK - ทำให้ใหญ่ขึ้นและไม่ถูกเบลอ */}
             <div className="relative z-20 backdrop-filter-none" style={{ filter: 'none' }}>
               <img 
-                src={customLogo} 
-                alt="Custom Logo" 
-                className="w-64 h-32 object-contain"
-                style={{
-                  filter: 'drop-shadow(0 0 10px rgba(30,100,200,0.7))'
-                }}
+                src="/maybank-logo.svg" 
+                alt="โลโก้ MAYBANK" 
+                className="h-24 md:h-32"
+                style={{ filter: 'none' }}
               />
             </div>
             

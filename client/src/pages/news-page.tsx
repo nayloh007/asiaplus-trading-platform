@@ -12,19 +12,19 @@ import { Button } from "@/components/ui/button";
 // รูปภาพที่ใช้ในข่าว - placeholder
 import placeholderImage from "@/assets/placeholder.svg";
 
-// รูปภาพจาก Asia Plus Securities
-import asiaPlus1 from "@assets/462601494_2872254826265363_8039408733850352485_n.png";
-import asiaPlus2 from "@assets/462884981_2876000042557508_8492050558665398215_n.jpg";
-import asiaPlus3 from "@assets/463194602_2877123072445205_400290765798955497_n.png";
-import asiaPlus4 from "@assets/463199942_2878974105593435_496135016965127313_n.png";
-import asiaPlus5 from "@assets/463883305_2883588198465359_7359262269516360381_n.png";
-import asiaPlus6 from "@assets/469260309_2928765837280928_8586244591954648374_n.png";
-import asiaPlus7 from "@assets/475770537_2978550502302461_2285734999134478019_n.png";
-import asiaPlus8 from "@assets/481193256_3003680446456133_1544279445465180161_n.jpg";
-import asiaPlus9 from "@assets/481247539_3003680433122801_4202088951531435287_n.jpg";
-import asiaPlus10 from "@assets/481265377_3001713059986205_2798521872516734220_n.jpg";
-import asiaPlus11 from "@assets/485370924_3024524554371722_736050699631465514_n.jpg";
-import asiaPlus12 from "@assets/35301242_1006247372866127_4893868337596989440_n.png";
+// รูปภาพจาก assets folder
+import maybank1 from "@/assets/Asia_Plus_Securities.png";
+import maybank2 from "@/assets/ASP.jpg";
+import maybank3 from "@/assets/asia_plus_logo.png";
+import maybank4 from "@/assets/stock_market_graph.png";
+import maybank5 from "@/assets/stock_chart_bg.png";
+import maybank6 from "@/assets/1.jpg";
+import maybank7 from "@/assets/2.jpg";
+import maybank8 from "@/assets/3.jpg";
+import maybank9 from "@/assets/4.jpg";
+import maybank10 from "@/assets/5.jpg";
+import maybank11 from "@/assets/6.jpg";
+import maybank12 from "@/assets/7.jpg";
 
 // ข้อมูลข่าวสารแบบ mock ชั่วคราว
 const mockNews = [
@@ -32,7 +32,7 @@ const mockNews = [
     id: 1,
     title: "Bitcoin (BTC) ทะลุ 80,000 ดอลลาร์แล้ว นักวิเคราะห์คาดอาจแตะ 100,000 ดอลลาร์ในปีนี้",
     summary: "Bitcoin ทำราคาสูงสุดใหม่ที่ 80,000 ดอลลาร์ หลังจากมีการปรับตัวในเชิงบวกอย่างต่อเนื่อง นักวิเคราะห์ชั้นนำคาดการณ์ว่าอาจจะแตะ 100,000 ดอลลาร์ภายในสิ้นปีนี้",
-    imageUrl: asiaPlus8,
+    imageUrl: maybank8,
     date: "15 พ.ค. 2025",
     category: "market",
     isFeatured: true,
@@ -42,7 +42,7 @@ const mockNews = [
     id: 2,
     title: "Ethereum (ETH) เตรียมปรับปรุงโปรโตคอลใหญ่ คาดว่าลดค่าธรรมเนียมได้ถึง 90%",
     summary: "Ethereum เตรียมอัปเดตโปรโตคอลครั้งใหญ่ซึ่งจะช่วยลดค่าธรรมเนียมการทำธุรกรรมลงได้ถึง 90% ผู้ใช้สามารถประหยัดเงินได้มากขึ้นในการใช้งานบนเครือข่าย",
-    imageUrl: asiaPlus9,
+    imageUrl: maybank9,
     date: "14 พ.ค. 2025",
     category: "tech",
     isFeatured: false,
@@ -50,9 +50,9 @@ const mockNews = [
   },
   {
     id: 3,
-    title: "เอเซีย พลัส เปิดตัวฟีเจอร์ใหม่ เพิ่มความปลอดภัยในการเข้าถึงบัญชี",
-    summary: "เอเซีย พลัส เตรียมเปิดตัวฟีเจอร์ใหม่ที่รองรับการยืนยันตัวตนด้วยเทคโนโลยีสมัยใหม่ ช่วยให้ผู้ใช้สามารถเข้าถึงบัญชีได้อย่างปลอดภัยมากขึ้น",
-    imageUrl: asiaPlus11,
+    title: "Maybank เปิดตัวฟีเจอร์ใหม่ เพิ่มความปลอดภัยในการเข้าถึงบัญชี",
+    summary: "Maybank เตรียมเปิดตัวฟีเจอร์ใหม่ที่รองรับการยืนยันตัวตนด้วยเทคโนโลยีสมัยใหม่ ช่วยให้ผู้ใช้สามารถเข้าถึงบัญชีได้อย่างปลอดภัยมากขึ้น",
+    imageUrl: maybank11,
     date: "12 พ.ค. 2025",
     category: "asiap",
     isFeatured: true,
@@ -62,7 +62,7 @@ const mockNews = [
     id: 4,
     title: "กระทรวงการคลังไทยเตรียมออกกฎหมายภาษี NFT และสินทรัพย์ดิจิทัล",
     summary: "กระทรวงการคลังไทยเตรียมออกกฎหมายภาษีสำหรับ NFT และสินทรัพย์ดิจิทัล คาดว่าจะมีผลบังคับใช้ในช่วงไตรมาสที่ 4 ของปีนี้ นักลงทุนควรเตรียมตัวรับมือ",
-    imageUrl: asiaPlus5,
+    imageUrl: maybank5,
     date: "10 พ.ค. 2025",
     category: "regulation",
     isFeatured: false,
@@ -70,9 +70,9 @@ const mockNews = [
   },
   {
     id: 5,
-    title: "เอเซีย พลัส Chain เปิดทดสอบการใช้ THB Programmable Payment บนบล็อกเชน",
-    summary: "เอเซีย พลัส Chain เปิดทดสอบการใช้ THB Programmable Payment ซึ่งเป็นสื่อกลางการชำระเงินด้วยเงินบาทบนระบบบล็อกเชน พร้อมให้ทดสอบการใช้งานภายในปี 2025",
-    imageUrl: asiaPlus1,
+    title: "Maybank Chain เปิดทดสอบการใช้ THB Programmable Payment บนบล็อกเชน",
+    summary: "Maybank Chain เปิดทดสอบการใช้ THB Programmable Payment ซึ่งเป็นสื่อกลางการชำระเงินด้วยเงินบาทบนระบบบล็อกเชน พร้อมให้ทดสอบการใช้งานภายในปี 2025",
+    imageUrl: maybank1,
     date: "8 พ.ค. 2025",
     category: "regulation",
     isFeatured: false,
@@ -80,9 +80,9 @@ const mockNews = [
   },
   {
     id: 6,
-    title: "เอเซีย พลัส Exchange ประกาศเปิดเทรด Grass (GRASS) คริปโตน้องใหม่ล่าสุด",
-    summary: "เอเซีย พลัส Exchange ประกาศเปิดให้ฝาก-ถอน และเทรด Grass (GRASS) คริปโตเคอร์เรนซี่น้องใหม่ล่าสุด เริ่มฝาก-ถอนวันที่ 9 เมษายน และเปิดเทรด 10 เมษายน 2025",
-    imageUrl: asiaPlus3,
+    title: "Maybank Exchange ประกาศเปิดเทรด Grass (GRASS) คริปโตน้องใหม่ล่าสุด",
+    summary: "Maybank Exchange ประกาศเปิดให้ฝาก-ถอน และเทรด Grass (GRASS) คริปโตเคอร์เรนซี่น้องใหม่ล่าสุด เริ่มฝาก-ถอนวันที่ 9 เมษายน และเปิดเทรด 10 เมษายน 2025",
+    imageUrl: maybank3,
     date: "5 พ.ค. 2025",
     category: "market",
     isFeatured: false,
@@ -90,9 +90,9 @@ const mockNews = [
   },
   {
     id: 7,
-    title: "เอเซีย พลัส จัดงาน BLOCKATHON 2023 ชวนนักพัฒนามาร่วมสร้างนวัตกรรมบล็อกเชน",
-    summary: "เอเซีย พลัส จัดงาน BLOCKATHON 2023 เชิญชวนนักพัฒนาและผู้สนใจเทคโนโลยีบล็อกเชนมาร่วมสร้างสรรค์นวัตกรรมและแอปพลิเคชันบนเครือข่าย เอเซีย พลัส Chain",
-    imageUrl: asiaPlus4,
+    title: "Maybank จัดงาน BLOCKATHON 2023 ชวนนักพัฒนามาร่วมสร้างนวัตกรรมบล็อกเชน",
+    summary: "Maybank จัดงาน BLOCKATHON 2023 เชิญชวนนักพัฒนาและผู้สนใจเทคโนโลยีบล็อกเชนมาร่วมสร้างสรรค์นวัตกรรมและแอปพลิเคชันบนเครือข่าย Maybank Chain",
+    imageUrl: maybank4,
     date: "3 พ.ค. 2025",
     category: "asiap",
     isFeatured: true,
@@ -100,9 +100,9 @@ const mockNews = [
   },
   {
     id: 8,
-    title: "วิธีสมัคร เอเซีย พลัส และยืนยันตัวตนล่าสุด 2024 แบบละเอียดทุกขั้นตอน",
-    summary: "แนะนำวิธีการสมัครและยืนยันตัวตนบนแพลตฟอร์ม เอเซีย พลัส แบบละเอียดทุกขั้นตอน อัปเดตล่าสุดปี 2024 สำหรับผู้ที่สนใจเริ่มต้นลงทุนในคริปโตเคอร์เรนซี่",
-    imageUrl: asiaPlus2,
+    title: "วิธีสมัคร Maybank และยืนยันตัวตนล่าสุด 2024 แบบละเอียดทุกขั้นตอน",
+    summary: "แนะนำวิธีการสมัครและยืนยันตัวตนบนแพลตฟอร์ม Maybank แบบละเอียดทุกขั้นตอน อัปเดตล่าสุดปี 2024 สำหรับผู้ที่สนใจเริ่มต้นลงทุนในคริปโตเคอร์เคอร์",
+    imageUrl: maybank2,
     date: "1 พ.ค. 2025",
     category: "market",
     isFeatured: false,
@@ -110,9 +110,9 @@ const mockNews = [
   },
   {
     id: 9,
-    title: "เอเซีย พลัส เตรียมเปิดตัวแอปพลิเคชันใหม่ ASP Smart พร้อมฟีเจอร์ที่น่าสนใจ",
-    summary: "เอเซีย พลัส ประกาศเตรียมเปิดตัวแอปพลิเคชันใหม่ ASP Smart ที่มีฟีเจอร์การวิเคราะห์ตลาดขั้นสูง พร้อมให้ผู้ใช้สามารถเข้าถึงการเทรดได้ทุกที่ทุกเวลา",
-    imageUrl: asiaPlus2,
+    title: "Maybank เตรียมเปิดตัวแอปพลิเคชันใหม่ MBK Smart พร้อมฟีเจอร์ที่น่าสนใจ",
+    summary: "Maybank ประกาศเตรียมเปิดตัวแอปพลิเคชันใหม่ MBK Smart ที่มีฟีเจอร์การวิเคราะห์ตลาดขั้นสูง พร้อมให้ผู้ใช้สามารถเข้าถึงการเทรดได้ทุกที่ทุกเวลา",
+    imageUrl: maybank2,
     date: "30 เม.ย. 2025",
     category: "asiap",
     isFeatured: false,
@@ -120,9 +120,9 @@ const mockNews = [
   },
   {
     id: 10,
-    title: "เอเซีย พลัส NEXT เปิดตัว Digital Hub ศูนย์รวมบริการดิจิทัลครบวงจร",
-    summary: "เอเซีย พลัส NEXT เปิดตัวบริการ Digital Hub ศูนย์รวมบริการดิจิทัลครบวงจร ทั้งการลงทุน การเงิน และไลฟ์สไตล์ รองรับการใช้งานทั้งคริปโตและสินทรัพย์ดิจิทัลรูปแบบอื่น",
-    imageUrl: asiaPlus6,
+    title: "Maybank NEXT เปิดตัว Digital Hub ศูนย์รวมบริการดิจิทัลครบวงจร",
+    summary: "Maybank NEXT เปิดตัวบริการ Digital Hub ศูนย์รวมบริการดิจิทัลครบวงจร ทั้งการลงทุน การเงิน และไลฟ์สไตล์ รองรับการใช้งานทั้งคริปโตและสินทรัพย์ดิจิทัลรูปแบบอื่น",
+    imageUrl: maybank11,
     date: "28 เม.ย. 2025",
     category: "asiap",
     isFeatured: true,

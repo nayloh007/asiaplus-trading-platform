@@ -1,4 +1,4 @@
--- Performance optimization indexes for AsiaPlus2 database
+-- Performance optimization indexes for Maybank database
 -- These indexes will significantly improve query performance for frequently accessed data
 
 -- User table indexes

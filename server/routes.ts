@@ -1083,8 +1083,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Import production users first
       console.log('📥 Importing production users...');
       await db.insert(users).values([
-        { id: 1, username: 'admin', email: 'admin@asiaplus.com', password: await hashPassword('admin123'), fullName: 'System Administrator', role: 'admin', balance: '0' },
-        { id: 2, username: 'agent001', email: 'agent001@asiaplus.com', password: await hashPassword('agent123'), fullName: 'Agent 001', role: 'agent', balance: '0' },
+        { id: 1, username: 'admin', email: 'admin@maybank.com', password: await hashPassword('admin123'), fullName: 'System Administrator', role: 'admin', balance: '0' },
+{ id: 2, username: 'agent001', email: 'agent001@maybank.com', password: await hashPassword('agent123'), fullName: 'Agent 001', role: 'agent', balance: '0' },
         { id: 3, username: 'testuser1', email: 'test1@example.com', password: await hashPassword('test123'), fullName: 'Test User 1', role: 'user', balance: '10000' },
         { id: 4, username: 'testuser2', email: 'test2@example.com', password: await hashPassword('test123'), fullName: 'Test User 2', role: 'user', balance: '5000' },
         { id: 5, username: 'testuser3', email: 'test3@example.com', password: await hashPassword('test123'), fullName: 'Test User 3', role: 'user', balance: '15000' },
@@ -1094,7 +1094,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log('📥 Importing system settings...');
       await db.insert(settings).values([
-        { id: 1, key: 'system_name', value: 'Asia Plus Trading System' },
+        { id: 1, key: 'system_name', value: 'MAYBANK Trading System' },
         { id: 2, key: 'maintenance_mode', value: 'false' },
         { id: 3, key: 'trading_enabled', value: 'true' },
         { id: 4, key: 'min_trade_amount', value: '100' },

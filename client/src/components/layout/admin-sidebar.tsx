@@ -41,11 +41,11 @@ export function AdminSidebar() {
         <Link href="/admin">
           <a className="flex items-center">
             <img 
-              src="/Asia_Plus_Securities.png" 
-              alt="โลโก้ Asia Plus Securities" 
-              className="h-8 mr-2" 
-            />
-            <h1 className="text-xl font-bold ml-2">Asia Plus Admin</h1>
+                src="/maybank-logo.svg" 
+                alt="โลโก้ MAYBANK" 
+                className="h-8 mr-2" 
+              />
+            <h1 className="text-xl font-bold ml-2">MAYBANK Admin</h1>
           </a>
         </Link>
       </div>
@@ -76,7 +76,7 @@ export function AdminSidebar() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <p className="text-sm font-medium">แอดมิน</p>
-            <p className="text-xs text-muted-foreground">admin@asiaplus.co.th</p>
+            <p className="text-xs text-muted-foreground">admin@maybank.co.th</p>
           </div>
         </div>
         <Button 

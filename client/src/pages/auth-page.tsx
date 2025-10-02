@@ -61,10 +61,10 @@ export default function AuthPage() {
           <CardHeader className="text-center">
             <div className="flex justify-center mb-2">
               <img 
-                src="/Asia_Plus_Securities.png" 
-                alt="โลโก้ Asia Plus Securities" 
-                className="h-20"
-              />
+                  src="/maybank-logo.svg" 
+                  alt="โลโก้ MAYBANK" 
+                  className="h-20"
+                />
             </div>
             <CardTitle className="text-2xl text-blue-600">
               {activeTab === "login" ? "ยินดีต้อนรับกลับ" : "สร้างบัญชีใหม่"}
